@@ -4,7 +4,7 @@ const connectDB = require("./db/db");
 const app = express();
 
 app.get("/", (req, res) => {
-    res.send({message:"Welcome To Inba Mart Backend System!"})
+    res.send({message:"Welcome To Inba Mart Backend System!"}) 
 })
 
 const port = 5000;
