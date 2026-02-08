@@ -1,11 +1,21 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const connectDB = require("./db/db");
 
 const app = express();
+app.use(express.json())
+app.use(express.urlencoded({extended:true}));
 
 app.get("/", (req, res) => {
     res.send({message:"Welcome To Inba Mart Backend System!"}) 
 })
+
+
+const adminRoutes = require("./routes/adminRoutes.js");
+const sellerRoutes = require("./routes/sellerRoutes.js");
+
+app.use("/sellers", sellerRoutes);
+app.use("/admin", adminRoutes)
 
 const port = 5000;
 

@@ -1,6 +1,6 @@
-const {Schema} = require("mongoose")
+const { mongoose } = require("mongoose");
 
-const verificationCodeSchema = new Schema({
+const verificationCodeSchema = new mongoose.Schema({
     otp:{
         type:String,
     },
