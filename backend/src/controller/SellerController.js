@@ -106,7 +106,6 @@ class SellerController{
         }
     }
 
-
 }
 
-module.exports = SellerController;
+module.exports = new SellerController();
