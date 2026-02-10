@@ -1,4 +1,4 @@
-const { mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const UserRoles = require("../domain/UserRole");
 const AccountStatus = require("../domain/AccountStatus");
 

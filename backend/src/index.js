@@ -13,9 +13,11 @@ app.get("/", (req, res) => {
 
 const adminRoutes = require("./routes/adminRoutes.js");
 const sellerRoutes = require("./routes/sellerRoutes.js");
+const authRoutes = require("./routes/authRoutes.js");
 
 app.use("/sellers", sellerRoutes);
-app.use("/admin", adminRoutes)
+app.use("/admin", adminRoutes);
+app.use("/auth", authRoutes);
 
 const port = 5000;
 
