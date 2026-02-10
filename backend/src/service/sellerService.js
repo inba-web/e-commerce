@@ -8,16 +8,20 @@ class SellerService {
     if (existingSeller) {
       throw new Error("Email Already Exists");
     }
+    let savedAddress = null;
 
-    let savedAddress = sellerData.pickupAddress;
-
-    savedAddress = await Address.create(sellerData.pickupAddress);
+    if (
+      sellerData.pickupAddress &&
+      typeof sellerData.pickupAddress === "object"
+    ) {
+      savedAddress = await Address.create(sellerData.pickupAddress);
+    }
 
     const newSeller = new Seller({
       sellerName: sellerData.sellerName,
       email: sellerData.email,
       password: sellerData.password,
-      pickupAddress: savedAddress._id,
+      pickupAddress: savedAddress ? savedAddress._id : null,
       GSTIN: sellerData.GSTIN,
       password: sellerData.password,
       mobile: sellerData.mobile,
@@ -73,7 +77,6 @@ class SellerService {
   async deleteSeller(sellerId) {
     return await Seller.findByIdAndDelete(sellerId);
   }
-
 }
 
 module.exports = new SellerService();

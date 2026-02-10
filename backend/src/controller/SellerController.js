@@ -24,7 +24,7 @@ class SellerController {
     try {
       const seller = await sellerService.createSeller(req.body);
 
-      res.json(200).json({ message: "seller created successfully" });
+      res.status(200).json({ message: "seller created successfully" });
     } catch (error) {
       console.log(`Error in createSeller controller: ${error}`);
       res
@@ -38,7 +38,7 @@ class SellerController {
       const status = req.query.status;
       const seller = await sellerService.getAllSellers(status);
 
-      res.json(200).json(seller);
+      res.status(200).json(seller);
     } catch (error) {
       console.log(`Error in getAllSellers controller: ${error}`);
       res
