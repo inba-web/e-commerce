@@ -94,7 +94,6 @@ class SellerController {
       const { otp, email } = req.body;
       const seller = await sellerService.getSellerByEmail(email);
 
-
       const verificationCode = await VerificationCode.findOne({ email });
 
       if (!verificationCode || verificationCode.otp != otp) {

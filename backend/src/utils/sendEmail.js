@@ -5,7 +5,7 @@ async function sendVerificataionEmail(to, subject, body){
         service: "gmail",
         auth:{
             user: "inbafreakz@gmail.com",
-            pass: "devhackinba@46"
+            pass: "coge wolb dgst nmgm"
         }
     });
 
