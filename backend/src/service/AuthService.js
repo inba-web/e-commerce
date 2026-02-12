@@ -9,25 +9,22 @@ class AuthService {
     const SIGNIN_PREFIX = "signin_";
 
     if (email.startsWith(SIGNIN_PREFIX)) {
-      email = email.substring(SIGNIN_PREFIX.length)
-      const seller = await sellerService.getSellerByEmail(email)
+      email = email.substring(SIGNIN_PREFIX.length);
+      const seller = await sellerService.getSellerByEmail(email);
       if (!seller) throw new Error("User not found");
     }
 
-    const existingVerificationCode = await VerificationCode.findOne({ email });
+    await VerificationCode.deleteOne({ email });
 
-    if (existingVerificationCode) {
-      await VerificationCode.deleteOne({ email });
+    const otp = generateOTP();
+    const verificationCode = new VerificationCode({ otp, email });
+    await verificationCode.save();
 
-      const otp = generateOTP();
-      const verificationCode = new VerificationCode({ otp, email });
-      await verificationCode.save();
+    const subject = "INBA MART Login/Signup OTP";
+    const body = `Your OTP is ${otp}. Please enter it to complete your login process.`;
+    await sendVerificataionEmail(email, subject, body);
 
-      // send email to user
-      const subject = "INBA MART Login/Signup OTP";
-      const body = `Your OTP is ${otp}. Please enter it to complete your login process.`;
-      await sendVerificataionEmail(email, subject, body);
-    }
+    console.log("OTP saved in DB:", otp);
   }
 }
 
