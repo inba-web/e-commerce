@@ -1,4 +1,3 @@
-const Seller = require("../model/Seller");
 const VerificationCode = require("../model/VerificationCode");
 const generateOTP = require("../utils/generateOTP");
 const sendVerificataionEmail = require("../utils/sendEmail");
@@ -14,11 +13,16 @@ class AuthService {
       if (!seller) throw new Error("User not found");
     }
 
-    await VerificationCode.deleteOne({ email });
+    const existingVerificationCode = await VerificationCode.findOne({email});
+
+    if(existingVerificationCode){
+      await VerificationCode.deleteOne({ email });
+    }
 
     const otp = generateOTP();
     const verificationCode = new VerificationCode({ otp, email });
     await verificationCode.save();
+    console.log("verification code : "+verificationCode.otp)
 
     const subject = "INBA MART Login/Signup OTP";
     const body = `Your OTP is ${otp}. Please enter it to complete your login process.`;
