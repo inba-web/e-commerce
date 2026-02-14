@@ -38,7 +38,7 @@ class SellerService {
   }
 
   async getSellerByEmail(email) {
-    console.log("email : ", email)
+    console.log("seller email : ", email)
     const seller = await Seller.findOne({ email });
 
     if (!seller) {

@@ -95,9 +95,14 @@ class SellerController {
       const seller = await sellerService.getSellerByEmail(email);
 
       const verificationCode = await VerificationCode.findOne({ email });
+      console.log("otp:"+otp)
+      console.log("verification bundle : "+verificationCode)
+      if(!verificationCode){
+        return res.status(400).json({message : "otp not found or expired"})
+      }
 
-      if (!verificationCode || verificationCode.otp != otp) {
-        throw new Error("Invalid OTP");
+      if(verificationCode.otp != otp){
+        return res.status(400).json({message: "Invalid OTP"})
       }
 
       const token = jwtProvider.createJwt({ email });
