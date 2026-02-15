@@ -5,6 +5,7 @@ const generateOTP = require("../utils/generateOTP");
 const sendVerificataionEmail = require("../utils/sendEmail");
 const sellerService = require("./sellerService");
 const jwtProvider = require("../utils/jwtProvider");
+const userService = require("./userService");
 
 class AuthService {
   async sendLoginOTP(email) {
@@ -13,7 +14,8 @@ class AuthService {
     if (email.startsWith(SIGNIN_PREFIX)) {
       email = email.substring(SIGNIN_PREFIX.length);
       const seller = await sellerService.getSellerByEmail(email);
-      if (!seller) throw new Error("User not found");
+      const user = await userService.findUserByEmail(email);
+      if (!seller && !user) throw new Error("User not found");
     }
 
     const existingVerificationCode = await VerificationCode.findOne({ email });
@@ -35,12 +37,18 @@ class AuthService {
   }
 
   async createUser(req) {
-    const { email, fullName } = req;
+    const { email, fullName ,otp} = req;
 
     let user = await User.findOne({ email });
 
     if (user) {
       throw new Error("User already exists with this email");
+    }
+
+    const verificationCode = await VerificationCode.findOne({email});
+    
+    if(!verificationCode ||  verificationCode.opt !== otp){
+      throw new Error("Invalid OTP...");
     }
 
     user = new User({
@@ -55,6 +63,28 @@ class AuthService {
     await cart.save();
 
     return jwtProvider.createJwt({ email });
+  }
+
+  async signin(req){
+    const {email, otp} = req;
+
+    const user = await User.findOne({email});
+
+    if(!user){
+      throw new Error("user not found with this email");
+    }
+
+    const verificationCode = await VerificationCode.findOne({email});
+
+    if(!verificationCode || verificationCode.otp != otp){
+      throw new Error("Invalid OTP");
+    }
+
+    return {
+      message: "Login Success",
+      jwt: jwtProvider.createJwt(email),
+      role: user.role
+    }
   }
 
 }
