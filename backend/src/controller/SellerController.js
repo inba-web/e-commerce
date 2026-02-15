@@ -8,10 +8,12 @@ class SellerController {
 
   async getSellerProfile(req, res) {
     try {
+      const profile = await req.seller;
+      console.log(profile)
       const jwt = req.headers.authorization.split(" ")[1];
       const seller = await sellerService.getSellerProfile(jwt);
 
-      res.json(200).json(seller);
+      res.status(200).json(seller);
     } catch (error) {
       console.log(`Error in getSellerProfile controller: ${error}`);
       res
@@ -52,7 +54,7 @@ class SellerController {
       const existingSeller = await req.seller;
       const seller = await sellerService.updateSeller(existingSeller, req.body);
 
-      res.json(200).json(seller);
+      res.status(200).json(seller);
     } catch (error) {
       console.log(`Error in updateSeller controller: ${error}`);
       res
@@ -65,7 +67,7 @@ class SellerController {
     try {
       const seller = await sellerService.deleteSeller(req.params.id);
 
-      res.json(200).json({ message: "Seller deleted successfully" });
+      res.status(200).json({ message: "Seller deleted successfully" });
     } catch (error) {
       console.log(`Error in deleteSeller controller: ${error}`);
       res
