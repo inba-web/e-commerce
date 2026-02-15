@@ -14,8 +14,10 @@ app.get("/", (req, res) => {
 const adminRoutes = require("./routes/adminRoutes.js");
 const sellerRoutes = require("./routes/sellerRoutes.js");
 const authRoutes = require("./routes/authRoutes.js");
+const userRoutes = require("./routes/UserRoute.js");
 
 app.use("/sellers", sellerRoutes);
+app.use("/api/users", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/auth", authRoutes);
 

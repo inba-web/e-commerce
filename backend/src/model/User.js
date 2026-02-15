@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose");
 const UserRoles = require("../domain/UserRole");
 
 const userSchema = new mongoose.Schema({
-  name: {
+  fullName: {
     type: String,
     required: true,
   },
