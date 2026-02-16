@@ -8,8 +8,7 @@ app.use(express.urlencoded({extended:true}));
 
 app.get("/", (req, res) => {
     res.send({message:"Welcome To Inba Mart Backend System!"}) 
-})
-
+}) 
 
 const adminRoutes = require("./routes/adminRoutes.js");
 const sellerRoutes = require("./routes/sellerRoutes.js");
