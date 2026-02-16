@@ -6,6 +6,7 @@ const sendVerificataionEmail = require("../utils/sendEmail");
 const sellerService = require("./sellerService");
 const jwtProvider = require("../utils/jwtProvider");
 const userService = require("./userService");
+const cart = require("../model/Cart.js");
 
 class AuthService {
   async sendLoginOTP(email) {
@@ -37,7 +38,7 @@ class AuthService {
   }
 
   async createUser(req) {
-    const { email, fullName ,otp} = req;
+    const { email, fullName ,otp, mobile} = req;
 
     let user = await User.findOne({ email });
 
@@ -46,15 +47,15 @@ class AuthService {
     }
 
     const verificationCode = await VerificationCode.findOne({email});
-    
-    if(!verificationCode ||  verificationCode.opt !== otp){
+    if(!verificationCode ||  verificationCode.otp != otp){
       throw new Error("Invalid OTP...");
     }
 
     user = new User({
       email,
       fullName,
-      password: await bcrypt.hash(12345678, 10),
+      mobile,
+      password: await bcrypt.hash("12345678", 10),
     });
 
     await user.save();
@@ -82,7 +83,7 @@ class AuthService {
 
     return {
       message: "Login Success",
-      jwt: jwtProvider.createJwt(email),
+      jwt: jwtProvider.createJwt({email}),
       role: user.role
     }
   }
