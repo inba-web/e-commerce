@@ -60,7 +60,7 @@ class AuthService {
 
     await user.save();
 
-    const cart = new Cart({ user: user._id });
+    const cart = new cart({ user: user._id });
     await cart.save();
 
     return jwtProvider.createJwt({ email });
