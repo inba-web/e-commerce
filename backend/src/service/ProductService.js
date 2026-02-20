@@ -85,37 +85,83 @@ class ProductService {
     }
   }
 
-  async findProductById(productId){
+  async findProductById(productId) {
     try {
-     const product = await Product.findById(productId);
-     if(!product){
-      throw new Error("Product not found");
-     } 
-     return product;
+      const product = await Product.findById(productId);
+      if (!product) {
+        throw new Error("Product not found");
+      }
+      return product;
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  async searchProduct(query){
+  async searchProduct(query) {
     try {
-      const products = await Product.find({title: new RegExp(query, "i")});
+      const products = await Product.find({ title: new RegExp(query, "i") });
       return products;
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  async getProductBySeller(sellerId){
+  async getProductBySeller(sellerId) {
     try {
-      return await Product.find({seller:sellerId})
+      return await Product.find({ seller: sellerId });
     } catch (error) {
-      throw new Error(error.message)
+      throw new Error(error.message);
     }
   }
 
-  async getAllProducts(req){
-    
+  async getAllProducts(req) {
+    const filterQuery = {};
+
+    if (req.category) {
+      const category = await Category.findOne({ categoryId: req.category });
+
+      if (!category) {
+        return {
+          content: [],
+          totalPages: 0,
+          totalElement: 0,
+        };
+      }
+
+      filterQuery.category = category._id.toString();
+
+      if (req.color) {
+        filterQuery.color = req.color;
+      }
+
+      if (req.minPrice && req.maxPrice) {
+        filterQuery.sellingPrice = { $gte: req.minPrice, $lte: req.maxPrice };
+      }
+
+      if (req.minDiscount) {
+        filterQuery.discountPercent = { $gte: req.minDiscount };
+      }
+
+      if (req.size) {
+        filterQuery.size = req.size;
+      }
+
+      let sortQuery = {};
+
+      if (req.sort === "price_low") {
+        sortQuery.sellingPrice = 1;
+      } else if (req.sort === "price_high") {
+        sortQuery.sellingPrice = -1;
+      }
+
+      const products = Product.find(filterQuery)
+        .sort(sortQuery)
+        .skip(req.pageNumber * 10)
+        .limit(10);
+      
+      
+    }
   }
-  
 }
+
+module.exports = ProductService;
