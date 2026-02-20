@@ -85,5 +85,37 @@ class ProductService {
     }
   }
 
+  async findProductById(productId){
+    try {
+     const product = await Product.findById(productId);
+     if(!product){
+      throw new Error("Product not found");
+     } 
+     return product;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async searchProduct(query){
+    try {
+      const products = await Product.find({title: new RegExp(query, "i")});
+      return products;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async getProductBySeller(sellerId){
+    try {
+      return await Product.find({seller:sellerId})
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async getAllProducts(req){
+    
+  }
   
 }
