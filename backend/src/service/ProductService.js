@@ -74,7 +74,7 @@ class ProductService {
 
   async updateProduct(productId, updatedProductedData) {
     try {
-      const product = await Product.findAndUpdate(
+      const product = await Product.findByIdAndUpdate(
         productId,
         updatedProductedData,
         { new: true },
@@ -127,8 +127,10 @@ class ProductService {
           totalElement: 0,
         };
       }
+            filterQuery.category = category._id.toString();
 
-      filterQuery.category = category._id.toString();
+    }
+
 
       if (req.color) {
         filterQuery.color = req.color;
@@ -154,10 +156,13 @@ class ProductService {
         sortQuery.sellingPrice = -1;
       }
 
-      const products = Product.find(filterQuery)
+      const page = parseInt(req.pageNumber) || 0;
+      const limit = 10;
+
+      const products = await Product.find(filterQuery)
         .sort(sortQuery)
-        .skip(req.pageNumber * 10)
-        .limit(10);
+        .skip(page * limit)
+        .limit(limit);
 
       const totalElement = await Product.countDocuments(filterQuery);
       const totalPages = Math.ceil(totalElement/10);
@@ -169,7 +174,7 @@ class ProductService {
       }
 
       return res;
-    }
+    
   }
 }
 
