@@ -127,8 +127,10 @@ class ProductService {
           totalElement: 0,
         };
       }
+            filterQuery.category = category._id.toString();
 
-      filterQuery.category = category._id.toString();
+    }
+
 
       if (req.color) {
         filterQuery.color = req.color;
@@ -172,7 +174,7 @@ class ProductService {
       }
 
       return res;
-    }
+    
   }
 }
 
