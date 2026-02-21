@@ -106,7 +106,7 @@ class ProductService {
     }
   }
 
-  async getProductBySeller(sellerId) {
+  async getProductBySellerId(sellerId) {
     try {
       return await Product.find({ seller: sellerId });
     } catch (error) {
@@ -158,10 +158,19 @@ class ProductService {
         .sort(sortQuery)
         .skip(req.pageNumber * 10)
         .limit(10);
-      
-      
+
+      const totalElement = await Product.countDocuments(filterQuery);
+      const totalPages = Math.ceil(totalElement/10);
+
+      const res = {
+        content:products,
+        totalPages:totalPages,
+        totalElement:totalElement
+      }
+
+      return res;
     }
   }
 }
 
-module.exports = ProductService;
+module.exports = new ProductService();
