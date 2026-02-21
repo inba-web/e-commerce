@@ -1,5 +1,4 @@
-const ProductService = require("../service/ProductService");
-
+const ProductService = require("../service/ProductService.js");
 
 
 class SellerProductController{
@@ -8,10 +7,10 @@ class SellerProductController{
         try {
             const seller = await req.seller;
             const products = await ProductService.getProductBySellerId(seller._id);
-            res.status(200).json(products);
+            return res.status(200).json(products);
         } catch (error) {
             console.log(`Error in getProductBySellerId Controller :`,error.message)
-            res.status(500).json({error: error.message})
+            return res.status(500).json({error: error.message})
         }
     }
 
@@ -32,7 +31,7 @@ class SellerProductController{
             //         count: error.errors.length,
             //     });
             // }
-            res.status(500).json({error: error.message})
+            return res.status(500).json({error: error.message})
         }
     }
     
@@ -42,7 +41,7 @@ class SellerProductController{
             return res.status(200).json({message: "Product Deleted Successfully"});
         } catch (error) {
             console.log(`Error in deleteProduct Controller : `, error.message);
-            res.status(500).json({error: error.message});
+            return res.status(500).json({error: error.message});
         }
     }
 
@@ -52,7 +51,7 @@ class SellerProductController{
             return res.status(200).json(product);
         } catch (error) {
             console.log(`Error in updateProduct Controller : `, error.message);
-            res.status(500).json({error: error.message});
+            return res.status(500).json({error: error.message});
         }
     }
 
@@ -62,7 +61,7 @@ class SellerProductController{
             return res.status(200).json(product);
         } catch (error) {
             console.log(`Error in getProductById Controller : `, error.message);
-            res.status(500).json({error: error.message});
+            return res.status(500).json({error: error.message});
         }
     }
 
@@ -73,7 +72,7 @@ class SellerProductController{
             return res.status(200).json(products);
         } catch (error) {
             console.log(`Error in searchProduct Controller : `, error.message);
-            res.status(500).json({error: error.message});
+            return res.status(500).json({error: error.message});
         }
     }
 
@@ -83,7 +82,7 @@ class SellerProductController{
             return res.status(200).json(products);
         } catch (error) {
             console.log(`Error in getAllProducts Controller : `, error.message);
-            res.status(500).json({error: error.message});
+            return res.status(500).json({error: error.message});
         }
     }
 }

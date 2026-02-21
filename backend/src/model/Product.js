@@ -12,19 +12,20 @@ const productSchema = new mongoose.Schema({
         trim: true
     },
     mrpPrice:{
-        typeof: Number,
-        required: true
+        type: Number,
+        required: true,
+        min: 0
     },
     sellingPrice:{
-        typeof: Number,
+        type: Number,
         required: true,
     },
     discountPercent:{
-        typeof: Number,
+        type: Number,
         required: true,
     },
     quantity:{
-        typeof: Number,
+        type: Number,
         required: true
     },
     images:{
@@ -47,5 +48,5 @@ const productSchema = new mongoose.Schema({
     }
 })
 
-const Product = mongoos.model("Product",productSchema);
+const Product = mongoose.model("Product",productSchema);
 module.exports = Product;
