@@ -39,6 +39,8 @@ class ProductService {
         sellingPrice: req.sellingPrice,
         discountPercent,
         size: req.size,
+        color: req.color,
+        quantity: req.quantity, 
         seller: seller._id,
         category: category3._id,
       });
@@ -125,7 +127,7 @@ class ProductService {
           content: [],
           totalPages: 0,
           totalElement: 0,
-        };
+      };
       }
       filterQuery.category = category._id.toString();
     }
