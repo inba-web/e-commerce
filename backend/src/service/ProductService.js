@@ -127,54 +127,51 @@ class ProductService {
           totalElement: 0,
         };
       }
-            filterQuery.category = category._id.toString();
-
+      filterQuery.category = category._id.toString();
     }
 
+    if (req.color) {
+      filterQuery.color = req.color;
+    }
 
-      if (req.color) {
-        filterQuery.color = req.color;
-      }
+    if (req.minPrice && req.maxPrice) {
+      filterQuery.sellingPrice = { $gte: req.minPrice, $lte: req.maxPrice };
+    }
 
-      if (req.minPrice && req.maxPrice) {
-        filterQuery.sellingPrice = { $gte: req.minPrice, $lte: req.maxPrice };
-      }
+    if (req.minDiscount) {
+      filterQuery.discountPercent = { $gte: req.minDiscount };
+    }
 
-      if (req.minDiscount) {
-        filterQuery.discountPercent = { $gte: req.minDiscount };
-      }
+    if (req.size) {
+      filterQuery.size = req.size;
+    }
 
-      if (req.size) {
-        filterQuery.size = req.size;
-      }
+    let sortQuery = {};
 
-      let sortQuery = {};
+    if (req.sort === "price_low") {
+      sortQuery.sellingPrice = 1;
+    } else if (req.sort === "price_high") {
+      sortQuery.sellingPrice = -1;
+    }
 
-      if (req.sort === "price_low") {
-        sortQuery.sellingPrice = 1;
-      } else if (req.sort === "price_high") {
-        sortQuery.sellingPrice = -1;
-      }
+    const page = parseInt(req.pageNumber) || 0;
+    const limit = 10;
 
-      const page = parseInt(req.pageNumber) || 0;
-      const limit = 10;
+    const products = await Product.find(filterQuery)
+      .sort(sortQuery)
+      .skip(page * limit)
+      .limit(limit);
 
-      const products = await Product.find(filterQuery)
-        .sort(sortQuery)
-        .skip(page * limit)
-        .limit(limit);
+    const totalElement = await Product.countDocuments(filterQuery);
+    const totalPages = Math.ceil(totalElement / 10);
 
-      const totalElement = await Product.countDocuments(filterQuery);
-      const totalPages = Math.ceil(totalElement/10);
+    const res = {
+      content: products,
+      totalPages: totalPages,
+      totalElement: totalElement,
+    };
 
-      const res = {
-        content:products,
-        totalPages:totalPages,
-        totalElement:totalElement
-      }
-
-      return res;
-    
+    return res;
   }
 }
 
