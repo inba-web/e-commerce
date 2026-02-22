@@ -1,3 +1,4 @@
+const CartItemService = require("../service/CartItemService");
 const CartService = require("../service/CartService");
 const ProductService = require("../service/ProductService");
 
@@ -7,7 +8,7 @@ class CartController{
     async findUserCartHandler(req, res){
         try {
             const user = await req.user;
-            const cart = await CarrtService.findUserCart(user);
+            const cart = await CartService.findUserCart(user);
 
             return res.status(200).json(cart);
         } catch (error) {
@@ -34,4 +35,35 @@ class CartController{
             return res.status(500).json({error:error.message});
         }
     }
+
+    async deleteCartItem(req, res){
+        try {
+            const user = await req.user;
+            await CartItemService.removeCartItem(user._id,req.params.cartItemId);
+            return res.status(202).json({message: "Item removed from cart"});
+        } catch (error) {
+            console.log(`Error in deleteCartItem controller : `, error.message);
+            return res.status(500).json({error:error.message});
+        }
+    }
+
+    async updateCartItemHandler(req, res){
+        try {
+        const cartItemId = req.params.cartItemId;
+        const {quantity} = req.body;
+
+        const user = await req.user;
+        let updatedCartItem;
+        if(quantity > 0){
+            updatedCartItem = await CartItemService.updateCartItem(user._id,cartItemId,{quantity});
+        }
+
+        return res.status(202).json(updatedCartItem);
+        } catch (error) {
+            console.log(`Error in updateCartItemHandler controller : `, error.message);
+            return res.status(500).json({error:error.message});
+        }
+    }
 }
+
+module.exports = new CartController();
