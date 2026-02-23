@@ -19,7 +19,7 @@ const cartSchema = new Schema({
     quantity:{
         type: Number,
         required: true,
-        defualt:1
+        default:1
     },
     mrpPrice:{
         type: Number,
