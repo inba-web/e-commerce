@@ -21,8 +21,9 @@ const authMiddleware = async (req, res, next) => {
 
     const email = jwtProvider.getEmailFromjwt(token);
 
-    const user = userService.findUserByEmail(email);
+    const user = await userService.findUserByEmail(email);
     req.user = user;
+    console.log(`Authenticated user : ${user.email}`);  
 
     next();
   } catch (error) {

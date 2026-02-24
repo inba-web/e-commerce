@@ -4,13 +4,15 @@ const { calculateDiscountPercentage } = require("./ProductService.js");
 
 class CartService {
   async findUserCart(user) {
-    let cart = await Cart.findOne({ user: user._id }).populate("cartItem");
+    let cart = await Cart.findOne({ user: user._id }).populate("cartItems");
 
-    
     if (!cart) {
-      throw new Error("Cart not found for user");
+      cart = new Cart({
+        user: user._id,
+        cartItems: [],
+      });
+      await cart.save();
     }
-    
     let totalPrice = 0;
     let totalDiscountedPrice = 0;
     let totalItem = cart.cartItems.length;
