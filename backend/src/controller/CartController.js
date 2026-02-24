@@ -1,6 +1,6 @@
-const CartItemService = require("../service/CartItemService");
-const CartService = require("../service/CartService");
-const ProductService = require("../service/ProductService");
+const CartItemService = require("../service/CartItemService.js");
+const CartService = require("../service/CartService.js");
+const ProductService = require("../service/ProductService.js");
 
 
 class CartController{
@@ -20,7 +20,7 @@ class CartController{
     async addItemToCart(req, res){
         try {
             const user = await req.user;
-            const product = await ProductService.findProductById(req.body.productId);
+            const product = await ProductService.ProductService.findProductById(req.params.productId);
             
             const cartItem = await CartService.addCartItem(
                 user,
