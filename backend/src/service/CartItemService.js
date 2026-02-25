@@ -3,7 +3,7 @@ const CartItem = require("../model/CartItem");
 class CartItemService{
 
     async updateCartItem(userId, cartItemId, cartItemData){
-        const cartItem = this.findCartItemById(cartItemId);
+        const cartItem = this.findCartItemById(cartItemId).populate("product");
 
         if(cartItem.userId.toString() === userId.toString()){
             const updated = {
@@ -15,7 +15,7 @@ class CartItemService{
             return await CartItem.findByIdAndUpdate(cartItemId, updated, {
                 new: true
             }).populate("product");
-        }
+        } 
         else{
             throw new Error("Unauthorized access");
         }
