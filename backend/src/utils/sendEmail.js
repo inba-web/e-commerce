@@ -10,7 +10,7 @@ async function sendVerificataionEmail(to, subject, body){
     });
 
     const mailOptions = {
-        from: "inbafreakz@gmail.com",
+        from: "inbavarunans@gmail.com",
         to,
         subject,
         html: body

@@ -6,7 +6,7 @@ class SellerService {
   async createSeller(sellerData) {
     const existingSeller = await Seller.findOne({ email: sellerData.email });
     if (existingSeller) {
-      throw new Error("Email Already Exists");
+      throw new Error("Email Already Exists!");
     }
     let savedAddress = null;
 
@@ -68,6 +68,7 @@ class SellerService {
   }
 
   async updateSellerStatus(sellerId, status) {
+    
     return Seller.findByIdAndUpdate(
       sellerId,
       { $set: { accountStatus: status } },
@@ -76,6 +77,10 @@ class SellerService {
   }
 
   async deleteSeller(sellerId) {
+    const seller = await Seller.findById(sellerId);
+    if (!seller) {
+      throw new Error("Seller not found");
+    }
     return await Seller.findByIdAndDelete(sellerId);
   }
 }
