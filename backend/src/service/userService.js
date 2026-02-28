@@ -10,7 +10,7 @@ class UserService {
         const user = await User.findOne({email});
 
         if(!user){
-            throw new UserError(`User does not exists with this email ${email}`)
+            throw new UserError(`User does not exists with this email : ${email}`)
         }
         return user;
     }
@@ -19,7 +19,7 @@ class UserService {
         const user = await User.findOne({email});
 
         if(!user) {
-            throw new UserException(`User does not exists with this email ${email}`);
+            throw new UserException(`User does not exists with this email : ${email}`);
         }
         return user;
     }
