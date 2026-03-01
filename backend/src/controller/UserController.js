@@ -5,7 +5,7 @@ const getUserProfileByJwt = async (req, res) => {
         const user = await req.user;
         return res.status(200).json(user);
     } catch (error) {
-        handleErrors(err, res);
+        handleErrors(error, res);
     }
 }
 

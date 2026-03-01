@@ -49,7 +49,7 @@ class SellerService {
   }
 
   async getSellerById(id) {
-    const seller = await Seller.findOne(id);
+    const seller = await Seller.findById(id);
     if (!seller) {
       throw new Error("Seller not found");
     }
@@ -68,7 +68,7 @@ class SellerService {
   }
 
   async updateSellerStatus(sellerId, status) {
-    
+
     return Seller.findByIdAndUpdate(
       sellerId,
       { $set: { accountStatus: status } },
