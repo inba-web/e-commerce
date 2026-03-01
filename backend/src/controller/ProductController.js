@@ -1,7 +1,7 @@
-const ProductService = require("../service/ProductService.js");
+const { ProductService } = require("../service/ProductService.js");
 
 
-class SellerProductController{
+class SellerProductController {
 
     async getProductBySellerId(req, res) {
         try {
@@ -9,8 +9,8 @@ class SellerProductController{
             const products = await ProductService.getProductBySellerId(seller._id);
             return res.status(200).json(products);
         } catch (error) {
-            console.log(`Error in getProductBySellerId Controller :`,error.message)
-            return res.status(500).json({error: error.message})
+            console.log(`Error in getProductBySellerId Controller :`, error.message)
+            return res.status(500).json({ error: error.message })
         }
     }
 
@@ -23,7 +23,7 @@ class SellerProductController{
             return res.status(201).json(product);
         } catch (error) {
             console.log(`Error in createProduct Controller : `, error.message);
-            
+
             // if(error instanceof Yup.validationError){
             //     return res.status(400).json({
             //         error: "Validation error",
@@ -31,17 +31,17 @@ class SellerProductController{
             //         count: error.errors.length,
             //     });
             // }
-            return res.status(500).json({error: error.message})
+            return res.status(500).json({ error: error.message })
         }
     }
-    
-    async deleteProduct(req, res){
+
+    async deleteProduct(req, res) {
         try {
             const product = await ProductService.deleteProduct(req.params.productId);
-            return res.status(200).json({message: "Product Deleted Successfully"});
+            return res.status(200).json({ message: "Product Deleted Successfully" });
         } catch (error) {
             console.log(`Error in deleteProduct Controller : `, error.message);
-            return res.status(500).json({error: error.message});
+            return res.status(500).json({ error: error.message });
         }
     }
 
@@ -51,38 +51,38 @@ class SellerProductController{
             return res.status(200).json(product);
         } catch (error) {
             console.log(`Error in updateProduct Controller : `, error.message);
-            return res.status(500).json({error: error.message});
+            return res.status(500).json({ error: error.message });
         }
     }
 
-    async getProductById(req, res){
+    async getProductById(req, res) {
         try {
             const product = await ProductService.findProductById(req.params.productId);
             return res.status(200).json(product);
         } catch (error) {
             console.log(`Error in getProductById Controller : `, error.message);
-            return res.status(500).json({error: error.message});
+            return res.status(500).json({ error: error.message });
         }
     }
 
-    async searchProduct(req, res){
+    async searchProduct(req, res) {
         try {
             const query = req.query.q;
             const products = await ProductService.searchProduct(query);
             return res.status(200).json(products);
         } catch (error) {
             console.log(`Error in searchProduct Controller : `, error.message);
-            return res.status(500).json({error: error.message});
+            return res.status(500).json({ error: error.message });
         }
     }
 
-    async getAllProducts(req, res){
+    async getAllProducts(req, res) {
         try {
             const products = await ProductService.getAllProducts(req.query);
             return res.status(200).json(products);
         } catch (error) {
             console.log(`Error in getAllProducts Controller : `, error.message);
-            return res.status(500).json({error: error.message});
+            return res.status(500).json({ error: error.message });
         }
     }
 }

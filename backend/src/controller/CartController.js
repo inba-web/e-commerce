@@ -20,8 +20,14 @@ class CartController{
     async addItemToCart(req, res){
         try {
             const user = await req.user;
-            const product = await ProductService.ProductService.findProductById(req.params.productId);
+            const product = await ProductService.ProductService.findProductById(req.body.productId);
             
+            if(!product){
+                return res.status(404).json({error:"Product not found in the system "});
+            }
+            
+            console.log("Product : ", product);
+
             const cartItem = await CartService.addCartItem(
                 user,
                 product,

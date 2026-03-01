@@ -6,7 +6,7 @@ const sendVerificataionEmail = require("../utils/sendEmail");
 const sellerService = require("./sellerService");
 const jwtProvider = require("../utils/jwtProvider");
 const userService = require("./userService");
-const cart = require("../model/Cart.js");
+const Cart = require("../model/Cart.js");
 
 class AuthService {
   async sendLoginOTP(email) {
@@ -14,8 +14,15 @@ class AuthService {
 
     if (email.startsWith(SIGNIN_PREFIX)) {
       email = email.substring(SIGNIN_PREFIX.length);
-      const seller = await sellerService.getSellerByEmail(email);
-      const user = await userService.findUserByEmail(email);
+      let seller, user;
+      try {
+        seller = await sellerService.getSellerByEmail(email);
+      } catch (error) { }
+
+      try {
+        user = await userService.findUserByEmail(email);
+      } catch (error) { }
+
       if (!seller && !user) throw new Error("User not found");
     }
 
@@ -38,7 +45,7 @@ class AuthService {
   }
 
   async createUser(req) {
-    const { email, fullName ,otp, mobile} = req;
+    const { email, fullName, otp, mobile } = req;
 
     let user = await User.findOne({ email });
 
@@ -46,8 +53,8 @@ class AuthService {
       throw new Error("User already exists with this email");
     }
 
-    const verificationCode = await VerificationCode.findOne({email});
-    if(!verificationCode ||  verificationCode.otp != otp){
+    const verificationCode = await VerificationCode.findOne({ email });
+    if (!verificationCode || verificationCode.otp != otp) {
       throw new Error("Invalid OTP...");
     }
 
@@ -60,30 +67,30 @@ class AuthService {
 
     await user.save();
 
-    const cart = new cart({ user: user._id });
-    await cart.save();
+    const createdCart = new Cart({ user: user._id });
+    await createdCart.save();
 
     return jwtProvider.createJwt({ email });
   }
 
-  async signin(req){
-    const {email, otp} = req;
+  async signin(req) {
+    const { email, otp } = req;
 
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email });
 
-    if(!user){
+    if (!user) {
       throw new Error("user not found with this email");
     }
 
-    const verificationCode = await VerificationCode.findOne({email});
+    const verificationCode = await VerificationCode.findOne({ email });
 
-    if(!verificationCode || verificationCode.otp != otp){
+    if (!verificationCode || verificationCode.otp != otp) {
       throw new Error("Invalid OTP");
     }
 
     return {
       message: "Login Success",
-      jwt: jwtProvider.createJwt({email}),
+      jwt: jwtProvider.createJwt({ email }),
       role: user.role
     }
   }

@@ -1,41 +1,41 @@
 const CartItem = require("../model/CartItem");
 
-class CartItemService{
+class CartItemService {
 
-    async updateCartItem(userId, cartItemId, cartItemData){
-        const cartItem = this.findCartItemById(cartItemId).populate("product");
+    async updateCartItem(userId, cartItemId, cartItemData) {
+        const cartItem = await this.findCartItemById(cartItemId);
 
-        if(cartItem.userId.toString() === userId.toString()){
+        if (cartItem.userId.toString() === userId.toString()) {
             const updated = {
-                quantity:cartItemData.quantity,
-                mrpPrice:cartItemData.quantity*cartItemData.product.mrpPrice,
-                sellingPrice:cartItemData.quantity*cartItemData.product.sellingPrice
+                quantity: cartItemData.quantity,
+                mrpPrice: cartItemData.quantity * cartItem.product.mrpPrice,
+                sellingPrice: cartItemData.quantity * cartItem.product.sellingPrice
             }
 
             return await CartItem.findByIdAndUpdate(cartItemId, updated, {
                 new: true
             }).populate("product");
-        } 
-        else{
+        }
+        else {
             throw new Error("Unauthorized access");
         }
     }
 
-    async removeCartItem(userId, cartItemId){
-        const cartItem = this.findCartItemById(cartItemId);
+    async removeCartItem(userId, cartItemId) {
+        const cartItem = await this.findCartItemById(cartItemId);
 
-        if(cartItem.userId.toString() === userId.toString()){
-            await CartItem.deleteOne({_id:cartItem._id})
+        if (cartItem.userId.toString() === userId.toString()) {
+            await CartItem.deleteOne({ _id: cartItem._id })
         }
-        else{
+        else {
             throw new Error("Unauthorized access");
         }
     }
 
-    async findCartItemById(cartItemId){
+    async findCartItemById(cartItemId) {
         const cartItem = await CartItem.findById(cartItemId).populate("product");
 
-        if(!cartItem){
+        if (!cartItem) {
             throw new Error("cart item not found");
         }
 

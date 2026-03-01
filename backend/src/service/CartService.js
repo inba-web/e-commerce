@@ -25,10 +25,11 @@ class CartService {
     cart.totalMrpPrice = totalPrice;
     cart.totalSellingPrice = totalDiscountedPrice;
     cart.totalItems = totalItem;
-    cart.discount = calculateDiscountPercentage(
-      totalPrice,
-      totalDiscountedPrice,
-    );
+
+    cart.discount =
+      totalPrice > 0
+        ? calculateDiscountPercentage(totalPrice, totalDiscountedPrice)
+        : 0;
 
     let cartItems = await CartItem.find({ cart: cart._id }).populate("product");
     cart.cartItems = cartItems;
@@ -56,6 +57,7 @@ class CartService {
         cart: cart._id,
       });
       await cartItem.save();
+      return cartItem;
     }
 
     return isPresent;

@@ -4,22 +4,22 @@ const jwtProvider = require("../utils/jwtProvider");
 
 class UserService {
 
-    async findUserProfileByJwt(jwt){
+    async findUserProfileByJwt(jwt) {
         const email = jwtProvider.getEmailFromjwt(jwt);
 
-        const user = await User.findOne({email});
+        const user = await User.findOne({ email });
 
-        if(!user){
-            throw new UserError(`User does not exists with this email : ${email}`)
+        if (!user) {
+            throw new Error(`User does not exists with this email : ${email}`)
         }
         return user;
     }
 
     async findUserByEmail(email) {
-        const user = await User.findOne({email});
+        const user = await User.findOne({ email });
 
-        if(!user) {
-            throw new UserException(`User does not exists with this email : ${email}`);
+        if (!user) {
+            throw new Error(`User does not exists with this email : ${email}`);
         }
         return user;
     }
