@@ -15,7 +15,7 @@ class CartItemService {
             return await CartItem.findByIdAndUpdate(cartItemId, updated, {
                 new: true
             }).populate("product");
-        }
+        } 
         else {
             throw new Error("Unauthorized access");
         }
