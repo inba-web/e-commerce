@@ -1,3 +1,5 @@
+const Order = require("../model/Order");
+const OrderItem = require("../model/OrderItem");
 const User = require("../model/User");
 
 
@@ -26,7 +28,7 @@ class OrderService {
         const totalOrderPrice = cartItems.reduce((sum, item) => sum + item.sellingPrice)
         const totalItem = cartItems.length;
 
-        const newOrder = new OrderService({
+        const newOrder = new Order({
             user: user._id,
             shippingAddress: shippingAddress._id,
             orderItems: [],
@@ -35,7 +37,27 @@ class OrderService {
             totalItems: totalItem,
         })
 
-        const orderItems = await Promise.all
+        const orderItems = await Promise.all(
+          cartItems.map(async (cartItem) => {
+            const orderItem = new OrderItem({
+              product: cartItem.product._id,
+              quantity: cartItem.quantity,
+              sellingPrice: cartItem.sellingPrice,
+              mrpPrice: cartItem.mrpPrice,
+              size: cartItem.size,
+              userId: cartItem.userId
+            })
+
+            const savedOrderItem = await orderItem.save();
+            newOrder.orderItem.push(savedOrderItem._id);
+
+            return savedOrderItem;
+          })
+        )
+
+        const savedOrder = await newOrder.save();
+        orders.add(savedOrder);
     }
+    return Array.from(orders);
   }
 }
