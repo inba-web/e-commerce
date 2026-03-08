@@ -121,7 +121,7 @@ class OrderService {
     ]);
   }
 
-  async cancelOrderStatus(orderId, status) {
+  async cancelOrder(orderId,user) {
     if (!mongoose.Types.ObjectId.isValid(orderId)) {
       throw new Error("Invalid Order ID");
     }
