@@ -20,7 +20,7 @@ class OrderService {
       acc[sellerId] = acc[sellerId] || [];
       acc[sellerId].push(item);
       return acc;
-    }, {});
+    }, {});j
 
     const orders = new Set();
 
@@ -147,6 +147,21 @@ class OrderService {
       { path: "shippingAddress" },
     ]);
   }
+
+  async findOrderItemById(orderItemId){
+    if(!mongoose.Types.ObjectId.isValid(orderItemId)){
+      throw new Error("Invalid Order Item ID")
+    }
+
+    const orderItem = await OrderItem.findById(orderItemId).populate("product");
+    
+    if(!orderItem){
+      throw new Error("Order item not found");
+    }
+
+    return orderItem;
+  }
+  
 }
 
 
