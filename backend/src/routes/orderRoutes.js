@@ -5,12 +5,12 @@ const router = express.Router();
 
 router.post('/', authMiddleware, OrderController.createOrder);
 
-router.get('/user', authMiddleware, OrderController.getUserOrderHistory);
+router.get('/user', authMiddleware, OrderController.getUserHistory);
 
 router.put('/:orderId/cancel', authMiddleware, OrderController.cancelOrder);
 
 router.get('/:orderId', authMiddleware, OrderController.getOrderById);
 
-router.get('/item/:orderItemId', authMiddleware, OrderController.getOrderByItemId);
+router.get('/item/:orderItemId', authMiddleware, OrderController.getOrderItemById);
 
-router.delete('/:orderId', authMiddleware, OrderController.deleteOrder)
+module.exports = router;
