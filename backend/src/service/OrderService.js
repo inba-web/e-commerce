@@ -28,10 +28,12 @@ class OrderService {
       const totalOrderPrice = cartItems.reduce(
         (sum, item) => sum + item.sellingPrice,
       );
+      
       const totalItem = cartItems.length;
 
       const newOrder = new Order({
         user: user._id,
+        seller: sellerId,
         shippingAddress: shippingAddress._id,
         orderItems: [],
         totalMrpPrice: totalOrderPrice,

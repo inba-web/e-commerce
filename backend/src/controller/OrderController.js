@@ -4,8 +4,8 @@ const OrderService = require("../service/OrderService");
 class OrderController {
   async createOrder(req, res, next) {
     const { shippingAddress } = req.body;
-    const { paymentMethod } = req.query;
-    const jwt = req.header.authorization;
+    const { paymentMethod } = req.query; 
+    // const jwt = req.header.authorization;
 
     try {
       const user = await req.user;
