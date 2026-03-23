@@ -38,7 +38,7 @@ class OrderService {
         orderItems: [],
         totalMrpPrice: totalOrderPrice,
         totalSellingPrice: totalOrderPrice,
-        totalItems: totalItem,
+        totalItems: totalItem, 
       });
 
       const orderItems = await Promise.all(

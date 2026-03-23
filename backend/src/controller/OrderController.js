@@ -48,7 +48,7 @@ class OrderController {
 
   async getUserHistory(req, res) {
     try {
-      const userId = req.user._id;
+      const userId = req.user._id.toString();
       const orderHistory = await OrderService.usersOrderHistory(userId);
       return res.status(200).json(orderHistory);
     } catch (error) {
