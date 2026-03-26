@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const Order = require("../model/Order");
 const OrderItem = require("../model/OrderItem");
 const User = require("../model/User");
+const Address = require("../model/Address");
 const OrderStatus = require("../domain/OrderStatus");
 
 class OrderService {
@@ -20,13 +21,13 @@ class OrderService {
       acc[sellerId] = acc[sellerId] || [];
       acc[sellerId].push(item);
       return acc;
-    }, {});j
+    }, {});
 
     const orders = new Set();
 
     for (const [sellerId, cartItems] of Object.entries(itemsBySeller)) {
       const totalOrderPrice = cartItems.reduce(
-        (sum, item) => sum + item.sellingPrice,
+        (sum, item) => sum + item.sellingPrice,0
       );
       
       const totalItem = cartItems.length;
@@ -38,7 +39,8 @@ class OrderService {
         orderItems: [],
         totalMrpPrice: totalOrderPrice,
         totalSellingPrice: totalOrderPrice,
-        totalItems: totalItem, 
+        discount: 0,
+        totalItem: totalItem, 
       });
 
       const orderItems = await Promise.all(
@@ -53,7 +55,7 @@ class OrderService {
           });
 
           const savedOrderItem = await orderItem.save();
-          newOrder.orderItem.push(savedOrderItem._id);
+          newOrder.orderItems.push(savedOrderItem._id);
 
           return savedOrderItem;
         }),
