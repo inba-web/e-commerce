@@ -18,7 +18,7 @@ class CartItemService {
         } 
         else {
             throw new Error("Unauthorized access");
-        }
+        } 
     }
 
     async removeCartItem(userId, cartItemId) {
