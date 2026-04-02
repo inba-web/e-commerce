@@ -15,7 +15,7 @@ class PaymentService{
         return await paymentOrder.save();
     }
 
-    async getPaymentOrderById(orderId){
+    async getPaymentOrderById(orderId) {
         const paymentOrder = await PaymentOrder.findOne(orderId);
 
         if(!paymentOrder) {
@@ -33,6 +33,14 @@ class PaymentService{
         }
 
         return paymentOrder;
+    }
+
+    async createRazorpayPaymentLink(user, amount, orderId){
+        try {
+            
+        } catch (error) {
+            
+        }
     }
 
 }
