@@ -37,7 +37,25 @@ class PaymentService{
 
     async createRazorpayPaymentLink(user, amount, orderId){
         try {
-            
+            const paymentLinkRequest = {
+                amount: amount*100,
+                currency: "INR",
+                customer:{
+                    name: user.fullName,
+                    email: user.email,
+                },
+
+                notify:{
+                    email: true
+                },
+
+                callback_url: `http://localhost:3000/payment-success/${orderId}`,
+                callback_method: "get"
+            }
+
+            const paymentLink = await razorpay.paymentLink.create(paymentLinkRequest);
+
+            return paymentLink;
         } catch (error) {
             
         }
