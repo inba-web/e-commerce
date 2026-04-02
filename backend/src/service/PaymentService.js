@@ -18,12 +18,21 @@ class PaymentService{
     async getPaymentOrderById(orderId){
         const paymentOrder = await PaymentOrder.findOne(orderId);
 
-        if(!paymentOrder){
+        if(!paymentOrder) {
             throw new Error("Payment order not found");
         }
 
         return paymentOrder;
     } 
 
+    async getPaymentOrderByPaymentLinkId(paymentLinkId){
+        const paymentOrder = await PaymentOrder.findOne({paymentLinkId});
+
+        if(!paymentOrder){
+            throw new Error("Payment order not found");
+        }
+
+        return paymentOrder;
+    }
 
 }
