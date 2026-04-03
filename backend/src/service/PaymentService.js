@@ -16,7 +16,7 @@ class PaymentService {
       orders: Orders.map((order) => order._id),
     });
 
-    return await paymentOrder.save();
+    return paymentOrder.save();
   }
 
   async getPaymentOrderById(orderId) {
