@@ -4,7 +4,6 @@ const sellerService = require("../service/sellerService");
 const jwtProvider = require("../utils/jwtProvider");
 
 class SellerController {
-  // Bearer token for
 
   async getSellerProfile(req, res) {
     try {
