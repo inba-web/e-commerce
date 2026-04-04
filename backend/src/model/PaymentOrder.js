@@ -24,7 +24,7 @@ const paymentOrderSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    order: {
+    orders: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Order",
         required: true
