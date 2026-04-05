@@ -1,6 +1,9 @@
 const PaymentService = require("../service/PaymentService.js");
 const OrderService = require("../service/OrderService.js");
 const Cart = require("../model/Cart.js");
+const TransactionService = require("../service/TransactionService.js");
+const SellerService = require("../service/SellerService.js");
+const SellerReportService = require("../service/SellerReportService.js");
 
 const paymentSuccessHandler = async (req, res) => {
   const { paymentId } = req.params;
@@ -22,16 +25,17 @@ const paymentSuccessHandler = async (req, res) => {
       for (let orderId of paymentOrder.orders) {
         const order = await OrderService.findOrderById(orderId);
 
-        // await TransactionService.createTransaction(order);
+        await TransactionService.createTransaction(order);
 
         const seller = await SellerService.getSellerById(order.seller);
-        // const sellerReport = await SellerReportService.getSellerReport(seller);
+        const sellerReport = await SellerReportService.getSellerReport(seller);
 
         sellerReport.totalOrders += 1;
         sellerReport.totalEarnings += order.totalSellingPrice;
         sellerReport.totalSales += order.orderItems.length;
 
-        // const updatedReport = await SellerReportService.updateSellerReport(sellerReport);
+        const updatedReport =
+          await SellerReportService.updateSellerReport(sellerReport);
         console.log("updated report : " + updatedReport);
       }
 
