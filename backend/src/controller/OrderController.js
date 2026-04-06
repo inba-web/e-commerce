@@ -1,5 +1,7 @@
+const PaymentOrder = require("../model/PaymentOrder");
 const CartService = require("../service/CartService");
 const OrderService = require("../service/OrderService");
+const PaymentService = require("../service/PaymentService");
 
 class OrderController {
   async createOrder(req, res, next) {
@@ -17,7 +19,24 @@ class OrderController {
         cart,
       );
 
-      return res.status(200).json(orders);
+      const paymentOrder = await PaymentService.createOrder(user, orders);
+
+      const response = {};
+
+      if(paymentMethod === "RAZORPAY"){
+        const payment = await PaymentService.createRazorpayPaymentLink(
+          user,
+          paymentOrder.amount,
+          paymentOrder._id
+        )
+
+        response.payment_link_url = payment.short_url;
+        paymentOrder.paymentLinkId = payment.id
+
+        await PaymentOrder.findByIdAndUpdate(paymentOrder._id, paymentOrder);
+      }
+
+      return res.status(200).json(response);
     } catch (error) {
       console.log(`Error in createOrder controller :  : ${error}`);
       return res.status(500).json({ error: error.message });
