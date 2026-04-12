@@ -18,7 +18,9 @@ const productRoutes = require("./routes/productRoute.js");  // Product Routes
 const cartRoutes = require("./routes/CartRoutes.js");  // Cart Routes
 const orderRoutes = require("./routes/orderRoutes.js");  // Order Routes
 const sellerOrderRoutes = require("./routes/sellerOrderRoutes.js");  // Seller Order Routee
-
+const paymentRoutes = require("./routes/paymentRoutes.js"); // payment routes
+const transactionRoutes = require("./routes/transactionRoutes.js") // transaction routes
+const sellerReportRoutes = require("./routes/sellerReportsRoutes.js") // seller report routes
 
 app.use("/auth", authRoutes); // auth routes
 app.use("/api/users", userRoutes);  // user routes
@@ -30,6 +32,10 @@ app.use("/api/sellers/product", sellerProductRoutes);  // sellerProduct routes
 app.use("/api/cart", cartRoutes);  // cart routes
 app.use("/api/orders", orderRoutes);  // order routes
 app.use("/api/sellers/orders", sellerOrderRoutes);  // sellers order routes
+
+app.use("/api/payment", paymentRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/sellers/report", sellerReportRoutes);
 
 app.use("/admin", adminRoutes);  // admin routes
 

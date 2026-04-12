@@ -3,7 +3,7 @@ const OrderService = require("../service/OrderService.js");
 const Cart = require("../model/Cart.js");
 const TransactionService = require("../service/TransactionService.js");
 const SellerService = require("../service/sellerService.js");
-const SellerReportService = require("../service/SellerReportService.js");
+const SellerReportService = require("../service/SelllerReportService.js");
 
 const paymentSuccessHandler = async (req, res) => {
   const { paymentId } = req.params;
