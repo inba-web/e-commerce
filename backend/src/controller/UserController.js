@@ -18,4 +18,5 @@ const handleErrors = (err, res) => {
 
 module.exports = {
     getUserProfileByJwt,
+    handleErrors
 }

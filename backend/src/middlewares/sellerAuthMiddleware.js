@@ -1,4 +1,4 @@
-const sellerService = require("../service/sellerService");
+const sellerService = require("../service/sellerService.js");
 const jwtProvider = require("../utils/jwtProvider");
 
 const sellerMiddleware = async (req, res, next) => {
