@@ -5,3 +5,5 @@ const paymentController = require("../controller/PaymentController.js");
 
 
 router.get("/:paymentId", authMiddleware, paymentController.paymentSuccessHandler);
+
+module.exports = router;
