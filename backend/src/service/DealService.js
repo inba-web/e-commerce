@@ -1,24 +1,52 @@
 const Deal = require("../model/Deal");
 const HomeCategory = require("../model/HomeCategory");
 
-class DealService{
+class DealService {
+  async getDeals() {
+    return await Deal.find().populate({ path: "category" });
+  }
 
-    async getDeals(){
-        return await Deal.find().populate({path:"category"})
+  async createDeals(deal) {
+    try {
+      const category = await HomeCategory.findById(deal.category._id);
+
+      const newDeal = new Deal({
+        ...deal,
+        category: category,
+      });
+      const saveDeal = await newDeal.save();
+      return await Deal.findById(saveDeal._id).populate({ path: "Category" });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async updateDeal(deal, id) {
+    const existingDeal = await HomeCategory.findById(id).populate({
+      path: "category",
+    });
+
+    if (existingDeal) {
+      return await Deal.findByIdAndUpdate(
+        existingDeal._id,
+        { discout: deal.discout },
+        { new: true },
+      );
     }
 
-    async createDeals(deal){
-        try {
-            const category = await HomeCategory.findById(deal.category._id);
+    throw new Error("Deal Not Found");
+  }
 
-            const newDeal = new Deal({
-                ...deal,
-                category:category
-            });
-            const saveDeal = await newDeal.save();
-            return await Deal.findById(saveDeal._id).populate({path:"Category"});
-        } catch (error) {
-            throw new Error(error.message);
-        }
+  async deleteDeal(id) {
+    const deal = await Deal.findById(id);
+
+    if (!deal) {
+      throw new Error("Deal Not found");
     }
+
+    await Deal.deleteOne({ _id: id });
+  }
+
 }
+
+module.exports = new DealService();
