@@ -21,6 +21,8 @@ const sellerOrderRoutes = require("./routes/sellerOrderRoutes.js");  // Seller O
 const paymentRoutes = require("./routes/paymentRoutes.js"); // payment routes
 const transactionRoutes = require("./routes/transactionRoutes.js") // transaction routes
 const sellerReportRoutes = require("./routes/sellerReportsRoutes.js") // seller report routes
+const dealRoutes = require("./routes/DealRoutes.js"); // home page deal routes
+
 
 
 app.use("/products", productRoutes);  // product routes
