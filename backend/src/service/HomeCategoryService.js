@@ -8,7 +8,7 @@ class HomeCategoryService{
 
     async createHomeCategory(homeCategory){
         return await HomeCategory.create(homeCategory);
-    }
+    } 
 
     async createCategories(homeCategories){
         const existingCategories = await HomeCategory.find();
