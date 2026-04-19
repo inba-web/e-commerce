@@ -21,7 +21,6 @@ const sellerOrderRoutes = require("./routes/sellerOrderRoutes.js");  // Seller O
 const paymentRoutes = require("./routes/paymentRoutes.js"); // payment routes
 const transactionRoutes = require("./routes/transactionRoutes.js") // transaction routes
 const sellerReportRoutes = require("./routes/sellerReportsRoutes.js") // seller report routes
-const dealRoutes = require("./routes/DealRoutes.js"); // home page deal routes
 const HomeCategoryRoutes = require("./routes/HomeCategoryRoutes.js"); // home category routes
 
 
@@ -40,11 +39,10 @@ app.use("/auth", authRoutes); // auth routes
 app.use("/api/users", userRoutes);  // user routes
 app.use("/sellers", sellerRoutes);  // seller routes
 
+app.use("/home", HomeCategoryRoutes);  //  HomeCategory Routes
+
 // admin
 app.use("/admin", adminRoutes);  // admin routes
-
-app.use("/home", HomeCategoryRoutes);  //  HomeCategory Routes
-app.use("/admin/deals", dealRoutes); // dealRoutes
 
 const port = 5000;
 
