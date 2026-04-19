@@ -13,11 +13,15 @@ class HomeService{
         const deals = await DealService.getDeals();
         
         const home = {
-            grid:"",
-            shopByCategories:[],
-            electricCategories:[],
-            deals:[],
-            dealCategories:[],
-        }
+            grid:gridCategories,
+            shopByCategories:shopByCategories,
+            electricCategories:electricCategories,
+            deals:deals,
+            dealCategories:dealCategories
+        } 
+
+        return home;
     }
 }
+
+module.exports = new HomeService();

@@ -1,12 +1,14 @@
+const HomeService = require("../service/HomeService");
 const HomeCategoryService = require("../service/HomeCategoryService");
 
 class HomeCategoryController {
+
   async createHomeCategories(req, res) {
     try {
       const homeCategories = req.body;
       const categories =
-        await HomeCategoryService.createHomeCategories(homeCategories);
-      // const home = await HomeCategoryService.createHomePageData(categories);
+        await HomeCategoryService.createCategories(homeCategories);
+      const home = await HomeService.createHomePageData(categories);
       return res.status(202).json(home);
     } catch (error) {
       console.log(`Error in HomeCategory Controller : ${error}`);

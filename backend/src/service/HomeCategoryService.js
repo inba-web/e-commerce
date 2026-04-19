@@ -31,4 +31,4 @@ class HomeCategoryService{
     }
 }
 
-module.export = new HomeCategoryService();
+module.exports = new HomeCategoryService();

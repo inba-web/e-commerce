@@ -43,6 +43,9 @@ app.use("/sellers", sellerRoutes);  // seller routes
 // admin
 app.use("/admin", adminRoutes);  // admin routes
 
+app.use("/home", HomeCategoryRoutes);  //  HomeCategory Routes
+app.use("/admin/deals", dealRoutes); // dealRoutes
+
 const port = 5000;
 
 app.listen(port, async()=> {
