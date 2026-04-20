@@ -2,10 +2,11 @@ const OrderStatus = require("../domain/OrderStatus.js");
 const PaymentStatus = require("../domain/PaymentStatus.js");
 const Orders = require("../model/Order.js");
 const PaymentOrder = require("../model/PaymentOrder.js");
+const razorpayClient = require("../config/razorpayClient.js");
 
 class PaymentService {
   async createOrder(user, order) {
-    const amount = Orders.reduce(
+    const amount = order.reduce(
       (sum, order) => sum + order.totalSellingPrice,
       0,
     );
@@ -42,10 +43,10 @@ class PaymentService {
   async proceedPaymentOrder(paymentOrder, paymentId, paymentLinkId){
 
     if(paymentOrder.status !== PaymentStatus.PENDING){
-        const payment = await razorpay.payment.fetch(paymentId);
+        const payment = await razorpayClient.payments.fetch(paymentId);
 
         if(payment.status === "captured"){
-            await Promisea.all(paymentOrder.orders.map(async (orderId) => {
+            await Promise.all(paymentOrder.orders.map(async (orderId) => {
                 const order = await Orders.findById(orderId);
                 order.paymentStatus = PaymentStatus.COMPLETED;
                 order.orderStatus = OrderStatus.PLACED;
@@ -94,7 +95,7 @@ class PaymentService {
         expire_by: Math.floor(Date.now()/1000) + (60*60) 
       };
 
-      const paymentLink = await razorpay.paymentLink.create(paymentLinkRequest);
+      const paymentLink = await razorpayClient.paymentLink.create(paymentLinkRequest);
 
       return paymentLink;
     } catch (error) {
