@@ -1,12 +1,13 @@
+import { ThemeProvider } from "@mui/material"
 import Button from "@mui/material/Button"
+import { customTheme } from "./theme/customeTheme"
+import Home from "./customer/pages/Home/Home"
 
 const App = () => {
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
-      <h1 className='text-2xl font-bold text-blue-500' >Hello, Vite!</h1>
-      <h1 className='text-2xl font-bold text-green-500'>E-Commerce Multi-Vendor Frontend!</h1>
-      <Button variant="contained">Start</Button>
-    </div>
+    <ThemeProvider theme={customTheme}>
+      <Home />
+    </ThemeProvider>
   )
 }
 
