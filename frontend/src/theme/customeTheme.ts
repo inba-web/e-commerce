@@ -8,6 +8,6 @@ export const customTheme = createTheme({
         },
         secondary:{
             main: '#EAF0F1'
-        }
+        } 
     }
 })
