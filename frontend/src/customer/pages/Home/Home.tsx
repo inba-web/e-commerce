@@ -1,8 +1,11 @@
 import React from 'react'
+import ElectronicCategory from './ElectronicCategory/ElectronicCategory'
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <div>
+      <ElectronicCategory />
+    </div>
   )
 } 
 
