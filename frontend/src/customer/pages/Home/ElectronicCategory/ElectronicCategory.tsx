@@ -37,7 +37,7 @@ const electronics = [
         section: "ELECTRIC_CATEGORY",
         name: "Tv",
         image: "https://rukminim1.flixcart.com/image/1536/1536/xif0q/dslr-camera/j/u/p/-original-imahbymfhgutf4dn.jpeg?q=90",
-        categoryId: "Tv"
+        categoryId: "tv"
     },
     {
         section: "ELECTRIC_CATEGORY",
@@ -50,7 +50,7 @@ const electronics = [
 const ElectronicCategory = () => {
   return (
     <div className='flex flex-wrap justify-between py-5 lg:px-20 border-b'>
-        {electronics.map((item) => <ElectronicCategoryCard item={item} />)} 
+        {electronics.map((item) => <ElectronicCategoryCard key={item.categoryId} item={item} />)} 
     </div>
   )
 }
