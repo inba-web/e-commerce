@@ -1,4 +1,3 @@
-import React from "react";
 import SliderImport from "react-slick";
 
 const Slider = SliderImport.default || SliderImport;
