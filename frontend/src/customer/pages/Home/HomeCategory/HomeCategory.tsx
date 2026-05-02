@@ -1,7 +1,11 @@
 
-const HomeCategory = () => {
+const HomeCategory = ({}) => {
   return (
-    <div>HomeCategory</div>
+    <div className="flex gap-3 flex-col justify-center items-center group cursor-pointer">
+      <div>
+        <img src={""} alt="" />
+      </div>
+    </div>
   )
 }
 
