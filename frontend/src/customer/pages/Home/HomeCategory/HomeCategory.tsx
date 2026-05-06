@@ -1,10 +1,10 @@
+import React from 'react'
+import HomeCategoryCard from './HomeCategoryCard'
 
-const HomeCategory = ({}) => {
+const HomeCategory = () => {
   return (
-    <div className="flex gap-3 flex-col justify-center items-center group cursor-pointer">
-      <div>
-        <img src={""} alt="" />
-      </div>
+    <div className='flex justify-center gap-7 flex-wrap'>
+      {[1,1,1,1,1,1,1,1,1,1].map((item) => <HomeCategoryCard />)}
     </div>
   )
 }
