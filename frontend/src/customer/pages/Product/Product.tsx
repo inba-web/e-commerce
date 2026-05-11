@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FilterSection from "./FilterSection";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "./ProductCard";
 
 const Products = () => {
   const [sort, setSort] = useState("price_low");
@@ -10,6 +10,8 @@ const Products = () => {
     setSort(e.target.value);
   };
 
+  console.log(sort);
+  
   return (
     <div className="-z-10 mt-10">
       <div className="">
@@ -37,16 +39,17 @@ const Products = () => {
               >
                 <MenuItem value="price_low">Price: Low to High</MenuItem>
                 <MenuItem value="price_high">Price: High to Low</MenuItem>
+
               </Select>
             </FormControl>
           </div>
 
-          <Divider />
+          {/* <Divider /> */}
 
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 px-5 justify-center">
-            {[1, 1, 1, 1, 1, 1].map((item) => (
-              <div>
-                <ProductCard />
+            {[1, 1, 1, 1, 1].map((item,key) => (
+              <div key={key} >
+                <ProductCard item={item} />
               </div>
             ))}
           </div>
