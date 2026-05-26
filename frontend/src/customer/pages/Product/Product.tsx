@@ -6,12 +6,23 @@ import ProductCard from "./ProductCard";
 const Products = () => {
   const [sort, setSort] = useState("price_low");
 
+ const products = [
+  {
+    id: 1,
+    images: [
+      "https://rukminim1.flixcart.com/image/1536/1536/xif0q/sari/j/u/w/free-tsk-saree-mall-maroon-tasrika-unstitched-original-imagzzj3f8yhvft8.jpeg?q=90",
+      "https://rukminim1.flixcart.com/image/1536/1536/xif0q/sari/z/w/g/free-tsk-saree-mall-maroon-tasrika-unstitched-original-imah4w6tdd9dhfuy.jpeg?q=90",
+      "https://rukminim1.flixcart.com/image/1536/1536/xif0q/sari/r/y/l/free-tsk-saree-mall-maroon-tasrika-unstitched-original-imah4w6tnbgtbztc.jpeg?q=90",
+    ],
+  },
+];
+
   const handleSortProduct = (e: any) => {
     setSort(e.target.value);
   };
 
   console.log(sort);
-  
+
   return (
     <div className="-z-10 mt-10">
       <div className="">
@@ -39,7 +50,6 @@ const Products = () => {
               >
                 <MenuItem value="price_low">Price: Low to High</MenuItem>
                 <MenuItem value="price_high">Price: High to Low</MenuItem>
-
               </Select>
             </FormControl>
           </div>
@@ -47,9 +57,9 @@ const Products = () => {
           {/* <Divider /> */}
 
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 px-5 justify-center">
-            {[1, 1, 1, 1, 1].map((item,key) => (
-              <div key={key} >
-                <ProductCard item={item} />
+            {products.map((product, key) => (
+              <div key={key}>
+                <ProductCard item={product} />
               </div>
             ))}
           </div>
