@@ -1,33 +1,37 @@
+import { useNavigate } from "react-router-dom";
 
-type dealCard = {
-  image: string,
-  discount: string
-}
+type DealItem = {
+  _id?: string;
+  image: string;
+  discount: string;
+  category?: string;
+};
 
-const DealCard = ({ deal }: {deal: dealCard}) => {
-
-  if(!deal) return null;
+const DealCard = ({ deal }: { deal: DealItem }) => {
+  const navigate = useNavigate();
+  if (!deal) return null;
 
   return (
-    <div className='w-full cursor-pointer group'>
-
+    <div
+      onClick={() => navigate(`/search?category=${deal.category || ""}`)}
+      className="w-full cursor-pointer group shadow-sm hover:shadow-md transition-shadow rounded-lg overflow-hidden border border-gray-100 bg-white"
+    >
       {/* Image */}
-      <div className='overflow-hidden rounded-t-lg'>
-        <img 
-          className='w-full h-64 object-cover object-top group-hover:scale-105 transition duration-300'
-          src={deal.image} 
-          alt=""
+      <div className="overflow-hidden bg-gray-50 h-56 flex items-center justify-center">
+        <img
+          className="w-full h-full object-cover object-top group-hover:scale-105 transition duration-300"
+          src={deal.image}
+          alt="Deal Item"
         />
       </div>
 
       {/* Content */}
-      <div className='bg-black text-white p-3 text-center rounded-b-lg'>
-        <p className='text-xl font-bold'>{deal.discount}</p>
-        <p className='text-sm opacity-80'>Shop Now</p>
+      <div className="bg-teal-600 text-white p-3 text-center">
+        <p className="text-lg font-bold truncate">{deal.discount}</p>
+        <p className="text-xs opacity-90 uppercase tracking-wider font-semibold mt-0.5">Shop Now</p>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default DealCard
+export default DealCard;

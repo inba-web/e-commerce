@@ -1,7 +1,17 @@
 const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const mongoSanitize = require("./middlewares/mongoSanitize");
 const connectDB = require("./db/db");
+const adminMiddleware = require("./middlewares/adminMiddleware");
 
 const app = express();
+app.use(helmet());
+app.use(mongoSanitize());
+app.use(cors({
+    origin: "*",
+    credentials: true
+}));
 app.use(express.json())
 app.use(express.urlencoded({extended:true}));
 
@@ -41,8 +51,8 @@ app.use("/sellers", sellerRoutes);  // seller routes
 
 app.use("/home", HomeCategoryRoutes);  //  HomeCategory Routes
 
-// admin
-app.use("/admin", adminRoutes);  // admin routes
+// admin - Locked down to prevent Broken Access Control
+app.use("/admin", adminMiddleware, adminRoutes);  // admin routes
 
 const port = 5000;
 

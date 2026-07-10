@@ -39,7 +39,13 @@ class AuthService {
 
     const subject = "INBA MART Login/Signup OTP";
     const body = `Your OTP is ${otp}. Please enter it to complete your login process.`;
-    await sendVerificataionEmail(email, subject, body);
+    try {
+      await sendVerificataionEmail(email, subject, body);
+      console.log("OTP email sent successfully");
+    } catch (emailError) {
+      console.error("WARNING: Failed to send verification email (SMTP Authentication Issue):", emailError.message);
+      console.log(`[DEVELOPMENT FALLBACK] Please use the OTP from logs above to log in: ${otp}`);
+    }
 
     console.log("OTP saved in DB:", otp);
   }

@@ -26,6 +26,17 @@ class HomeCategoryController {
     }
   }
 
+  async getHomePageData(req, res) {
+    try {
+      const allCategories = await HomeCategoryService.getAllHomeCategories();
+      const homeData = await HomeService.createHomePageData(allCategories);
+      return res.status(200).json(homeData);
+    } catch (error) {
+      console.log(`Error in getHomePageData Controller : ${error}`);
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
   async updateHomeCategory(req, res) {
     try {
       const category = req.body;

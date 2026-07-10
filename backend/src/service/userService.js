@@ -7,7 +7,7 @@ class UserService {
     async findUserProfileByJwt(jwt) {
         const email = jwtProvider.getEmailFromjwt(jwt);
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).populate("addresses");
 
         if (!user) {
             throw new Error(`User does not exists with this email : ${email}`)
@@ -16,7 +16,7 @@ class UserService {
     }
 
     async findUserByEmail(email) {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).populate("addresses");
 
         if (!user) {
             throw new Error(`User does not exists with this email : ${email}`);

@@ -127,9 +127,21 @@ class ProductService {
           content: [],
           totalPages: 0,
           totalElement: 0,
-      };
+        };
       }
-      filterQuery.category = category._id.toString();
+
+      let categoryIds = [category._id];
+      if (category.level === 1) {
+        const lvl2Categories = await Category.find({ parentCategory: category._id });
+        const lvl2Ids = lvl2Categories.map(c => c._id);
+        const lvl3Categories = await Category.find({ parentCategory: { $in: lvl2Ids } });
+        categoryIds = lvl3Categories.map(c => c._id);
+      } else if (category.level === 2) {
+        const lvl3Categories = await Category.find({ parentCategory: category._id });
+        categoryIds = lvl3Categories.map(c => c._id);
+      }
+
+      filterQuery.category = { $in: categoryIds };
     }
 
     if (req.color) {

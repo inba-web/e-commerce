@@ -14,7 +14,7 @@ class PaymentService {
     const paymentOrder = new PaymentOrder({
       amount,
       user: user._id,
-      orders: Orders.map((order) => order._id),
+      orders: order.map((order) => order._id),
     });
 
     return paymentOrder.save();
@@ -90,9 +90,9 @@ class PaymentService {
           email: true,
         },
 
-        callback_url: `http://localhost:3000/payment-success/${orderId}`,
+        callback_url: `http://localhost:5173/payment-success/${orderId}`,
         callback_method: "get",
-        expire_by: Math.floor(Date.now()/1000) + (60*60) 
+        expire_by: Math.floor(Date.now()/1000) + (24 * 60 * 60) 
       };
 
       const paymentLink = await razorpayClient.paymentLink.create(paymentLinkRequest);
