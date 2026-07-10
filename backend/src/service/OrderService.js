@@ -7,13 +7,15 @@ const OrderStatus = require("../domain/OrderStatus");
 
 class OrderService {
   async createOrder(user, shippingAddress, cart) {
-    if (shippingAddress._id && !user.address.includes(shippingAddress._id)) {
+    if (shippingAddress._id && !user.addresses.includes(shippingAddress._id)) {
       user.addresses.push(shippingAddress._id);
       await User.findByIdAndUpdate(user._id, user);
     }
 
     if (!shippingAddress._id) {
       shippingAddress = await Address.create(shippingAddress);
+      user.addresses.push(shippingAddress._id);
+      await User.findByIdAndUpdate(user._id, { $push: { addresses: shippingAddress._id } });
     }
 
     const itemsBySeller = cart.cartItems.reduce((acc, item) => {
@@ -86,15 +88,15 @@ class OrderService {
   }
 
   async usersOrderHistory(userId) {
-    return await Order.findOne({ user: userId }).populate([
+    return await Order.find({ user: userId }).populate([
       { path: "seller" },
       { path: "orderItems", populate: { path: "product" } },
       { path: "shippingAddress" },
     ]);
   }
 
-  async getSellersOrder(orderId) {
-    return await Order.findOne({ seller: orderId })
+  async getSellersOrder(sellerId) {
+    return await Order.find({ seller: sellerId })
       .sort({ orderDate: -1 })
       .populate([
         { path: "seller" },
@@ -125,7 +127,7 @@ class OrderService {
     ]);
   }
 
-  async cancelOrder(orderId,user) {
+  async cancelOrder(orderId, userId) {
     if (!mongoose.Types.ObjectId.isValid(orderId)) {
       throw new Error("Invalid Order ID");
     }
@@ -137,7 +139,7 @@ class OrderService {
     }
 
 
-    if(user._id.toString() !== order.user.toString()){
+    if(userId.toString() !== order.user.toString()){
       throw new Error("Unauthorized to cancel this order");
     }
 

@@ -21,7 +21,10 @@ class OrderController {
 
       const paymentOrder = await PaymentService.createOrder(user, orders);
 
-      const response = {};
+      const response = {
+        paymentOrder,
+        orders
+      };
 
       if(paymentMethod === "RAZORPAY"){
         const payment = await PaymentService.createRazorpayPaymentLink(
@@ -54,7 +57,7 @@ class OrderController {
     }
   }
 
-  async getOrderItemById(orderItemId) {
+  async getOrderItemById(req, res) {
     try {
       const { orderItemId } = req.params;
       const orderItem = await OrderService.findOrderItemById(orderItemId);
@@ -79,7 +82,7 @@ class OrderController {
   async getSellersOrders(req, res) {
     try {
       const sellerId = req.seller._id;
-      const orders = OrderService.getSellersOrder(sellerId);
+      const orders = await OrderService.getSellersOrder(sellerId);
       return res.status(200).json(orders);
     } catch (error) {
       console.log(`Error in getSellerOrders controller :  : ${error}`);
@@ -89,8 +92,8 @@ class OrderController {
 
   async updateOrdeStatus(req, res) {
     try {
-      const { orderId, status } = req.params;
-      const updateOrderStatus = OrderService.updateOrderStatus(orderId, status);
+      const { orderId, orderStatus } = req.params;
+      const updateOrderStatus = await OrderService.updateOrderStatus(orderId, orderStatus);
       return res.status(200).json(updateOrderStatus);
     } catch (error) {
       console.log(`Error in updateOrderStatus controller :  : ${error}`);
