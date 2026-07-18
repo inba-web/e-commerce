@@ -122,6 +122,45 @@ class SellerController {
         .json({ message: error.message });
     }
   }
+
+  async loginWithPassword(req, res) {
+    try {
+      const { email, password } = req.body;
+      const authResponse = await sellerService.loginWithPassword(email, password);
+      return res.status(200).json(authResponse);
+    } catch (error) {
+      console.log(`Error in loginWithPassword controller: ${error}`);
+      res
+        .status(error instanceof Error ? 400 : 500)
+        .json({ message: error.message });
+    }
+  }
+
+  async forgetPassword(req, res) {
+    try {
+      const { email } = req.body;
+      await sellerService.forgetPassword(email);
+      return res.status(200).json({ message: "OTP sent successfully to email" });
+    } catch (error) {
+      console.log(`Error in forgetPassword controller: ${error}`);
+      res
+        .status(error instanceof Error ? 400 : 500)
+        .json({ message: error.message });
+    }
+  }
+
+  async resetPassword(req, res) {
+    try {
+      const { email, otp, password } = req.body;
+      await sellerService.resetPassword(email, otp, password);
+      return res.status(200).json({ message: "Password reset successful" });
+    } catch (error) {
+      console.log(`Error in resetPassword controller: ${error}`);
+      res
+        .status(error instanceof Error ? 400 : 500)
+        .json({ message: error.message });
+    }
+  }
 }
 
 module.exports = new SellerController();

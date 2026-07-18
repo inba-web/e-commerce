@@ -7,6 +7,7 @@ const sellerService = require("./sellerService.js");
 const jwtProvider = require("../utils/jwtProvider");
 const userService = require("./userService");
 const Cart = require("../model/Cart.js");
+const { getWelcomeOtpTemplate } = require("../utils/emailTemplates.js");
 
 class AuthService {
   async sendLoginOTP(email) {
@@ -38,7 +39,7 @@ class AuthService {
     console.log("verification code : " + verificationCode.otp);
 
     const subject = "INBA MART Login/Signup OTP";
-    const body = `Your OTP is ${otp}. Please enter it to complete your login process.`;
+    const body = getWelcomeOtpTemplate(otp);
     try {
       await sendVerificataionEmail(email, subject, body);
       console.log("OTP email sent successfully");

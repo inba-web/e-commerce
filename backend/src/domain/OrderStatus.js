@@ -3,7 +3,7 @@ const OrderStatus = Object.freeze({
     PLACED: "PLACED",
     CONFIRMED: "CONFIRMED",
     SHIPPED: "SHIPPED",
-    DELIVERED: "SHIPPED",
+    DELIVERED: "DELIVERED",
     CANCELLED: "CANCELLED"
 })
 

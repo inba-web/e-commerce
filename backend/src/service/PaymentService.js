@@ -42,7 +42,7 @@ class PaymentService {
 
   async proceedPaymentOrder(paymentOrder, paymentId, paymentLinkId){
 
-    if(paymentOrder.status !== PaymentStatus.PENDING){
+    if(paymentOrder.status === PaymentStatus.PENDING){
         const payment = await razorpayClient.payments.fetch(paymentId);
 
         if(payment.status === "captured"){
@@ -91,8 +91,7 @@ class PaymentService {
         },
 
         callback_url: `http://localhost:5173/payment-success/${orderId}`,
-        callback_method: "get",
-        expire_by: Math.floor(Date.now()/1000) + (24 * 60 * 60) 
+        callback_method: "get"
       };
 
       const paymentLink = await razorpayClient.paymentLink.create(paymentLinkRequest);

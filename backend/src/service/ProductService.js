@@ -76,6 +76,31 @@ class ProductService {
 
   async updateProduct(productId, updatedProductedData) {
     try {
+      if (updatedProductedData.mrpPrice && updatedProductedData.sellingPrice) {
+        updatedProductedData.discountPercent = calculateDiscountPercentage(
+          updatedProductedData.mrpPrice,
+          updatedProductedData.sellingPrice
+        );
+      }
+
+      if (updatedProductedData.category) {
+        const category1 = await this.createOrGetCategory(updatedProductedData.category, 1);
+        const category2 = await this.createOrGetCategory(
+          updatedProductedData.category2 || "clothing",
+          2,
+          category1._id
+        );
+        const category3 = await this.createOrGetCategory(
+          updatedProductedData.category3 || "ethnic-wear",
+          3,
+          category2._id
+        );
+        updatedProductedData.category = category3._id;
+      }
+
+      delete updatedProductedData.category2;
+      delete updatedProductedData.category3;
+
       const product = await Product.findByIdAndUpdate(
         productId,
         updatedProductedData,

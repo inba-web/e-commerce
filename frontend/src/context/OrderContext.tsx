@@ -74,10 +74,10 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const verifyPayment = async (paymentId: string, paymentLinkId: string) => {
     if (!token) return;
     const headers = { Authorization: `Bearer ${token}` };
-    // Send data in GET request body config for Axios
+    // Send data in GET request query params
     const response = await axios.get(`${API_URL}/api/payment/${paymentId}`, {
       headers,
-      data: { paymentLinkId }
+      params: { paymentLinkId }
     });
     return response.data;
   };
