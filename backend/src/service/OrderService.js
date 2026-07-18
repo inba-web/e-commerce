@@ -116,7 +116,7 @@ class OrderService {
       throw new Error("Order not found");
     }
 
-    order.status = status;
+    order.orderStatus = status;
 
     return await Order.findByIdAndUpdate(orderId, order, {
       new: true,
@@ -143,7 +143,7 @@ class OrderService {
       throw new Error("Unauthorized to cancel this order");
     }
 
-    order.status = OrderStatus.CANCELLED;
+    order.orderStatus = OrderStatus.CANCELLED;
 
     return await Order.findByIdAndUpdate(orderId, order, {
       new: true,

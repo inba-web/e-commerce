@@ -15,22 +15,28 @@ import Divider from "@mui/material/Divider";
 
 const SellerLogin = () => {
   const navigate = useNavigate();
-  const { sendOtp, signin } = useAuth();
+  const { signinSeller, forgetSellerPassword, resetSellerPassword } = useAuth();
   const { registerSeller } = useSeller();
 
   const [tab, setTab] = useState(0); // 0 = Login, 1 = Register
 
   // Login Form
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
+  const [password, setPassword] = useState("");
 
   // Register Form
   const [sellerName, setSellerName] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [gstin, setGstin] = useState("");
-  const password = "12345678";
+  const [regPassword, setRegPassword] = useState("");
+
+  // Forgot Password Form
+  const [forgotMode, setForgotMode] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotOtp, setForgotOtp] = useState("");
+  const [forgotNewPassword, setForgotNewPassword] = useState("");
+  const [forgotOtpSent, setForgotOtpSent] = useState(false);
 
   // Bank Info
   const [accNo, setAccNo] = useState("");
@@ -57,48 +63,88 @@ const SellerLogin = () => {
     setTab(val);
     setError("");
     setSuccess("");
+    setForgotMode(false);
   };
 
-  const handleRequestOtp = async () => {
-    if (!email) {
-      setError("Please enter your registered email");
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setError("Please enter your registered email and password");
       return;
     }
     setLoading(true);
     setError("");
     try {
-      await sendOtp(email, true);
-      setOtpSent(true);
-      setSuccess("OTP sent successfully. Check your email!");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to send OTP. Is this email registered as a seller?");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLoginSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !otp) return;
-    setLoading(true);
-    setError("");
-    try {
-      await signin(email, otp);
+      await signinSeller(email, password);
       setSuccess("Welcome back, Vendor!");
       setTimeout(() => {
         navigate("/seller/dashboard");
       }, 1000);
     } catch (err: any) {
-      setError(err.message || "Failed to verify. Verify the OTP code.");
+      setError(err.response?.data?.message || err.message || "Failed to log in. Please review credentials.");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleRequestForgotOtp = async () => {
+    if (!forgotEmail) {
+      setError("Please enter your registered email");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    setSuccess("");
+    try {
+      await forgetSellerPassword(forgotEmail);
+      setForgotOtpSent(true);
+      setSuccess("Verification OTP sent! Check console / email.");
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || "Failed to send reset OTP.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!forgotEmail || !forgotOtp || !forgotNewPassword) {
+      setError("Please fill in all reset details");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    setSuccess("");
+    try {
+      await resetSellerPassword(forgotEmail, forgotOtp, forgotNewPassword);
+      setSuccess("Password updated successfully! You can now log in.");
+      setTimeout(() => {
+        setForgotMode(false);
+        setForgotOtpSent(false);
+        setEmail(forgotEmail);
+        setPassword("");
+        resetForgotForm();
+      }, 1500);
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || "Failed to reset password. Check OTP.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetForgotForm = () => {
+    setForgotEmail("");
+    setForgotOtp("");
+    setForgotNewPassword("");
+    setForgotOtpSent(false);
+    setError("");
+    setSuccess("");
+  };
+
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!sellerName || !regEmail || !mobile || !gstin) {
-      setError("Please fill all vendor primary fields");
+    if (!sellerName || !regEmail || !mobile || !gstin || !regPassword) {
+      setError("Please fill all vendor primary fields, including password");
       return;
     }
     setLoading(true);
@@ -107,7 +153,7 @@ const SellerLogin = () => {
       const sellerData = {
         sellerName,
         email: regEmail,
-        password,
+        password: regPassword,
         mobile,
         GSTIN: gstin,
         bankDetails: {
@@ -136,6 +182,7 @@ const SellerLogin = () => {
       setSuccess("Onboarding application submitted! Login once approved by Admin.");
       setTab(0);
       setEmail(regEmail);
+      setPassword("");
     } catch (err: any) {
       setError(err.response?.data?.message || "Onboarding failed. Review GSTIN/Email inputs.");
     } finally {
@@ -161,35 +208,45 @@ const SellerLogin = () => {
             {error && <Alert severity="error" className="mt-4">{error}</Alert>}
             {success && <Alert severity="success" className="mt-4">{success}</Alert>}
 
-            {tab === 0 ? (
-              <form onSubmit={handleLoginSubmit} className="space-y-4 mt-6">
+            {forgotMode ? (
+              <form onSubmit={handleResetPasswordSubmit} className="space-y-4 mt-6">
+                <Typography className="font-bold text-gray-700 text-sm">Reset Vendor Password</Typography>
                 <TextField
                   label="Registered Email"
                   fullWidth
-                  value={email}
-                  disabled={otpSent}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={forgotEmail}
+                  disabled={forgotOtpSent}
+                  onChange={(e) => setForgotEmail(e.target.value)}
                 />
-                {otpSent && (
-                  <TextField
-                    label="6-Digit OTP"
-                    fullWidth
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    helperText="Check console/email for code"
-                  />
+                {forgotOtpSent && (
+                  <>
+                    <TextField
+                      label="6-Digit OTP Code"
+                      fullWidth
+                      value={forgotOtp}
+                      onChange={(e) => setForgotOtp(e.target.value)}
+                      helperText="Check console/email for OTP"
+                    />
+                    <TextField
+                      label="New Password"
+                      type="password"
+                      fullWidth
+                      value={forgotNewPassword}
+                      onChange={(e) => setForgotNewPassword(e.target.value)}
+                    />
+                  </>
                 )}
 
-                {!otpSent ? (
+                {!forgotOtpSent ? (
                   <Button
                     variant="contained"
                     fullWidth
                     size="large"
                     disabled={loading}
-                    onClick={handleRequestOtp}
+                    onClick={handleRequestForgotOtp}
                     sx={{ bgcolor: "#00927c", "&:hover": { bgcolor: "#007d6a" }, fontWeight: "bold" }}
                   >
-                    {loading ? <CircularProgress size={24} color="inherit" /> : "Request Login OTP"}
+                    {loading ? <CircularProgress size={24} color="inherit" /> : "Request Reset OTP"}
                   </Button>
                 ) : (
                   <Button
@@ -200,9 +257,56 @@ const SellerLogin = () => {
                     disabled={loading}
                     sx={{ bgcolor: "#00927c", "&:hover": { bgcolor: "#007d6a" }, fontWeight: "bold" }}
                   >
-                    {loading ? <CircularProgress size={24} color="inherit" /> : "Login Store"}
+                    {loading ? <CircularProgress size={24} color="inherit" /> : "Save New Password"}
                   </Button>
                 )}
+
+                <Button
+                  variant="text"
+                  fullWidth
+                  onClick={() => { setForgotMode(false); resetForgotForm(); }}
+                  sx={{ color: "#00927c", fontWeight: "bold", textTransform: "none", mt: 1 }}
+                >
+                  Back to Login
+                </Button>
+              </form>
+            ) : tab === 0 ? (
+              <form onSubmit={handleLoginSubmit} className="space-y-4 mt-6">
+                <TextField
+                  label="Registered Email"
+                  fullWidth
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                  label="Store Password"
+                  type="password"
+                  fullWidth
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <div className="flex justify-end">
+                  <Button
+                    variant="text"
+                    size="small"
+                    onClick={() => { setForgotMode(true); setError(""); setSuccess(""); }}
+                    sx={{ color: "#00927c", fontWeight: "bold", textTransform: "none" }}
+                  >
+                    Forgot Password?
+                  </Button>
+                </div>
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  size="large"
+                  disabled={loading}
+                  sx={{ bgcolor: "#00927c", "&:hover": { bgcolor: "#007d6a" }, fontWeight: "bold" }}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : "Login Store"}
+                </Button>
               </form>
             ) : (
               <form onSubmit={handleRegisterSubmit} className="space-y-6 mt-6">
@@ -214,6 +318,7 @@ const SellerLogin = () => {
                     <TextField label="Login Email" fullWidth size="small" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} />
                     <TextField label="Mobile Phone" fullWidth size="small" value={mobile} onChange={(e) => setMobile(e.target.value)} />
                     <TextField label="GSTIN Number" fullWidth size="small" value={gstin} onChange={(e) => setGstin(e.target.value)} />
+                    <TextField label="Store Password" type="password" fullWidth size="small" className="sm:col-span-2" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} />
                   </div>
                 </div>
 

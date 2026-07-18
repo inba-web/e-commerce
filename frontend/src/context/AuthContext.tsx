@@ -14,6 +14,9 @@ interface AuthContextType {
   sendOtp: (email: string, isLogin: boolean) => Promise<void>;
   signup: (fullName: string, email: string, mobile: string, otp: string) => Promise<void>;
   signin: (email: string, otp: string) => Promise<any>;
+  signinSeller: (email: string, password: string) => Promise<any>;
+  forgetSellerPassword: (email: string) => Promise<void>;
+  resetSellerPassword: (email: string, otp: string, newPass: string) => Promise<void>;
   logout: () => void;
   fetchProfile: (jwtToken?: string) => Promise<void>;
 }
@@ -115,6 +118,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return response.data;
   };
 
+  const signinSeller = async (email: string, password: string) => {
+    const response = await axios.post(`${API_URL}/sellers/login`, { email, password });
+    const { jwt, role: userRole } = response.data;
+    if (jwt) {
+      localStorage.setItem("jwt", jwt);
+      localStorage.setItem("role", userRole);
+      setToken(jwt);
+      setRole(userRole);
+      await fetchProfile(jwt);
+    }
+    return response.data;
+  };
+
+  const forgetSellerPassword = async (email: string) => {
+    await axios.post(`${API_URL}/sellers/forget-password`, { email });
+  };
+
+  const resetSellerPassword = async (email: string, otp: string, newPass: string) => {
+    await axios.post(`${API_URL}/sellers/reset-password`, { email, otp, password: newPass });
+  };
+
   const logout = () => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("role");
@@ -135,6 +159,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         sendOtp,
         signup,
         signin,
+        signinSeller,
+        forgetSellerPassword,
+        resetSellerPassword,
         logout,
         fetchProfile,
       }}

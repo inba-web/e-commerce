@@ -32,6 +32,7 @@ const SellerOrders = () => {
     switch (status) {
       case "PENDING": return "warning";
       case "PLACED": return "primary";
+      case "CONFIRMED": return "secondary";
       case "SHIPPED": return "info";
       case "DELIVERED": return "success";
       case "CANCELLED": return "error";
@@ -139,6 +140,7 @@ const SellerOrders = () => {
                         >
                           <MenuItem value="PENDING" disabled>Pending</MenuItem>
                           <MenuItem value="PLACED">Placed</MenuItem>
+                          <MenuItem value="CONFIRMED">Confirmed</MenuItem>
                           <MenuItem value="SHIPPED">Shipped</MenuItem>
                           <MenuItem value="DELIVERED">Delivered</MenuItem>
                           <MenuItem value="CANCELLED">Cancelled</MenuItem>

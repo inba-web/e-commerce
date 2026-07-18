@@ -46,6 +46,81 @@ const MyOrders = () => {
     }
   };
 
+  const renderTimeline = (currentStatus: string) => {
+    if (currentStatus === "CANCELLED") {
+      return (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2 text-xs font-bold my-4">
+          <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-ping" />
+          This order has been CANCELLED and will not be processed.
+        </div>
+      );
+    }
+
+    const steps = ["PLACED", "CONFIRMED", "SHIPPED", "DELIVERED"];
+    const stepLabels = ["Placed", "Confirmed", "Shipped", "Delivered"];
+    
+    let activeIndex = steps.indexOf(currentStatus);
+    if (activeIndex === -1 && currentStatus === "PENDING") {
+      activeIndex = 0;
+    }
+
+    return (
+      <div className="w-full py-6 px-2 sm:px-6">
+        <div className="relative flex justify-between items-center w-full">
+          {/* Background line */}
+          <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 -translate-y-1/2 z-0 rounded-full" />
+          
+          {/* Active progress fill */}
+          <div 
+            className="absolute top-1/2 left-0 h-1 bg-[#00927c] -translate-y-1/2 z-0 transition-all duration-500 rounded-full"
+            style={{ 
+              width: `${activeIndex >= 0 ? (activeIndex / (steps.length - 1)) * 100 : 0}%` 
+            }} 
+          />
+
+          {steps.map((step, idx) => {
+            const isCompleted = idx < activeIndex;
+            const isActive = idx === activeIndex;
+
+            return (
+              <div key={step} className="flex flex-col items-center z-10 relative">
+                <div 
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                    isCompleted 
+                      ? "bg-[#00927c] text-white shadow" 
+                      : isActive 
+                        ? "bg-white border-2 border-[#00927c] text-[#00927c] ring-4 ring-teal-50" 
+                        : "bg-white border border-gray-300 text-gray-400"
+                  }`}
+                >
+                  {isCompleted ? (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    idx + 1
+                  )}
+                </div>
+                
+                <span 
+                  className={`mt-2 text-[10px] sm:text-xs font-semibold whitespace-nowrap transition-colors duration-300 ${
+                    isActive 
+                      ? "text-teal-700 font-bold" 
+                      : isCompleted 
+                        ? "text-gray-700" 
+                        : "text-gray-400"
+                  }`}
+                >
+                  {stepLabels[idx]}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 lg:px-8 mt-10 pb-16">
       <h1 className="text-2xl lg:text-3xl font-black text-gray-800 mb-8 uppercase tracking-wide">
@@ -106,6 +181,9 @@ const MyOrders = () => {
                   </div>
                 );
               })}
+
+              {/* Visual Order Timeline Stepper */}
+              {renderTimeline(order.orderStatus)}
 
               <Divider className="my-2" />
 

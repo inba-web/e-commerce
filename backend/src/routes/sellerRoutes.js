@@ -9,5 +9,8 @@ router.get("/", sellerMiddleware, SellerController.getAllSellers);
 router.patch("/", sellerMiddleware, SellerController.updateSeller);
 
 router.post("/verify/login-otp", SellerController.verifyLoginOtp);
+router.post("/login", SellerController.loginWithPassword);
+router.post("/forget-password", SellerController.forgetPassword);
+router.post("/reset-password", SellerController.resetPassword);
 
 module.exports = router;
