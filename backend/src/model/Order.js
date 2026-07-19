@@ -57,6 +57,10 @@ const orderSchema = new mongoose.Schema({
         default: function(){
             return Date.now() + 7 * 24 * 60 * 60 * 1000;
         }
+    },
+    deletedByCustomer: {
+        type: Boolean,
+        default: false
     }
 })
 

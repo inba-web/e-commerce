@@ -11,6 +11,8 @@ interface OrderContextType {
   createOrder: (shippingAddress: any, paymentMethod: string) => Promise<any>;
   cancelOrder: (orderId: string) => Promise<void>;
   verifyPayment: (paymentId: string, paymentLinkId: string) => Promise<any>;
+  deleteOrderHistory: (orderId: string) => Promise<void>;
+  clearOrderHistory: () => Promise<void>;
 }
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
@@ -82,6 +84,20 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return response.data;
   };
 
+  const deleteOrderHistory = async (orderId: string) => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    await axios.delete(`${API_URL}/api/orders/${orderId}`, { headers });
+    await fetchUserOrders();
+  };
+
+  const clearOrderHistory = async () => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    await axios.delete(`${API_URL}/api/orders/user/clear-history`, { headers });
+    await fetchUserOrders();
+  };
+
   return (
     <OrderContext.Provider
       value={{
@@ -93,6 +109,8 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         createOrder,
         cancelOrder,
         verifyPayment,
+        deleteOrderHistory,
+        clearOrderHistory,
       }}
     >
       {children}

@@ -20,6 +20,10 @@ import Cart from "./customer/pages/Cart/Cart";
 import Checkout from "./customer/pages/Checkout/Checkout";
 import PaymentSuccess from "./customer/pages/Checkout/PaymentSuccess";
 import MyOrders from "./customer/pages/MyOrders/MyOrders";
+import Profile from "./customer/pages/Profile/Profile";
+import Login from "./customer/pages/Auth/Login";
+import Signup from "./customer/pages/Auth/Signup";
+import Footer from "./customer/components/Footer";
 
 // Seller components & pages
 import SellerLogin from "./seller/SellerLogin";
@@ -37,9 +41,12 @@ import AdminDeals from "./admin/AdminDeals";
 
 // Customer Layout Wrapper
 const CustomerView = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen bg-gray-50 flex flex-col">
-    <Navbar />
-    <div className="flex-grow">{children}</div>
+  <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
+    <div className="flex flex-col flex-grow">
+      <Navbar />
+      <div className="flex-grow">{children}</div>
+    </div>
+    <Footer />
   </div>
 );
 
@@ -72,6 +79,9 @@ const App = () => {
                       <Route path="/checkout" element={<CustomerView><Checkout /></CustomerView>} />
                       <Route path="/payment-success/:orderId" element={<CustomerView><PaymentSuccess /></CustomerView>} />
                       <Route path="/my-orders" element={<CustomerView><MyOrders /></CustomerView>} />
+                      <Route path="/profile" element={<CustomerView><Profile /></CustomerView>} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/signup" element={<Signup />} />
 
                       {/* Seller Routes */}
                       <Route path="/seller/login" element={<SellerLogin />} />

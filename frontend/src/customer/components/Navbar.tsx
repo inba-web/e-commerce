@@ -69,12 +69,17 @@ const Navbar = () => {
       <div>
         <div className="flex justify-between items-center px-4 py-4 border-b border-teal-700">
           <Link to="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2">
-            <div className="bg-white text-[#00927c] p-1.5 rounded-lg flex items-center justify-center">
+            <div className="bg-gradient-to-tr from-amber-400 to-yellow-300 text-teal-900 p-1.5 rounded-lg flex items-center justify-center shadow">
               <StorefrontIcon sx={{ fontSize: 20 }} />
             </div>
-            <span className="logo text-white font-black text-xl tracking-wide select-none">
-              Inba Mart
-            </span>
+            <div className="flex flex-col">
+              <span className="logo text-white font-black text-lg tracking-wide leading-none select-none">
+                Inba Mart
+              </span>
+              <span className="text-[8px] text-teal-100 uppercase tracking-widest leading-none select-none">
+                Premium
+              </span>
+            </div>
           </Link>
           <IconButton onClick={handleDrawerToggle} color="inherit">
             <CloseIcon />
@@ -92,12 +97,20 @@ const Navbar = () => {
           )}
 
           {token && role === "ROLE_CUSTOMER" && (
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => { setMobileOpen(false); navigate("/my-orders"); }}>
-                <ListItemIcon sx={{ color: "white", minWidth: 40 }}><ListAltIcon /></ListItemIcon>
-                <ListItemText primary="My Orders" />
-              </ListItemButton>
-            </ListItem>
+            <>
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => { setMobileOpen(false); navigate("/profile"); }}>
+                  <ListItemIcon sx={{ color: "white", minWidth: 40 }}><AccountCircle /></ListItemIcon>
+                  <ListItemText primary="My Profile" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => { setMobileOpen(false); navigate("/my-orders"); }}>
+                  <ListItemIcon sx={{ color: "white", minWidth: 40 }}><ListAltIcon /></ListItemIcon>
+                  <ListItemText primary="My Orders" />
+                </ListItemButton>
+              </ListItem>
+            </>
           )}
 
           {token && role === "ROLE_SELLER" && (
@@ -139,7 +152,7 @@ const Navbar = () => {
           <Button
             variant="contained"
             fullWidth
-            onClick={() => { setMobileOpen(false); setAuthOpen(true); }}
+            onClick={() => { setMobileOpen(false); navigate("/login"); }}
             sx={{ bgcolor: "white", color: "#00927c", fontWeight: "bold", "&:hover": { bgcolor: "#f2f2f2" } }}
             className="capitalize shadow-none"
           >
@@ -168,13 +181,19 @@ const Navbar = () => {
             </IconButton>
 
             {/* Brand Logo */}
-            <Link to="/" style={{ textDecoration: "none" }} className="flex items-center gap-2 group">
-              <div className="bg-white text-[#00927c] p-1.5 rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300">
-                <StorefrontIcon sx={{ fontSize: 24 }} />
+            <Link to="/" style={{ textDecoration: "none" }} className="flex items-center gap-2.5 group">
+              <div className="relative overflow-hidden bg-gradient-to-tr from-amber-400 via-yellow-300 to-teal-100 text-teal-900 p-2 rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 group-hover:rotate-2 transition-all duration-300">
+                <StorefrontIcon sx={{ fontSize: 24, color: '#00927c' }} />
+                <span className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              <span className="logo text-white font-black text-2xl tracking-wide select-none drop-shadow-sm group-hover:opacity-90 transition-opacity">
-                Inba Mart
-              </span>
+              <div className="flex flex-col">
+                <span className="logo text-white font-black text-2xl tracking-wider leading-none select-none drop-shadow-sm group-hover:text-yellow-200 transition-colors duration-300">
+                  Inba Mart
+                </span>
+                <span className="text-[10px] text-teal-100/80 uppercase tracking-widest leading-none mt-0.5 font-bold select-none">
+                  Premium Store
+                </span>
+              </div>
             </Link>
           </div>
 
@@ -219,7 +238,7 @@ const Navbar = () => {
                 <span className="hidden md:inline text-sm font-medium">Hi, {user?.fullName || "User"}</span>
               </div>
             ) : (
-              <Button variant="outlined" color="inherit" onClick={() => setAuthOpen(true)} className="hidden md:flex capitalize border-white hover:bg-teal-700">
+              <Button variant="outlined" color="inherit" onClick={() => navigate("/login")} className="hidden md:flex capitalize border-white hover:bg-teal-700">
                 Login / Register
               </Button>
             )}
@@ -281,7 +300,10 @@ const Navbar = () => {
           <MenuItem onClick={() => { handleMenuClose(); navigate("/admin/dashboard"); }}>Admin Dashboard</MenuItem>
         )}
         {role === "ROLE_CUSTOMER" && (
-          <MenuItem onClick={() => { handleMenuClose(); navigate("/my-orders"); }}>My Orders</MenuItem>
+          <>
+            <MenuItem onClick={() => { handleMenuClose(); navigate("/profile"); }}>My Profile</MenuItem>
+            <MenuItem onClick={() => { handleMenuClose(); navigate("/my-orders"); }}>My Orders</MenuItem>
+          </>
         )}
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>

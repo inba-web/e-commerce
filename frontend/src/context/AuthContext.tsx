@@ -19,6 +19,10 @@ interface AuthContextType {
   resetSellerPassword: (email: string, otp: string, newPass: string) => Promise<void>;
   logout: () => void;
   fetchProfile: (jwtToken?: string) => Promise<void>;
+  updateProfile: (profileData: { fullName?: string, mobile?: string }) => Promise<void>;
+  addUserAddress: (addressData: any) => Promise<void>;
+  updateUserAddress: (addressId: string, addressData: any) => Promise<void>;
+  deleteUserAddress: (addressId: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -148,6 +152,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setRole(null);
   };
 
+  const updateProfile = async (profileData: { fullName?: string, mobile?: string }) => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await axios.put(`${API_URL}/api/users/profile`, profileData, { headers });
+    setUser(response.data);
+  };
+
+  const addUserAddress = async (addressData: any) => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await axios.post(`${API_URL}/api/users/addresses`, addressData, { headers });
+    setUser(response.data);
+  };
+
+  const updateUserAddress = async (addressId: string, addressData: any) => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await axios.put(`${API_URL}/api/users/addresses/${addressId}`, addressData, { headers });
+    setUser(response.data);
+  };
+
+  const deleteUserAddress = async (addressId: string) => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await axios.delete(`${API_URL}/api/users/addresses/${addressId}`, { headers });
+    setUser(response.data);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -164,6 +196,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         resetSellerPassword,
         logout,
         fetchProfile,
+        updateProfile,
+        addUserAddress,
+        updateUserAddress,
+        deleteUserAddress,
       }}
     >
       {children}

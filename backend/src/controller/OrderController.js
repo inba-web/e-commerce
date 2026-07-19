@@ -115,6 +115,45 @@ class OrderController {
     }
   }
 
+  async deleteOrderHistory(req, res) {
+    try {
+      const { orderId } = req.params;
+      const userId = req.user._id;
+      const Order = require("../model/Order");
+      
+      const order = await Order.findById(orderId);
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+      
+      if (order.user.toString() !== userId.toString()) {
+        return res.status(403).json({ error: "Unauthorized to delete this order from history" });
+      }
+      
+      order.deletedByCustomer = true;
+      await order.save();
+      
+      return res.status(200).json({ message: "Order removed from history successfully" });
+    } catch (error) {
+      console.log(`Error in deleteOrderHistory controller: ${error}`);
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  async clearOrderHistory(req, res) {
+    try {
+      const userId = req.user._id;
+      const Order = require("../model/Order");
+      
+      await Order.updateMany({ user: userId }, { deletedByCustomer: true });
+      
+      return res.status(200).json({ message: "Order history cleared successfully" });
+    } catch (error) {
+      console.log(`Error in clearOrderHistory controller: ${error}`);
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
 }
 
 module.exports = new OrderController();

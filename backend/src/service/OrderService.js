@@ -88,7 +88,7 @@ class OrderService {
   }
 
   async usersOrderHistory(userId) {
-    return await Order.find({ user: userId }).populate([
+    return await Order.find({ user: userId, deletedByCustomer: { $ne: true } }).populate([
       { path: "seller" },
       { path: "orderItems", populate: { path: "product" } },
       { path: "shippingAddress" },
