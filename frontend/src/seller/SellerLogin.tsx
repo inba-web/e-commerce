@@ -191,10 +191,12 @@ const SellerLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-xl w-full space-y-6">
         <div className="text-center">
-          <h1 className="logo text-4xl text-teal-700 font-bold">Inba Mart</h1>
+          <div className="flex justify-center mb-4 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm w-fit mx-auto">
+            <img src="/inbamart-logo.png" alt="Inba Mart" className="h-10 w-auto object-contain" />
+          </div>
           <p className="mt-2 text-sm text-gray-500 font-medium">Seller Integration Portal</p>
         </div>
 

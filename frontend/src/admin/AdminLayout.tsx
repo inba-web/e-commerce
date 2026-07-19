@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import StorefrontIcon from "@mui/icons-material/Storefront";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -49,13 +48,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const drawerContent = (
     <div>
       <Toolbar className="flex justify-center items-center py-4">
-        <Link to="/" style={{ textDecoration: "none" }} className="flex items-center gap-2 group">
-          <div className="bg-[#00927c] text-white p-1 rounded-lg flex items-center justify-center shadow-md">
-            <StorefrontIcon sx={{ fontSize: 20 }} />
-          </div>
-          <span className="logo text-white font-black text-xl tracking-wide select-none">
-            Inba Mart
-          </span>
+        <Link to="/" style={{ textDecoration: "none" }} className="flex items-center justify-center bg-white px-3 py-1.5 rounded-lg border border-slate-700 shadow-inner">
+          <img src="/inbamart-logo.png" alt="Inba Mart" className="h-6 w-auto object-contain" />
         </Link>
       </Toolbar>
       <Divider sx={{ borderColor: "#334155" }} />
@@ -104,6 +98,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          left: { sm: `${drawerWidth}px` },
+          right: 0,
           bgcolor: "white",
           color: "gray.800",
           boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.05)",

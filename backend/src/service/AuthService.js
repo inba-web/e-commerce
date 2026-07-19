@@ -52,7 +52,7 @@ class AuthService {
   }
 
   async createUser(req) {
-    const { email, fullName, otp, mobile } = req;
+    const { email, fullName, mobile, password } = req;
 
     let user = await User.findOne({ email });
 
@@ -60,16 +60,11 @@ class AuthService {
       throw new Error("User already exists with this email");
     }
 
-    const verificationCode = await VerificationCode.findOne({ email });
-    if (!verificationCode || verificationCode.otp != otp) {
-      throw new Error("Invalid OTP...");
-    }
-
     user = new User({
       email,
       fullName,
       mobile,
-      password: await bcrypt.hash("12345678", 10),
+      password: await bcrypt.hash(password || "12345678", 10),
     });
 
     await user.save();
@@ -81,18 +76,17 @@ class AuthService {
   }
 
   async signin(req) {
-    const { email, otp } = req;
+    const { email, password } = req;
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      throw new Error("user not found with this email");
+      throw new Error("User not found with this email");
     }
 
-    const verificationCode = await VerificationCode.findOne({ email });
-
-    if (!verificationCode || verificationCode.otp != otp) {
-      throw new Error("Invalid OTP");
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new Error("Invalid email or password");
     }
 
     return {

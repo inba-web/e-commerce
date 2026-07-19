@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import StorefrontIcon from "@mui/icons-material/Storefront";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -78,14 +77,10 @@ const Footer: React.FC = () => {
 
         {/* Bottom row */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="bg-gradient-to-tr from-amber-400 to-yellow-300 text-teal-900 p-1 rounded-lg">
-              <StorefrontIcon sx={{ fontSize: 18 }} />
+          <div className="flex items-center">
+            <div className="bg-white px-2.5 py-1.25 rounded-lg border border-slate-700 flex items-center justify-center shadow-md">
+              <img src="/inbamart-logo.png" alt="Inba Mart" className="h-6 w-auto object-contain" />
             </div>
-            <span className="logo text-white font-black text-lg select-none">
-              Inba Mart
-            </span>
           </div>
 
           {/* Copyright */}

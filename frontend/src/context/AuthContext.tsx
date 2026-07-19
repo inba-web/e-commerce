@@ -12,8 +12,8 @@ interface AuthContextType {
   role: UserRole;
   loading: boolean;
   sendOtp: (email: string, isLogin: boolean) => Promise<void>;
-  signup: (fullName: string, email: string, mobile: string, otp: string) => Promise<void>;
-  signin: (email: string, otp: string) => Promise<any>;
+  signup: (fullName: string, email: string, mobile: string, password: string) => Promise<void>;
+  signin: (email: string, password: string) => Promise<any>;
   signinSeller: (email: string, password: string) => Promise<any>;
   forgetSellerPassword: (email: string) => Promise<void>;
   resetSellerPassword: (email: string, otp: string, newPass: string) => Promise<void>;
@@ -81,12 +81,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await axios.post(`${API_URL}/auth/sent/login-signup-otp`, { email: emailPayload });
   };
 
-  const signup = async (fullName: string, email: string, mobile: string, otp: string) => {
+  const signup = async (fullName: string, email: string, mobile: string, password: string) => {
     const response = await axios.post(`${API_URL}/auth/signup`, {
       fullName,
       email,
       mobile,
-      otp,
+      password,
     });
     const { jwt, role: userRole } = response.data;
     if (jwt) {
@@ -97,20 +97,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signin = async (email: string, otp: string) => {
-    // Try customer signin first
-    let response;
-    try {
-      response = await axios.post(`${API_URL}/auth/signin`, { email, otp });
-    } catch (customerError: any) {
-      // If customer fails, check if it's seller OTP verification
-      try {
-        response = await axios.post(`${API_URL}/sellers/verify/login-otp`, { email, otp });
-      } catch (sellerError) {
-        throw new Error(customerError.response?.data?.message || "Invalid credentials or OTP");
-      }
-    }
-
+  const signin = async (email: string, password: string) => {
+    const response = await axios.post(`${API_URL}/auth/signin`, { email, password });
     const { jwt, role: userRole } = response.data;
     if (jwt) {
       localStorage.setItem("jwt", jwt);

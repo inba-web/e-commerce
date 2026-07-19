@@ -51,6 +51,32 @@ class HomeCategoryController {
       return res.status(500).json({ error: error.message });
     }
   }
+
+  async uploadCategoryImg(req, res) {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No image file uploaded" });
+      }
+
+      const cloudinary = require("../utils/cloudinary");
+      
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "inbamart_categories" },
+        (error, result) => {
+          if (error) {
+            console.error("Cloudinary upload error:", error);
+            return res.status(500).json({ error: error.message });
+          }
+          return res.status(200).json({ url: result.secure_url });
+        }
+      );
+
+      uploadStream.end(req.file.buffer);
+    } catch (error) {
+      console.error("Error in uploadCategoryImg controller:", error);
+      return res.status(500).json({ error: error.message });
+    }
+  }
 }
 
 module.exports = new HomeCategoryController();

@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import { customTheme } from "./theme/customeTheme";
 
@@ -60,6 +60,19 @@ const AdminView = ({ children }: { children: React.ReactNode }) => (
   <AdminLayout>{children}</AdminLayout>
 );
 
+// Unlock body scrollbar and scroll to top on navigation/mount
+const ScrollReset = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    document.body.style.overflow = "unset";
+    document.body.style.paddingRight = "0px";
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  return null;
+};
+
 const App = () => {
   return (
     <ThemeProvider theme={customTheme}>
@@ -70,6 +83,7 @@ const App = () => {
               <OrderProvider>
                 <ProductProvider>
                   <BrowserRouter>
+                    <ScrollReset />
                     <Routes>
                       {/* Customer Routes */}
                       <Route path="/" element={<CustomerView><Home /></CustomerView>} />
@@ -80,11 +94,11 @@ const App = () => {
                       <Route path="/payment-success/:orderId" element={<CustomerView><PaymentSuccess /></CustomerView>} />
                       <Route path="/my-orders" element={<CustomerView><MyOrders /></CustomerView>} />
                       <Route path="/profile" element={<CustomerView><Profile /></CustomerView>} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/signup" element={<Signup />} />
+                      <Route path="/login" element={<CustomerView><Login /></CustomerView>} />
+                      <Route path="/signup" element={<CustomerView><Signup /></CustomerView>} />
 
                       {/* Seller Routes */}
-                      <Route path="/seller/login" element={<SellerLogin />} />
+                      <Route path="/seller/login" element={<CustomerView><SellerLogin /></CustomerView>} />
                       <Route path="/seller/dashboard" element={<SellerView><SellerDashboard /></SellerView>} />
                       <Route path="/seller/products" element={<SellerView><SellerProducts /></SellerView>} />
                       <Route path="/seller/orders" element={<SellerView><SellerOrders /></SellerView>} />
