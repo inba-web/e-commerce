@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useSeller } from "../context/SellerContext";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import TextField from "@mui/material/TextField";
@@ -12,6 +10,19 @@ import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
+import InputAdornment from "@mui/material/InputAdornment";
+
+// Icon imports
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
+import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
+import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
+import PinDropOutlinedIcon from "@mui/icons-material/PinDropOutlined";
+import StorefrontOutlinedIcon from "@mui/icons-material/StorefrontOutlined";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlined";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const SellerLogin = () => {
   const navigate = useNavigate();
@@ -191,191 +202,413 @@ const SellerLogin = () => {
   };
 
   return (
-    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-xl w-full space-y-6">
-        <div className="text-center">
-          <div className="flex justify-center mb-4 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm w-fit mx-auto">
-            <img src="/inbamart-logo.png" alt="Inba Mart" className="h-10 w-auto object-contain" />
+    <div className="flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-[90vh]">
+      <div className="max-w-5xl w-full bg-white rounded-3xl border border-gray-150 shadow-xl overflow-hidden flex flex-col lg:flex-row min-h-[650px]">
+        
+        {/* Left Pane - Brand Pitch (visible on desktop) */}
+        <div className="lg:w-[42%] bg-gradient-to-br from-[#00927c] to-[#005f50] p-10 lg:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+          {/* Background overlay graphic */}
+          <div className="absolute top-[-20%] right-[-20%] w-80 h-80 bg-teal-400 rounded-full opacity-10 blur-2xl"></div>
+          <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-teal-300 rounded-full opacity-10 blur-xl"></div>
+          
+          <div className="space-y-8 z-10">
+            {/* Logo */}
+            <div className="bg-white px-4 py-2 rounded-xl shadow-inner w-fit">
+              <img src="/inbamart-logo.png" alt="Inba Mart" className="h-8 w-auto object-contain" />
+            </div>
+            
+            <div className="space-y-4">
+              <h2 className="text-3xl font-black tracking-tight leading-tight">
+                Start Selling on Inba Mart
+              </h2>
+              <p className="text-teal-50 text-sm leading-relaxed font-light">
+                Reach millions of active shoppers, enjoy 0% onboarding fee, and receive direct payments weekly.
+              </p>
+            </div>
+
+            {/* Merchant perks list */}
+            <div className="space-y-5 pt-4">
+              {[
+                "0% Commission Onboarding",
+                "Fast Weekly Settlements",
+                "Powerful Merchant Analytics",
+                "Dedicated Account Support Desk"
+              ].map((perk, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <CheckCircleOutlineIcon className="text-teal-300" fontSize="small" />
+                  <span className="text-sm font-semibold text-teal-50">{perk}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <p className="mt-2 text-sm text-gray-500 font-medium">Seller Integration Portal</p>
+
+          <div className="pt-10 z-10 border-t border-teal-700/60 mt-8">
+            <p className="text-xs text-teal-200">
+              Trusted by 10,000+ local sellers and distributors across India.
+            </p>
+          </div>
         </div>
 
-        <Card className="border border-gray-150 shadow-md">
-          <CardContent className="p-6">
-            <Tabs value={tab} onChange={handleTabChange} variant="fullWidth" textColor="primary" indicatorColor="primary">
-              <Tab label="Vendor Login" className="font-semibold" />
-              <Tab label="Register Store" className="font-semibold" />
+        {/* Right Pane - Form Interface */}
+        <div className="lg:w-[58%] p-8 sm:p-12 flex flex-col justify-center bg-white">
+          <div className="mb-6">
+            <Tabs
+              value={tab}
+              onChange={handleTabChange}
+              variant="fullWidth"
+              textColor="primary"
+              indicatorColor="primary"
+              sx={{
+                borderBottom: "1px solid #e5e7eb",
+                "& .MuiTab-root": { fontWeight: "bold", textTransform: "none", fontSize: "0.95rem" }
+              }}
+            >
+              <Tab label="Vendor Login" />
+              <Tab label="Register Store" />
             </Tabs>
+          </div>
 
-            {error && <Alert severity="error" className="mt-4">{error}</Alert>}
-            {success && <Alert severity="success" className="mt-4">{success}</Alert>}
+          {error && <Alert severity="error" className="mb-4 rounded-xl">{error}</Alert>}
+          {success && <Alert severity="success" className="mb-4 rounded-xl">{success}</Alert>}
 
-            {forgotMode ? (
-              <form onSubmit={handleResetPasswordSubmit} className="space-y-4 mt-6">
-                <Typography className="font-bold text-gray-700 text-sm">Reset Vendor Password</Typography>
-                <TextField
-                  label="Registered Email"
+          {forgotMode ? (
+            <form onSubmit={handleResetPasswordSubmit} className="space-y-4">
+              <div className="space-y-1">
+                <Typography className="font-extrabold text-gray-800 text-lg">Reset Vendor Password</Typography>
+                <Typography className="text-xs text-gray-400">Enter your email and verify your identity.</Typography>
+              </div>
+
+              <TextField
+                label="Registered Email"
+                fullWidth
+                value={forgotEmail}
+                disabled={forgotOtpSent}
+                onChange={(e) => setForgotEmail(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailOutlinedIcon className="text-gray-400" />
+                    </InputAdornment>
+                  )
+                }}
+              />
+
+              {forgotOtpSent && (
+                <>
+                  <TextField
+                    label="6-Digit OTP Code"
+                    fullWidth
+                    value={forgotOtp}
+                    onChange={(e) => setForgotOtp(e.target.value)}
+                    helperText="Check console/email for OTP"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CheckCircleOutlineIcon className="text-gray-400" />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <TextField
+                    label="New Password"
+                    type="password"
+                    fullWidth
+                    value={forgotNewPassword}
+                    onChange={(e) => setForgotNewPassword(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockOutlinedIcon className="text-gray-400" />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </>
+              )}
+
+              {!forgotOtpSent ? (
+                <Button
+                  variant="contained"
                   fullWidth
-                  value={forgotEmail}
-                  disabled={forgotOtpSent}
-                  onChange={(e) => setForgotEmail(e.target.value)}
-                />
-                {forgotOtpSent && (
-                  <>
-                    <TextField
-                      label="6-Digit OTP Code"
-                      fullWidth
-                      value={forgotOtp}
-                      onChange={(e) => setForgotOtp(e.target.value)}
-                      helperText="Check console/email for OTP"
-                    />
-                    <TextField
-                      label="New Password"
-                      type="password"
-                      fullWidth
-                      value={forgotNewPassword}
-                      onChange={(e) => setForgotNewPassword(e.target.value)}
-                    />
-                  </>
-                )}
+                  size="large"
+                  disabled={loading}
+                  onClick={handleRequestForgotOtp}
+                  sx={{
+                    bgcolor: "#00927c",
+                    "&:hover": { bgcolor: "#007d6a" },
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    py: 1.2,
+                    borderRadius: "10px",
+                    boxShadow: "none"
+                  }}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : "Request Reset OTP"}
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  size="large"
+                  disabled={loading}
+                  sx={{
+                    bgcolor: "#00927c",
+                    "&:hover": { bgcolor: "#007d6a" },
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    py: 1.2,
+                    borderRadius: "10px",
+                    boxShadow: "none"
+                  }}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : "Save New Password"}
+                </Button>
+              )}
 
-                {!forgotOtpSent ? (
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    size="large"
-                    disabled={loading}
-                    onClick={handleRequestForgotOtp}
-                    sx={{ bgcolor: "#00927c", "&:hover": { bgcolor: "#007d6a" }, fontWeight: "bold" }}
-                  >
-                    {loading ? <CircularProgress size={24} color="inherit" /> : "Request Reset OTP"}
-                  </Button>
-                ) : (
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    fullWidth
-                    size="large"
-                    disabled={loading}
-                    sx={{ bgcolor: "#00927c", "&:hover": { bgcolor: "#007d6a" }, fontWeight: "bold" }}
-                  >
-                    {loading ? <CircularProgress size={24} color="inherit" /> : "Save New Password"}
-                  </Button>
-                )}
+              <Button
+                variant="text"
+                fullWidth
+                onClick={() => { setForgotMode(false); resetForgotForm(); }}
+                sx={{ color: "#00927c", fontWeight: "bold", textTransform: "none", mt: 1 }}
+              >
+                Back to Login
+              </Button>
+            </form>
+          ) : tab === 0 ? (
+            <form onSubmit={handleLoginSubmit} className="space-y-5">
+              <div className="space-y-1">
+                <Typography className="font-extrabold text-gray-800 text-lg">Welcome back, Partner</Typography>
+                <Typography className="text-xs text-gray-400">Log in to manage your inventory, orders, and settlements.</Typography>
+              </div>
 
+              <TextField
+                label="Registered Email"
+                fullWidth
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailOutlinedIcon className="text-gray-400" />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <TextField
+                label="Store Password"
+                type="password"
+                fullWidth
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOutlinedIcon className="text-gray-400" />
+                    </InputAdornment>
+                  )
+                }}
+              />
+
+              <div className="flex justify-end">
                 <Button
                   variant="text"
-                  fullWidth
-                  onClick={() => { setForgotMode(false); resetForgotForm(); }}
-                  sx={{ color: "#00927c", fontWeight: "bold", textTransform: "none", mt: 1 }}
+                  size="small"
+                  onClick={() => { setForgotMode(true); setError(""); setSuccess(""); }}
+                  sx={{ color: "#00927c", fontWeight: "bold", textTransform: "none", fontSize: "0.85rem" }}
                 >
-                  Back to Login
+                  Forgot Password?
                 </Button>
-              </form>
-            ) : tab === 0 ? (
-              <form onSubmit={handleLoginSubmit} className="space-y-4 mt-6">
-                <TextField
-                  label="Registered Email"
-                  fullWidth
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <TextField
-                  label="Store Password"
-                  type="password"
-                  fullWidth
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+              </div>
 
-                <div className="flex justify-end">
-                  <Button
-                    variant="text"
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                size="large"
+                disabled={loading}
+                sx={{
+                  bgcolor: "#00927c",
+                  "&:hover": { bgcolor: "#007d6a" },
+                  fontWeight: "bold",
+                  textTransform: "none",
+                  py: 1.3,
+                  borderRadius: "10px",
+                  boxShadow: "none"
+                }}
+              >
+                {loading ? <CircularProgress size={24} color="inherit" /> : "Login Store"}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleRegisterSubmit} className="space-y-6 max-h-[500px] overflow-y-auto pr-2">
+              
+              {/* Primary store */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-teal-700">
+                  <StorefrontOutlinedIcon fontSize="small" />
+                  <Typography className="font-extrabold text-sm uppercase tracking-wider">Primary Store Info</Typography>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <TextField
+                    label="Seller Name"
+                    fullWidth
                     size="small"
-                    onClick={() => { setForgotMode(true); setError(""); setSuccess(""); }}
-                    sx={{ color: "#00927c", fontWeight: "bold", textTransform: "none" }}
-                  >
-                    Forgot Password?
-                  </Button>
+                    value={sellerName}
+                    onChange={(e) => setSellerName(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PersonOutlinedIcon fontSize="small" className="text-gray-400" />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <TextField
+                    label="Login Email"
+                    fullWidth
+                    size="small"
+                    value={regEmail}
+                    onChange={(e) => setRegEmail(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailOutlinedIcon fontSize="small" className="text-gray-400" />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <TextField
+                    label="Mobile Phone"
+                    fullWidth
+                    size="small"
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PhoneOutlinedIcon fontSize="small" className="text-gray-400" />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <TextField
+                    label="GSTIN Number"
+                    fullWidth
+                    size="small"
+                    value={gstin}
+                    onChange={(e) => setGstin(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <BusinessOutlinedIcon fontSize="small" className="text-gray-400" />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <TextField
+                    label="Store Password"
+                    type="password"
+                    fullWidth
+                    size="small"
+                    className="sm:col-span-2"
+                    value={regPassword}
+                    onChange={(e) => setRegPassword(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockOutlinedIcon fontSize="small" className="text-gray-400" />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
                 </div>
+              </div>
 
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  disabled={loading}
-                  sx={{ bgcolor: "#00927c", "&:hover": { bgcolor: "#007d6a" }, fontWeight: "bold" }}
-                >
-                  {loading ? <CircularProgress size={24} color="inherit" /> : "Login Store"}
-                </Button>
-              </form>
-            ) : (
-              <form onSubmit={handleRegisterSubmit} className="space-y-6 mt-6">
-                {/* Primary store */}
-                <div className="space-y-3">
-                  <Typography className="font-bold text-gray-700 text-sm">Primary Store Info</Typography>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <TextField label="Seller Name" fullWidth size="small" value={sellerName} onChange={(e) => setSellerName(e.target.value)} />
-                    <TextField label="Login Email" fullWidth size="small" value={regEmail} onChange={(e) => setRegEmail(e.target.value)} />
-                    <TextField label="Mobile Phone" fullWidth size="small" value={mobile} onChange={(e) => setMobile(e.target.value)} />
-                    <TextField label="GSTIN Number" fullWidth size="small" value={gstin} onChange={(e) => setGstin(e.target.value)} />
-                    <TextField label="Store Password" type="password" fullWidth size="small" className="sm:col-span-2" value={regPassword} onChange={(e) => setRegPassword(e.target.value)} />
-                  </div>
+              <Divider />
+
+              {/* Bank */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-teal-700">
+                  <AccountBalanceOutlinedIcon fontSize="small" />
+                  <Typography className="font-extrabold text-sm uppercase tracking-wider">Bank Details (For Payouts)</Typography>
                 </div>
-
-                <Divider />
-
-                {/* Bank */}
-                <div className="space-y-3">
-                  <Typography className="font-bold text-gray-700 text-sm">Bank Details (For Payouts)</Typography>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <TextField label="Bank Account Number" fullWidth size="small" value={accNo} onChange={(e) => setAccNo(e.target.value)} />
-                    <TextField label="IFSC Code" fullWidth size="small" value={ifsc} onChange={(e) => setIfsc(e.target.value)} />
-                    <TextField label="Account Holder Name" fullWidth size="small" className="sm:col-span-2" value={holder} onChange={(e) => setHolder(e.target.value)} />
-                  </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <TextField label="Bank Account Number" fullWidth size="small" value={accNo} onChange={(e) => setAccNo(e.target.value)} />
+                  <TextField label="IFSC Code" fullWidth size="small" value={ifsc} onChange={(e) => setIfsc(e.target.value)} />
+                  <TextField
+                    label="Account Holder Name"
+                    fullWidth
+                    size="small"
+                    className="sm:col-span-2"
+                    value={holder}
+                    onChange={(e) => setHolder(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PersonOutlinedIcon fontSize="small" className="text-gray-400" />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
                 </div>
+              </div>
 
-                <Divider />
+              <Divider />
 
-                {/* Business details */}
-                <div className="space-y-3">
-                  <Typography className="font-bold text-gray-700 text-sm">Store Business Info</Typography>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <TextField label="Store/Business Name" fullWidth size="small" value={bizName} onChange={(e) => setBizName(e.target.value)} />
-                    <TextField label="Business Email" fullWidth size="small" value={bizEmail} onChange={(e) => setBizEmail(e.target.value)} />
-                    <TextField label="Business Phone" fullWidth size="small" value={bizMobile} onChange={(e) => setBizMobile(e.target.value)} />
-                  </div>
+              {/* Business details */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-teal-700">
+                  <BusinessOutlinedIcon fontSize="small" />
+                  <Typography className="font-extrabold text-sm uppercase tracking-wider">Store Business Info</Typography>
                 </div>
-
-                <Divider />
-
-                {/* Pickup address */}
-                <div className="space-y-3">
-                  <Typography className="font-bold text-gray-700 text-sm">Pickup Address</Typography>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <TextField label="Street Address" fullWidth size="small" className="sm:col-span-2" value={street} onChange={(e) => setStreet(e.target.value)} />
-                    <TextField label="Locality" fullWidth size="small" value={locality} onChange={(e) => setLocality(e.target.value)} />
-                    <TextField label="City" fullWidth size="small" value={city} onChange={(e) => setCity(e.target.value)} />
-                    <TextField label="State" fullWidth size="small" value={state} onChange={(e) => setState(e.target.value)} />
-                    <TextField label="Pin Code" fullWidth size="small" value={pin} onChange={(e) => setPin(e.target.value)} />
-                  </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <TextField label="Store/Business Name" fullWidth size="small" value={bizName} onChange={(e) => setBizName(e.target.value)} />
+                  <TextField label="Business Email" fullWidth size="small" value={bizEmail} onChange={(e) => setBizEmail(e.target.value)} />
+                  <TextField label="Business Phone" fullWidth size="small" value={bizMobile} onChange={(e) => setBizMobile(e.target.value)} />
                 </div>
+              </div>
 
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  disabled={loading}
-                  sx={{ bgcolor: "#00927c", "&:hover": { bgcolor: "#007d6a" }, fontWeight: "bold", mt: 4 }}
-                >
-                  {loading ? <CircularProgress size={24} color="inherit" /> : "Submit Application"}
-                </Button>
-              </form>
-            )}
-          </CardContent>
-        </Card>
+              <Divider />
+
+              {/* Pickup address */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-teal-700">
+                  <PinDropOutlinedIcon fontSize="small" />
+                  <Typography className="font-extrabold text-sm uppercase tracking-wider">Pickup Address</Typography>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <TextField label="Street Address" fullWidth size="small" className="sm:col-span-2" value={street} onChange={(e) => setStreet(e.target.value)} />
+                  <TextField label="Locality" fullWidth size="small" value={locality} onChange={(e) => setLocality(e.target.value)} />
+                  <TextField label="City" fullWidth size="small" value={city} onChange={(e) => setCity(e.target.value)} />
+                  <TextField label="State" fullWidth size="small" value={state} onChange={(e) => setState(e.target.value)} />
+                  <TextField label="Pin Code" fullWidth size="small" value={pin} onChange={(e) => setPin(e.target.value)} />
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                size="large"
+                disabled={loading}
+                endIcon={<ArrowForwardIcon />}
+                sx={{
+                  bgcolor: "#00927c",
+                  "&:hover": { bgcolor: "#007d6a" },
+                  fontWeight: "bold",
+                  textTransform: "none",
+                  py: 1.3,
+                  borderRadius: "10px",
+                  boxShadow: "none",
+                  mt: 4
+                }}
+              >
+                {loading ? <CircularProgress size={24} color="inherit" /> : "Submit Application"}
+              </Button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );

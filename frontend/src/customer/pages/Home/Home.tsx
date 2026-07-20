@@ -49,10 +49,10 @@ const NextArrow = (props: any) => {
   return (
     <button
       onClick={onClick}
-      className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/60 text-white p-3 rounded-full flex items-center justify-center transition-colors shadow-md hidden sm:flex"
+      className="absolute right-6 top-1/2 -translate-y-1/2 z-10 backdrop-blur-md bg-white/10 hover:bg-[#00927c] border border-white/20 text-white p-3 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl hidden sm:flex hover:scale-110 cursor-pointer"
       aria-label="Next slide"
     >
-      <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
+      <ArrowForwardIosIcon sx={{ fontSize: 14 }} />
     </button>
   );
 };
@@ -62,10 +62,10 @@ const PrevArrow = (props: any) => {
   return (
     <button
       onClick={onClick}
-      className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/60 text-white p-3 rounded-full flex items-center justify-center transition-colors shadow-md hidden sm:flex"
+      className="absolute left-6 top-1/2 -translate-y-1/2 z-10 backdrop-blur-md bg-white/10 hover:bg-[#00927c] border border-white/20 text-white p-3 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl hidden sm:flex hover:scale-110 cursor-pointer"
       aria-label="Previous slide"
     >
-      <ArrowBackIosNewIcon sx={{ fontSize: 16 }} />
+      <ArrowBackIosNewIcon sx={{ fontSize: 14 }} />
     </button>
   );
 };
@@ -126,12 +126,12 @@ const Home = () => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     appendDots: (dots: any) => (
-      <div style={{ position: "absolute", bottom: "16px" }}>
-        <ul className="flex justify-center gap-2 m-0 p-0">{dots}</ul>
+      <div style={{ position: "absolute", bottom: "24px", width: "100%" }}>
+        <ul className="flex justify-center gap-3.5 m-0 p-0">{dots}</ul>
       </div>
     ),
     customPaging: () => (
-      <div className="w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-white transition-colors" />
+      <div className="w-2.5 h-1.5 rounded-full bg-white/40 hover:bg-white/70 transition-all duration-300" />
     )
   };
 
@@ -142,24 +142,40 @@ const Home = () => {
 
       {/* Hero Promotional Banner Slider */}
       <section className="relative w-full overflow-hidden mt-0">
-        <div className="select-none relative bg-slate-900">
+        <div className="select-none relative bg-slate-950">
           <Slider {...heroSettings}>
             {heroBanners.map((banner, index) => (
-              <div key={index} className="relative h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px]">
+              <div key={index} className="relative h-[250px] sm:h-[380px] md:h-[480px] lg:h-[540px]">
+                {/* Images with clean editorial filter and shading overlays */}
                 <img
                   src={banner.image}
                   alt={banner.title}
-                  className="w-full h-full object-cover brightness-[0.65]"
+                  className="w-full h-full object-cover brightness-[0.55]"
                 />
+                {/* Gradient shading overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/30 pointer-events-none"></div>
+                {/* Dot grid pattern overlay */}
+                <div className="absolute inset-0 opacity-[0.12] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, #ffffff 1px, transparent 1px)", backgroundSize: "16px 16px" }}></div>
+
                 <div className="absolute inset-0 flex items-center">
-                  <div className="max-w-7xl mx-auto w-full px-8 sm:px-16 lg:px-24 text-white space-y-3 sm:space-y-4">
-                    <span className="text-teal-400 text-xs sm:text-sm font-extrabold uppercase tracking-widest">
-                      Exclusive Launch
-                    </span>
-                    <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none drop-shadow-md">
-                      {banner.title}
+                  <div className="max-w-7xl mx-auto w-full px-8 sm:px-16 lg:px-24 text-white space-y-4 md:space-y-5">
+                    {/* Live glowing badge */}
+                    <div className="flex items-center gap-3">
+                      <span className="bg-teal-500/20 text-teal-300 border border-teal-500/40 text-[10px] sm:text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-inner">
+                        Limited Time Offer
+                      </span>
+                      <span className="relative flex h-2.5 w-2.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
+                      </span>
+                    </div>
+
+                    <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-none">
+                      <span className="bg-gradient-to-r from-teal-200 via-emerald-250 to-white bg-clip-text text-transparent drop-shadow-md">
+                        {banner.title}
+                      </span>
                     </h1>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium max-w-xl text-gray-200 drop-shadow-sm">
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium max-w-xl text-gray-300 drop-shadow-sm">
                       {banner.subtitle}
                     </p>
                     <div className="pt-2">
@@ -168,14 +184,15 @@ const Home = () => {
                         onClick={() => navigate("/products")}
                         sx={{
                           bgcolor: "#00927c",
-                          "&:hover": { bgcolor: "#007d6a" },
-                          fontWeight: "bold",
+                          "&:hover": { bgcolor: "#007d6a", transform: "translateY(-2px)" },
+                          transition: "all 0.2s ease-in-out",
+                          fontWeight: "extrabold",
                           textTransform: "none",
-                          px: { xs: 3, sm: 4 },
-                          py: { xs: 1, sm: 1.5 },
+                          px: { xs: 4, sm: 5 },
+                          py: { xs: 1.2, sm: 1.8 },
                           fontSize: { xs: "0.85rem", sm: "0.95rem" },
-                          borderRadius: "8px",
-                          boxShadow: "none"
+                          borderRadius: "10px",
+                          boxShadow: "0 4px 14px rgba(0, 146, 124, 0.4)"
                         }}
                       >
                         {banner.cta}

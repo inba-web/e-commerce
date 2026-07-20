@@ -7,3 +7,8 @@
   color: currentColor;
 }
 
+/* Custom Slick Slider active dot animation */
+.slick-dots li.slick-active div {
+  width: 24px !important;
+  background-color: #00927c !important;
+}

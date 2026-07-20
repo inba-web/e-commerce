@@ -10,6 +10,7 @@ import { OrderProvider } from "./context/OrderContext";
 import { ProductProvider } from "./context/ProductContext";
 import { SellerProvider } from "./context/SellerContext";
 import { AdminProvider } from "./context/AdminContext";
+import { WishlistProvider } from "./context/WishlistContext";
 
 // Customer components & pages
 import Navbar from "./customer/components/Navbar";
@@ -17,6 +18,7 @@ import Home from "./customer/pages/Home/Home";
 import Products from "./customer/pages/Product/Product";
 import ProductDetails from "./customer/pages/Product/ProductDetails";
 import Cart from "./customer/pages/Cart/Cart";
+import Wishlist from "./customer/pages/Wishlist/Wishlist";
 import Checkout from "./customer/pages/Checkout/Checkout";
 import PaymentSuccess from "./customer/pages/Checkout/PaymentSuccess";
 import MyOrders from "./customer/pages/MyOrders/MyOrders";
@@ -79,9 +81,10 @@ const App = () => {
       <AuthProvider>
         <SellerProvider>
           <AdminProvider>
-            <CartProvider>
-              <OrderProvider>
-                <ProductProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <OrderProvider>
+                  <ProductProvider>
                   <BrowserRouter>
                     <ScrollReset />
                     <Routes>
@@ -90,6 +93,7 @@ const App = () => {
                       <Route path="/search" element={<CustomerView><Products /></CustomerView>} />
                       <Route path="/product/:id" element={<CustomerView><ProductDetails /></CustomerView>} />
                       <Route path="/cart" element={<CustomerView><Cart /></CustomerView>} />
+                      <Route path="/wishlist" element={<CustomerView><Wishlist /></CustomerView>} />
                       <Route path="/checkout" element={<CustomerView><Checkout /></CustomerView>} />
                       <Route path="/payment-success/:orderId" element={<CustomerView><PaymentSuccess /></CustomerView>} />
                       <Route path="/my-orders" element={<CustomerView><MyOrders /></CustomerView>} />
@@ -114,6 +118,7 @@ const App = () => {
                 </ProductProvider>
               </OrderProvider>
             </CartProvider>
+          </WishlistProvider>
           </AdminProvider>
         </SellerProvider>
       </AuthProvider>

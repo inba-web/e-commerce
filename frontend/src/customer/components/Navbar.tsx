@@ -24,11 +24,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useWishlist } from "../../context/WishlistContext";
 import AuthModal from "./AuthModal";
 
 const Navbar = () => {
   const { user, token, logout, role } = useAuth();
   const { cart } = useCart();
+  const { wishlist } = useWishlist();
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -80,12 +83,36 @@ const Navbar = () => {
 
         <List className="py-4">
           {role !== "ROLE_SELLER" && role !== "ROLE_ADMIN" && (
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => { setMobileOpen(false); navigate("/seller/login"); }}>
-                <ListItemIcon sx={{ color: "white", minWidth: 40 }}><StorefrontIcon /></ListItemIcon>
-                <ListItemText primary="Become Seller" />
-              </ListItemButton>
-            </ListItem>
+            <>
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => { setMobileOpen(false); navigate("/seller/login"); }}>
+                  <ListItemIcon sx={{ color: "white", minWidth: 40 }}><StorefrontIcon /></ListItemIcon>
+                  <ListItemText primary="Become Seller" />
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => { setMobileOpen(false); navigate("/cart"); }}>
+                  <ListItemIcon sx={{ color: "white", minWidth: 40 }}>
+                    <Badge badgeContent={cartCount} color="error">
+                      <ShoppingCartIcon sx={{ color: "white" }} />
+                    </Badge>
+                  </ListItemIcon>
+                  <ListItemText primary="My Cart" />
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => { setMobileOpen(false); navigate("/wishlist"); }}>
+                  <ListItemIcon sx={{ color: "white", minWidth: 40 }}>
+                    <Badge badgeContent={wishlist.length} color="error">
+                      <FavoriteBorderIcon sx={{ color: "white" }} />
+                    </Badge>
+                  </ListItemIcon>
+                  <ListItemText primary="My Wishlist" />
+                </ListItemButton>
+              </ListItem>
+            </>
           )}
 
           {token && role === "ROLE_CUSTOMER" && (
@@ -161,13 +188,13 @@ const Navbar = () => {
         {/* Main Header Row */}
         <Toolbar className="flex justify-between items-center max-w-7xl mx-auto w-full px-4 lg:px-8">
           <div className="flex items-center">
-            {/* Hamburger Trigger for Mobile */}
+            {/* Hamburger Trigger */}
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              className="md:hidden mr-2"
+              className="mr-2"
             >
               <MenuIcon />
             </IconButton>
@@ -226,12 +253,19 @@ const Navbar = () => {
               </Button>
             )}
 
-            {role === "ROLE_CUSTOMER" && (
-              <IconButton size="large" aria-label="cart items count" color="inherit" onClick={() => navigate("/cart")}>
-                <Badge badgeContent={cartCount} color="error">
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
+            {role !== "ROLE_SELLER" && role !== "ROLE_ADMIN" && (
+              <>
+                <IconButton size="large" aria-label="wishlist items count" color="inherit" onClick={() => navigate("/wishlist")}>
+                  <Badge badgeContent={wishlist.length} color="error">
+                    <FavoriteBorderIcon />
+                  </Badge>
+                </IconButton>
+                <IconButton size="large" aria-label="cart items count" color="inherit" onClick={() => navigate("/cart")}>
+                  <Badge badgeContent={cartCount} color="error">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+              </>
             )}
           </div>
         </Toolbar>
@@ -251,12 +285,11 @@ const Navbar = () => {
         </div>
       </AppBar>
 
-      {/* Slide-out Mobile Navigation Drawer */}
+      {/* Slide-out Navigation Drawer */}
       <Drawer
         anchor="left"
         open={mobileOpen}
         onClose={handleDrawerToggle}
-        className="md:hidden"
       >
         {drawer}
       </Drawer>

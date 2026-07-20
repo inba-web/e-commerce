@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useWishlist } from "../../../context/WishlistContext";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import IconButton from "@mui/material/IconButton";
 
 interface ProductItem {
   _id: string;
@@ -16,6 +20,7 @@ interface ProductItem {
 const ProductCard = ({ item }: { item: ProductItem }) => {
   const navigate = useNavigate();
   const [currentImage, setCurrentImage] = useState(0);
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   if (!item) return null;
 
@@ -46,6 +51,28 @@ const ProductCard = ({ item }: { item: ProductItem }) => {
             {item.discountPercent}% OFF
           </div>
         )}
+        <div className="absolute top-3 right-3 z-10">
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isInWishlist(item._id)) {
+                removeFromWishlist(item._id);
+              } else {
+                addToWishlist(item);
+              }
+            }}
+            sx={{
+              bgcolor: "white",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+              "&:hover": { bgcolor: "#f5f5f5", transform: "scale(1.1)" },
+              transition: "all 0.2s ease-in-out",
+              color: isInWishlist(item._id) ? "#ef4444" : "gray"
+            }}
+            size="small"
+          >
+            {isInWishlist(item._id) ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
+          </IconButton>
+        </div>
       </div>
 
       {/* Info Content */}

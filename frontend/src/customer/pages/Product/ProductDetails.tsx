@@ -10,6 +10,10 @@ import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import StarIcon from "@mui/icons-material/Star";
 import Alert from "@mui/material/Alert";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import IconButton from "@mui/material/IconButton";
+import { useWishlist } from "../../../context/WishlistContext";
 
 const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +21,7 @@ const ProductDetails = () => {
   const { token } = useAuth();
   const { fetchProductById, loading } = useProducts();
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const [product, setProduct] = useState<any>(null);
   const [selectedImage, setSelectedImage] = useState("");
@@ -201,7 +206,7 @@ const ProductDetails = () => {
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <div className="flex gap-4 pt-4">
             <Button
               variant="outlined"
               size="large"
@@ -209,11 +214,13 @@ const ProductDetails = () => {
               disabled={actionLoading}
               onClick={handleAddToCart}
               sx={{
-                flex: 1,
+                flex: 2,
                 borderColor: "#00927c",
                 color: "#00927c",
                 fontWeight: "bold",
                 py: 1.5,
+                textTransform: "none",
+                borderRadius: "8px",
                 "&:hover": { borderColor: "#007d6a", bgcolor: "#f2faf8" },
               }}
             >
@@ -226,15 +233,45 @@ const ProductDetails = () => {
               disabled={actionLoading}
               onClick={handleBuyNow}
               sx={{
-                flex: 1,
+                flex: 2,
                 bgcolor: "#00927c",
                 "&:hover": { bgcolor: "#007d6a" },
                 fontWeight: "bold",
+                textTransform: "none",
+                borderRadius: "8px",
                 py: 1.5,
               }}
             >
               Buy Now
             </Button>
+            <IconButton
+              onClick={() => {
+                if (isInWishlist(product._id)) {
+                  removeFromWishlist(product._id);
+                } else {
+                  addToWishlist(product);
+                }
+              }}
+              sx={{
+                border: "1px solid",
+                borderColor: isInWishlist(product._id) ? "#ef4444" : "#e5e7eb",
+                color: isInWishlist(product._id) ? "#ef4444" : "#4b5563",
+                bgcolor: isInWishlist(product._id) ? "#fef2f2" : "white",
+                "&:hover": {
+                  borderColor: "#ef4444",
+                  bgcolor: "#fef2f2",
+                  color: "#ef4444",
+                },
+                borderRadius: "8px",
+                width: 48,
+                height: 48,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isInWishlist(product._id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            </IconButton>
           </div>
         </div>
       </div>
