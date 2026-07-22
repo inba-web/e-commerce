@@ -5,6 +5,7 @@ const defaultUrl = "mongodb+srv://inbafreakz_db_user:tb868bQdyiV4HDdO@cluster0.g
 const seedAdmin = async () => {
     try {
         const User = require("../model/User");
+        const Product = require("../model/Product");
         const bcrypt = require("bcrypt");
         const UserRoles = require("../domain/UserRole");
         const defaultAdmin = await User.findOne({ role: UserRoles.ADMIN });
@@ -20,8 +21,15 @@ const seedAdmin = async () => {
             await admin.save();
             console.log("[ADMIN SEED] Super admin created with email: admin@inbamart.com / password: adminpassword");
         }
+
+        const productCount = await Product.countDocuments();
+        if (productCount === 0) {
+            console.log("[AUTO SEED] No products found in database. Starting auto-seed...");
+            const seedDatabase = require("../scripts/seedDatabase");
+            await seedDatabase();
+        }
     } catch (err) {
-        console.error("Failed to seed default admin:", err.message);
+        console.error("Failed to seed default admin and database:", err.message);
     }
 };
 

@@ -40,6 +40,9 @@ import SellerProfile from "./seller/SellerProfile";
 import AdminLayout from "./admin/AdminLayout";
 import AdminSellers from "./admin/AdminSellers";
 import AdminDeals from "./admin/AdminDeals";
+import AdminDashboard from "./admin/AdminDashboard";
+import AdminProfile from "./admin/AdminProfile";
+import AdminCoupons from "./admin/AdminCoupons";
 
 // Customer Layout Wrapper
 const CustomerView = ({ children }: { children: React.ReactNode }) => (
@@ -110,9 +113,11 @@ const App = () => {
                       <Route path="/seller/profile" element={<SellerView><SellerProfile /></SellerView>} />
 
                       {/* Admin Routes */}
+                      <Route path="/admin/dashboard" element={<AdminView><AdminDashboard /></AdminView>} />
                       <Route path="/admin/sellers" element={<AdminView><AdminSellers /></AdminView>} />
                       <Route path="/admin/deals" element={<AdminView><AdminDeals /></AdminView>} />
-                      <Route path="/admin/dashboard" element={<AdminView><AdminSellers /></AdminView>} />
+                      <Route path="/admin/coupons" element={<AdminView><AdminCoupons /></AdminView>} />
+                      <Route path="/admin/profile" element={<AdminView><AdminProfile /></AdminView>} />
                     </Routes>
                   </BrowserRouter>
                 </ProductProvider>

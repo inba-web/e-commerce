@@ -84,6 +84,42 @@ const SellerDashboard = () => {
     return data;
   };
 
+  const getCategorySalesData = () => {
+    const categoryTotals: { [key: string]: number } = {};
+    if (sellerOrders && Array.isArray(sellerOrders)) {
+      sellerOrders.forEach((order: any) => {
+        if (order.orderItems && Array.isArray(order.orderItems)) {
+          order.orderItems.forEach((item: any) => {
+            const title = item.product?.title || "";
+            const catName = title.includes("Phone") || title.includes("Adapter") || title.includes("Case") || title.includes("Glass") 
+              ? "Mobiles"
+              : title.includes("Book") || title.includes("Sleeve") || title.includes("Stand") || title.includes("Mouse") || title.includes("Hub")
+              ? "Laptops"
+              : title.includes("Watch") || title.includes("Band") || title.includes("Guard")
+              ? "Smart Watches"
+              : "Others";
+            
+            categoryTotals[catName] = (categoryTotals[catName] || 0) + (item.sellingPrice || 0);
+          });
+        }
+      });
+    }
+
+    const data = Object.keys(categoryTotals).map(name => ({
+      name,
+      value: categoryTotals[name]
+    }));
+
+    if (data.length === 0) {
+      return [
+        { name: "Mobiles", value: 12000 },
+        { name: "Laptops", value: 8000 },
+        { name: "Smart Watches", value: 4000 }
+      ];
+    }
+    return data;
+  };
+
   const renderAnalyticsChart = () => {
     const chartData = getAnalyticsData();
     const width = 600;
@@ -297,22 +333,85 @@ const SellerDashboard = () => {
         </Grid>
       </Grid>
 
-      {/* Analytics Chart Widget */}
-      <Card className="border border-gray-150 shadow-sm rounded-xl p-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
-          <div>
-            <Typography variant="h6" className="font-bold text-gray-700">7-Day Sales Trend</Typography>
-            <Typography className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Revenue & Volume Analytics</Typography>
-          </div>
-          <div className="flex gap-4 text-xs font-bold text-gray-500">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#00927c] rounded-full inline-block" /> Sales (₹)</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#3b82f6] rounded-full inline-block" /> Orders Count</span>
-          </div>
-        </div>
-        
-        {/* Render SVG Chart */}
-        {renderAnalyticsChart()}
-      </Card>
+      {/* Analytics Charts Grid */}
+      <Grid container spacing={3}>
+        {/* Sales Trend Chart (Width 8) */}
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Card className="border border-gray-150 shadow-sm rounded-xl p-6 h-full">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+              <div>
+                <Typography variant="h6" className="font-bold text-gray-700">7-Day Sales Trend</Typography>
+                <Typography className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Revenue & Volume Analytics</Typography>
+              </div>
+              <div className="flex gap-4 text-xs font-bold text-gray-500">
+                <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#00927c] rounded-full inline-block" /> Sales (₹)</span>
+                <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#3b82f6] rounded-full inline-block" /> Orders Count</span>
+              </div>
+            </div>
+            
+            {/* Render SVG Chart */}
+            {renderAnalyticsChart()}
+          </Card>
+        </Grid>
+
+        {/* Category Performance Breakdown (Width 4) */}
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Card className="border border-gray-150 shadow-sm rounded-xl p-6 h-full flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div>
+                <Typography variant="h6" className="font-bold text-gray-700">Category Sales</Typography>
+                <Typography className="text-gray-400 text-xs font-semibold uppercase tracking-wider">Revenue Share distribution</Typography>
+              </div>
+              <Divider />
+              
+              {/* Category Bars */}
+              <div className="space-y-4">
+                {getCategorySalesData().map((cat: any, idx: number) => {
+                  const maxVal = Math.max(...getCategorySalesData().map(c => c.value), 100);
+                  const percentage = Math.round((cat.value / maxVal) * 100);
+                  return (
+                    <div key={idx} className="space-y-1">
+                      <div className="flex justify-between text-xs font-bold text-gray-600">
+                        <span>{cat.name}</span>
+                        <span>₹{cat.value}</span>
+                      </div>
+                      <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-teal-600 h-full rounded-full transition-all duration-500" 
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <Divider />
+
+              {/* Order Status Summary */}
+              <div className="space-y-2">
+                <Typography className="text-xs font-bold text-gray-400 uppercase tracking-wider">Orders Status Summary</Typography>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                    <p className="text-sm font-black text-gray-800">{sellerOrders.filter(o => o.orderStatus === "PENDING" || o.orderStatus === "PLACED").length}</p>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase">Incoming</p>
+                  </div>
+                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                    <p className="text-sm font-black text-green-700">{sellerOrders.filter(o => o.orderStatus === "DELIVERED").length}</p>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase">Completed</p>
+                  </div>
+                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
+                    <p className="text-sm font-black text-blue-700">{sellerOrders.filter(o => o.orderStatus === "SHIPPED" || o.orderStatus === "CONFIRMED").length}</p>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase">Transit</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </Grid>
+      </Grid>
 
       {/* Recent Orders table */}
       <div className="space-y-3 pt-4">

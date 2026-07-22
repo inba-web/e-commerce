@@ -11,6 +11,7 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
 import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
 // Icon imports
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
@@ -34,6 +35,7 @@ const SellerLogin = () => {
   // Login Form
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   // Register Form
   const [sellerName, setSellerName] = useState("");
@@ -41,6 +43,7 @@ const SellerLogin = () => {
   const [mobile, setMobile] = useState("");
   const [gstin, setGstin] = useState("");
   const [regPassword, setRegPassword] = useState("");
+  const [showRegPassword, setShowRegPassword] = useState(false);
 
   // Forgot Password Form
   const [forgotMode, setForgotMode] = useState(false);
@@ -48,6 +51,7 @@ const SellerLogin = () => {
   const [forgotOtp, setForgotOtp] = useState("");
   const [forgotNewPassword, setForgotNewPassword] = useState("");
   const [forgotOtpSent, setForgotOtpSent] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
 
   // Bank Info
   const [accNo, setAccNo] = useState("");
@@ -284,13 +288,15 @@ const SellerLogin = () => {
                 value={forgotEmail}
                 disabled={forgotOtpSent}
                 onChange={(e) => setForgotEmail(e.target.value)}
-                InputProps={{
+              slotProps={{
+                input: {
                   startAdornment: (
                     <InputAdornment position="start">
                       <EmailOutlinedIcon className="text-gray-400" />
                     </InputAdornment>
                   )
-                }}
+                }
+              }}
               />
 
               {forgotOtpSent && (
@@ -301,26 +307,43 @@ const SellerLogin = () => {
                     value={forgotOtp}
                     onChange={(e) => setForgotOtp(e.target.value)}
                     helperText="Check console/email for OTP"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <CheckCircleOutlineIcon className="text-gray-400" />
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <CheckCircleOutlineIcon className="text-gray-400" />
+                          </InputAdornment>
+                        )
+                      }
                     }}
                   />
                   <TextField
                     label="New Password"
-                    type="password"
+                    type={showResetPassword ? "text" : "password"}
+                    placeholder="🔑 New password (click 👀 to view)"
                     fullWidth
                     value={forgotNewPassword}
                     onChange={(e) => setForgotNewPassword(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LockOutlinedIcon className="text-gray-400" />
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LockOutlinedIcon className="text-gray-400" />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowResetPassword(!showResetPassword)}
+                              edge="end"
+                              size="small"
+                              sx={{ fontSize: "1.1rem" }}
+                            >
+                              {showResetPassword ? "🙈" : "👀"}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }
                     }}
                   />
                 </>
@@ -387,26 +410,43 @@ const SellerLogin = () => {
                 fullWidth
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailOutlinedIcon className="text-gray-400" />
-                    </InputAdornment>
-                  )
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailOutlinedIcon className="text-gray-400" />
+                      </InputAdornment>
+                    )
+                  }
                 }}
               />
               <TextField
                 label="Store Password"
-                type="password"
+                type={showLoginPassword ? "text" : "password"}
+                placeholder=""
                 fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockOutlinedIcon className="text-gray-400" />
-                    </InputAdornment>
-                  )
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockOutlinedIcon className="text-gray-400" />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowLoginPassword(!showLoginPassword)}
+                          edge="end"
+                          size="small"
+                          sx={{ fontSize: "1.1rem" }}
+                        >
+                          {showLoginPassword ? "🙈" : "👀"}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }
                 }}
               />
 
@@ -456,12 +496,14 @@ const SellerLogin = () => {
                     size="small"
                     value={sellerName}
                     onChange={(e) => setSellerName(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PersonOutlinedIcon fontSize="small" className="text-gray-400" />
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PersonOutlinedIcon fontSize="small" className="text-gray-400" />
+                          </InputAdornment>
+                        )
+                      }
                     }}
                   />
                   <TextField
@@ -470,12 +512,14 @@ const SellerLogin = () => {
                     size="small"
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <EmailOutlinedIcon fontSize="small" className="text-gray-400" />
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <EmailOutlinedIcon fontSize="small" className="text-gray-400" />
+                          </InputAdornment>
+                        )
+                      }
                     }}
                   />
                   <TextField
@@ -484,12 +528,14 @@ const SellerLogin = () => {
                     size="small"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PhoneOutlinedIcon fontSize="small" className="text-gray-400" />
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PhoneOutlinedIcon fontSize="small" className="text-gray-400" />
+                          </InputAdornment>
+                        )
+                      }
                     }}
                   />
                   <TextField
@@ -498,28 +544,45 @@ const SellerLogin = () => {
                     size="small"
                     value={gstin}
                     onChange={(e) => setGstin(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <BusinessOutlinedIcon fontSize="small" className="text-gray-400" />
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <BusinessOutlinedIcon fontSize="small" className="text-gray-400" />
+                          </InputAdornment>
+                        )
+                      }
                     }}
                   />
                   <TextField
                     label="Store Password"
-                    type="password"
+                    type={showRegPassword ? "text" : "password"}
+                    placeholder=""
                     fullWidth
                     size="small"
                     className="sm:col-span-2"
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LockOutlinedIcon fontSize="small" className="text-gray-400" />
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LockOutlinedIcon fontSize="small" className="text-gray-400" />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowRegPassword(!showRegPassword)}
+                              edge="end"
+                              size="small"
+                              sx={{ fontSize: "1.1rem" }}
+                            >
+                              {showRegPassword ? "🙈" : "👀"}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }
                     }}
                   />
                 </div>
@@ -543,12 +606,14 @@ const SellerLogin = () => {
                     className="sm:col-span-2"
                     value={holder}
                     onChange={(e) => setHolder(e.target.value)}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PersonOutlinedIcon fontSize="small" className="text-gray-400" />
-                        </InputAdornment>
-                      )
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <PersonOutlinedIcon fontSize="small" className="text-gray-400" />
+                          </InputAdornment>
+                        )
+                      }
                     }}
                   />
                 </div>

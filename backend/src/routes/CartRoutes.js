@@ -12,4 +12,7 @@ router.delete('/item/:cartItemId', authMiddleware, cartController.deleteCartItem
 
 router.put('/item/:cartItemId', authMiddleware, cartController.updateCartItemHandler);
 
+router.post('/coupon/apply', authMiddleware, cartController.applyCoupon);
+router.post('/coupon/remove', authMiddleware, cartController.removeCoupon);
+
 module.exports = router;

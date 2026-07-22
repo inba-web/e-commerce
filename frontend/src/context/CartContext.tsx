@@ -9,6 +9,8 @@ interface CartContextType {
   addToCart: (productId: string, size: string, quantity: number) => Promise<void>;
   removeCartItem: (cartItemId: string) => Promise<void>;
   updateCartItem: (cartItemId: string, quantity: number) => Promise<void>;
+  applyCoupon: (couponCode: string) => Promise<void>;
+  removeCoupon: () => Promise<void>;
   clearCart: () => void;
 }
 
@@ -62,6 +64,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await fetchCart();
   };
 
+  const applyCoupon = async (couponCode: string) => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await axios.post(`${API_URL}/api/cart/coupon/apply`, { couponCode }, { headers });
+    setCart(response.data);
+  };
+
+  const removeCoupon = async () => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await axios.post(`${API_URL}/api/cart/coupon/remove`, {}, { headers });
+    setCart(response.data);
+  };
+
   const clearCart = () => {
     setCart(null);
   };
@@ -75,6 +91,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addToCart,
         removeCartItem,
         updateCartItem,
+        applyCoupon,
+        removeCoupon,
         clearCart,
       }}
     >

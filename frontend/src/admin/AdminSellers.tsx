@@ -16,9 +16,9 @@ import BlockIcon from "@mui/icons-material/Block";
 
 const AdminSellers = () => {
   const { sellers, loading, fetchSellers, updateSellerStatus } = useAdmin();
-  const [statusTab, setStatusTab] = useState(0); // 0 = PENDING, 1 = ACTIVE, 2 = SUSPENDED
+  const [statusTab, setStatusTab] = useState(0); // 0 = PENDING_VERIFICATION, 1 = ACTIVE, 2 = SUSPENDED
 
-  const statuses = ["PENDING", "ACTIVE", "SUSPENDED"];
+  const statuses = ["PENDING_VERIFICATION", "ACTIVE", "SUSPENDED"];
 
   useEffect(() => {
     fetchSellers(statuses[statusTab]);
@@ -30,7 +30,7 @@ const AdminSellers = () => {
 
   const handleStatusUpdate = async (id: string, newStatus: string) => {
     try {
-      await updateSellerStatus(id, newStatus);
+      await updateSellerStatus(id, newStatus, statuses[statusTab]);
     } catch (error) {
       alert("Failed to update status");
     }
@@ -98,7 +98,7 @@ const AdminSellers = () => {
                       {seller.businessDetails?.businessAddress || "pickup address"}
                     </TableCell>
                     <TableCell align="right">
-                      {statuses[statusTab] === "PENDING" && (
+                      {statuses[statusTab] === "PENDING_VERIFICATION" && (
                         <Button
                           variant="contained"
                           color="success"

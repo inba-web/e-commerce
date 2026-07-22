@@ -70,6 +70,32 @@ class CartController{
             return res.status(500).json({error:error.message});
         }
     }
+
+    async applyCoupon(req, res) {
+        try {
+            const user = await req.user;
+            const { couponCode } = req.body;
+            if (!couponCode) {
+                return res.status(400).json({ error: "Coupon code is required" });
+            }
+            const cart = await CartService.applyCoupon(user, couponCode);
+            return res.status(200).json(cart);
+        } catch (error) {
+            console.log(`Error in applyCoupon controller : `, error.message);
+            return res.status(400).json({ error: error.message });
+        }
+    }
+
+    async removeCoupon(req, res) {
+        try {
+            const user = await req.user;
+            const cart = await CartService.removeCoupon(user);
+            return res.status(200).json(cart);
+        } catch (error) {
+            console.log(`Error in removeCoupon controller : `, error.message);
+            return res.status(400).json({ error: error.message });
+        }
+    }
 }
 
 module.exports = new CartController();

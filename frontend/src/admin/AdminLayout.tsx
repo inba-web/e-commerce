@@ -18,6 +18,9 @@ import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import PercentIcon from "@mui/icons-material/Percent";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const drawerWidth = 240;
 
@@ -41,8 +44,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   };
 
   const menuItems = [
+    { text: "Dashboard Overview", icon: <DashboardIcon />, path: "/admin/dashboard" },
     { text: "Verify Sellers", icon: <SupervisorAccountIcon />, path: "/admin/sellers" },
     { text: "Deal Banners", icon: <PercentIcon />, path: "/admin/deals" },
+    { text: "Coupon Codes", icon: <LocalOfferIcon />, path: "/admin/coupons" },
+    { text: "My Profile", icon: <AccountCircleIcon />, path: "/admin/profile" },
   ];
 
   const drawerContent = (

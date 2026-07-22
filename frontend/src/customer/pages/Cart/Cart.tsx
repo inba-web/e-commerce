@@ -1,16 +1,22 @@
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../../context/CartContext";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import Alert from "@mui/material/Alert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 const Cart = () => {
-  const { cart, loading, removeCartItem, updateCartItem } = useCart();
+  const { cart, loading, removeCartItem, updateCartItem, applyCoupon, removeCoupon } = useCart();
   const navigate = useNavigate();
+  const [couponInput, setCouponInput] = useState("");
+  const [couponError, setCouponError] = useState("");
+  const [couponSuccess, setCouponSuccess] = useState("");
 
   if (loading && !cart) {
     return (
@@ -46,10 +52,39 @@ const Cart = () => {
     updateCartItem(item._id, item.quantity + 1);
   };
 
+  const handleApplyCoupon = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!couponInput.trim()) return;
+    setCouponError("");
+    setCouponSuccess("");
+    try {
+      await applyCoupon(couponInput.trim().toUpperCase());
+      setCouponSuccess(`Coupon Applied Successfully!`);
+      setCouponInput("");
+    } catch (err: any) {
+      setCouponError(err.response?.data?.error || err.message || "Failed to apply coupon");
+    }
+  };
+
+  const handleRemoveCoupon = async () => {
+    setCouponError("");
+    setCouponSuccess("");
+    try {
+      await removeCoupon();
+      setCouponSuccess("Coupon removed successfully.");
+    } catch (err: any) {
+      setCouponError("Failed to remove coupon");
+    }
+  };
+
   // Calculations
   const totalMrp = cart.totalMrpPrice || 0;
-  const totalSelling = cart.totalSellingPrice || 0;
-  const discountAmt = totalMrp - totalSelling;
+  const couponDiscount = cart.couponPrice || 0;
+  const finalPayable = cart.totalSellingPrice || 0;
+  
+  // rawSellingPrice represents selling price of items before coupon deduction
+  const rawSellingPrice = cart.couponCode ? finalPayable + couponDiscount : finalPayable;
+  const productDiscount = totalMrp - rawSellingPrice;
 
   return (
     <div className="max-w-7xl mx-auto px-4 lg:px-8 mt-10 pb-16">
@@ -116,7 +151,7 @@ const Cart = () => {
         </div>
 
         {/* Summary sidebar */}
-        <div className="w-full lg:w-[35%]">
+        <div className="w-full lg:w-[35%] space-y-6">
           <div className="bg-white p-6 rounded-xl border border-gray-150 shadow-sm space-y-4">
             <h3 className="font-bold text-gray-700 uppercase text-sm tracking-wider">Price Details</h3>
             <Divider />
@@ -126,10 +161,16 @@ const Cart = () => {
                 <span>Price ({cart.cartItems.length} items)</span>
                 <span>₹{totalMrp}</span>
               </div>
-              {discountAmt > 0 && (
+              {productDiscount > 0 && (
                 <div className="flex justify-between text-green-600 font-medium">
-                  <span>Discount</span>
-                  <span>- ₹{discountAmt}</span>
+                  <span>Product Discount</span>
+                  <span>- ₹{productDiscount}</span>
+                </div>
+              )}
+              {couponDiscount > 0 && (
+                <div className="flex justify-between text-teal-600 font-bold">
+                  <span>Coupon ({cart.couponCode})</span>
+                  <span>- ₹{couponDiscount}</span>
                 </div>
               )}
               <div className="flex justify-between">
@@ -142,7 +183,7 @@ const Cart = () => {
 
             <div className="flex justify-between text-base font-extrabold text-gray-800">
               <span>Total Payable</span>
-              <span>₹{totalSelling}</span>
+              <span>₹{finalPayable}</span>
             </div>
 
             <Button
@@ -160,6 +201,57 @@ const Cart = () => {
             >
               Proceed To Checkout
             </Button>
+          </div>
+
+          {/* Coupon Code Application Card */}
+          <div className="bg-white p-6 rounded-xl border border-gray-150 shadow-sm space-y-4">
+            <h3 className="font-bold text-gray-700 uppercase text-sm tracking-wider">Coupons & Offers</h3>
+            <Divider />
+
+            {couponError && <Alert severity="error" className="text-xs py-1">{couponError}</Alert>}
+            {couponSuccess && <Alert severity="success" className="text-xs py-1" onClose={() => setCouponSuccess("")}>{couponSuccess}</Alert>}
+
+            {cart.couponCode ? (
+              <div className="flex items-center justify-between bg-teal-50 border border-teal-200 p-3 rounded-lg">
+                <div>
+                  <p className="text-xs font-bold text-teal-700 uppercase">Active Code</p>
+                  <p className="text-base font-black text-teal-900">{cart.couponCode}</p>
+                </div>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  onClick={handleRemoveCoupon}
+                  sx={{ textTransform: "none", fontWeight: "bold" }}
+                >
+                  Remove
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleApplyCoupon} className="flex gap-2">
+                <TextField
+                  size="small"
+                  label="Promo Code"
+                  placeholder="SAVE10"
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value)}
+                  sx={{ flex: 1 }}
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={!couponInput.trim()}
+                  sx={{
+                    bgcolor: "#00927c",
+                    "&:hover": { bgcolor: "#007d6a" },
+                    fontWeight: "bold",
+                    textTransform: "none"
+                  }}
+                >
+                  Apply
+                </Button>
+              </form>
+            )}
           </div>
         </div>
       </div>

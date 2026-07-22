@@ -130,7 +130,10 @@ class SellerService {
   }
 
   async getAllSellers(status) {
-    return await Seller.find({ accountStatus: status });
+    if (status) {
+      return await Seller.find({ accountStatus: status });
+    }
+    return await Seller.find();
   }
 
   async updateSeller(existingSeller, sellerData) {

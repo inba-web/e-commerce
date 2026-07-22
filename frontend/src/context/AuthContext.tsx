@@ -20,6 +20,7 @@ interface AuthContextType {
   logout: () => void;
   fetchProfile: (jwtToken?: string) => Promise<void>;
   updateProfile: (profileData: { fullName?: string, mobile?: string }) => Promise<void>;
+  updateSellerProfile: (profileData: any) => Promise<void>;
   addUserAddress: (addressData: any) => Promise<void>;
   updateUserAddress: (addressId: string, addressData: any) => Promise<void>;
   deleteUserAddress: (addressId: string) => Promise<void>;
@@ -147,6 +148,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(response.data);
   };
 
+  const updateSellerProfile = async (profileData: any) => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    const response = await axios.patch(`${API_URL}/sellers`, profileData, { headers });
+    setSeller(response.data);
+  };
+
   const addUserAddress = async (addressData: any) => {
     if (!token) return;
     const headers = { Authorization: `Bearer ${token}` };
@@ -185,6 +193,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         fetchProfile,
         updateProfile,
+        updateSellerProfile,
         addUserAddress,
         updateUserAddress,
         deleteUserAddress,

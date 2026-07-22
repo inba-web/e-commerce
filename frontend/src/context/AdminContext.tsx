@@ -7,7 +7,7 @@ interface AdminContextType {
   deals: any[];
   loading: boolean;
   fetchSellers: (status?: string) => Promise<void>;
-  updateSellerStatus: (sellerId: string, status: string) => Promise<void>;
+  updateSellerStatus: (sellerId: string, status: string, currentTabStatus?: string) => Promise<void>;
   fetchDeals: () => Promise<void>;
   createDeal: (dealData: { discount: string; image: string }) => Promise<void>;
   deleteDeal: (dealId: string) => Promise<void>;
@@ -42,10 +42,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const updateSellerStatus = async (sellerId: string, status: string) => {
+  const updateSellerStatus = async (sellerId: string, status: string, currentTabStatus?: string) => {
     if (!token) return;
     await axios.patch(`${API_URL}/admin/seller/${sellerId}/status/${status}`, {}, getHeaders());
-    await fetchSellers();
+    await fetchSellers(currentTabStatus);
   };
 
   const fetchDeals = async () => {

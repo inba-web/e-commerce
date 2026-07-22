@@ -5,6 +5,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
 const Login: React.FC = () => {
   const { signin } = useAuth();
@@ -14,6 +16,7 @@ const Login: React.FC = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -72,11 +75,27 @@ const Login: React.FC = () => {
               <TextField
                 fullWidth
                 size="small"
-                type="password"
-                placeholder="Enter password"
+                type={showPassword ? "text" : "password"}
+                placeholder=""
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 variant="outlined"
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                          size="small"
+                          sx={{ fontSize: "1.1rem" }}
+                        >
+                          {showPassword ? "🙈" : "👀"}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }
+                }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     "&.Mui-focused fieldset": { borderColor: "#00927c" }

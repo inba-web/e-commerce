@@ -156,7 +156,14 @@ class ProductService {
       }
 
       let categoryIds = [category._id];
-      if (category.level === 1) {
+      if (category.level === 0) {
+        const lvl1Categories = await Category.find({ parentCategory: category._id });
+        const lvl1Ids = lvl1Categories.map(c => c._id);
+        const lvl2Categories = await Category.find({ parentCategory: { $in: lvl1Ids } });
+        const lvl2Ids = lvl2Categories.map(c => c._id);
+        const lvl3Categories = await Category.find({ parentCategory: { $in: lvl2Ids } });
+        categoryIds = lvl3Categories.map(c => c._id);
+      } else if (category.level === 1) {
         const lvl2Categories = await Category.find({ parentCategory: category._id });
         const lvl2Ids = lvl2Categories.map(c => c._id);
         const lvl3Categories = await Category.find({ parentCategory: { $in: lvl2Ids } });

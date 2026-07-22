@@ -865,15 +865,19 @@ const categoryData = [
 ];
 
 const seed = async () => {
-  const url = process.env.MONGODB_URI || defaultUrl;
-  console.log("Connecting to MongoDB at", url);
-  try {
-    await mongoose.connect(url);
-    console.log("Connected to MongoDB!");
-  } catch (dbErr) {
-    console.log(`Primary DB connection failed, trying local fallback: ${dbErr.message}`);
-    await mongoose.connect("mongodb://localhost:27017/inba-mart");
-    console.log("Connected to Local MongoDB!");
+  if (mongoose.connection.readyState === 0) {
+    const url = process.env.MONGODB_URI || defaultUrl;
+    console.log("Connecting to MongoDB at", url);
+    try {
+      await mongoose.connect(url);
+      console.log("Connected to MongoDB!");
+    } catch (dbErr) {
+      console.log(`Primary DB connection failed, trying local fallback: ${dbErr.message}`);
+      await mongoose.connect("mongodb://localhost:27017/inba-mart");
+      console.log("Connected to Local MongoDB!");
+    }
+  } else {
+    console.log("Using existing active database connection.");
   }
 
   // 1. Seed / Fetch Seller
@@ -1048,10 +1052,21 @@ const seed = async () => {
   }
 
   console.log("Database seeded successfully with all 13 categories and products!");
-  process.exit(0);
 };
 
-seed().catch(err => {
-  console.error("Seeding script error:", err);
-  process.exit(1);
-});
+if (require.main === module) {
+  const url = process.env.MONGODB_URI || defaultUrl;
+  console.log("Connecting to MongoDB at", url);
+  mongoose.connect(url)
+    .then(() => seed())
+    .then(() => {
+      console.log("Seeding CLI finished.");
+      process.exit(0);
+    })
+    .catch(err => {
+      console.error("Seeding script error:", err);
+      process.exit(1);
+    });
+}
+
+module.exports = seed;
