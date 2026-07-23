@@ -13,24 +13,25 @@ class CartService {
       });
       await cart.save();
     }
+    let cartItems = await CartItem.find({ cart: cart._id }).populate("product");
+    cart.cartItems = cartItems;
+
     let totalPrice = 0;
     let totalDiscountedPrice = 0;
-    let totalItem = cart.cartItems.length;
+    let totalItem = cartItems.length;
 
-    cart.cartItems.forEach((cartItem) => {
-      totalPrice += cartItem.mrpPrice;
-      totalDiscountedPrice += cartItem.sellingPrice;
+    cartItems.forEach((cartItem) => {
+      totalPrice += cartItem.mrpPrice || 0;
+      totalDiscountedPrice += cartItem.sellingPrice || 0;
     });
 
     cart.totalMrpPrice = totalPrice;
+    cart.totalItem = totalItem;
     cart.totalItems = totalItem;
     cart.discount =
       totalPrice > 0
         ? calculateDiscountPercentage(totalPrice, totalDiscountedPrice)
         : 0;
-
-    let cartItems = await CartItem.find({ cart: cart._id }).populate("product");
-    cart.cartItems = cartItems;
 
     // Coupon calculation logic
     if (cart.couponCode) {

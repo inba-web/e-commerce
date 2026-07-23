@@ -73,7 +73,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center px-4 py-4 border-b border-teal-700">
           <Link to="/" onClick={() => setMobileOpen(false)} className="flex items-center">
             <div className="bg-white px-2.5 py-1.5 rounded-lg border border-teal-600 flex items-center justify-center shadow-inner">
-              <img src="/inbamart-logo.png" alt="Inba Mart" className="h-7 w-auto object-contain" />
+              <img src="/inbamart-logo.svg" alt="Inba Mart" className="h-7 w-auto object-contain" />
             </div>
           </Link>
           <IconButton onClick={handleDrawerToggle} color="inherit">
@@ -202,7 +202,7 @@ const Navbar = () => {
             {/* Brand Logo */}
             <Link to="/" style={{ textDecoration: "none" }} className="flex items-center group">
               <div className="bg-white px-3 py-1.5 rounded-xl shadow-md border border-teal-100 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg">
-                <img src="/inbamart-logo.png" alt="Inba Mart" className="h-8 sm:h-9 w-auto object-contain" />
+                <img src="/inbamart-logo.svg" alt="Inba Mart" className="h-8 sm:h-9 w-auto object-contain" />
               </div>
             </Link>
           </div>
