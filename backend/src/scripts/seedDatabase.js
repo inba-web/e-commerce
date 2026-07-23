@@ -1047,7 +1047,7 @@ const seed = async () => {
     // Link to Deal
     await Deal.create({
       discout: item.discount,
-      categroy: hc._id
+      category: hc._id
     });
   }
 

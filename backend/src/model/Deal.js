@@ -5,10 +5,10 @@ const dealSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    categroy:{
+    category:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "HomeCategory",
-        rquired: true
+        required: true
     },
 }) 
 

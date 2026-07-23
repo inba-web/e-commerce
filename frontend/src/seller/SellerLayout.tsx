@@ -69,7 +69,7 @@ const SellerLayout: React.FC<SellerLayoutProps> = ({ children }) => {
     <div>
       <Toolbar className="flex justify-center items-center py-4">
         <Link to="/" style={{ textDecoration: "none" }} className="flex items-center justify-center bg-white px-3 py-1.5 rounded-lg border border-slate-700 shadow-inner">
-          <img src="/inbamart-logo.png" alt="Inba Mart" className="h-6 w-auto object-contain" />
+          <img src="/inbamart-logo.svg" alt="Inba Mart" className="h-6 w-auto object-contain" />
         </Link>
       </Toolbar>
       <Divider sx={{ borderColor: "#1f2937" }} />

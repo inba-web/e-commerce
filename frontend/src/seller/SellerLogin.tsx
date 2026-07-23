@@ -218,7 +218,7 @@ const SellerLogin = () => {
           <div className="space-y-8 z-10">
             {/* Logo */}
             <div className="bg-white px-4 py-2 rounded-xl shadow-inner w-fit">
-              <img src="/inbamart-logo.png" alt="Inba Mart" className="h-8 w-auto object-contain" />
+              <img src="/inbamart-logo.svg" alt="Inba Mart" className="h-8 w-auto object-contain" />
             </div>
             
             <div className="space-y-4">
