@@ -15,14 +15,14 @@ class DealService {
         category: category,
       });
       const saveDeal = await newDeal.save();
-      return await Deal.findById(saveDeal._id).populate({ path: "Category" });
+      return await Deal.findById(saveDeal._id).populate({ path: "category" });
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
   async updateDeal(deal, id) {
-    const existingDeal = await HomeCategory.findById(id).populate({
+    const existingDeal = await Deal.findById(id).populate({
       path: "category",
     });
 

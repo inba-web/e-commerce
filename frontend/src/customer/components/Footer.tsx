@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
           <div className="flex items-center">
             <div className="bg-white px-2.5 py-1.25 rounded-lg border border-slate-700 flex items-center justify-center shadow-md">
-              <img src="/inbamart-logo.png" alt="Inba Mart" className="h-6 w-auto object-contain" />
+              <img src="/inbamart-logo.svg" alt="Inba Mart" className="h-6 w-auto object-contain" />
             </div>
           </div>
 

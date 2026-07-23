@@ -19,9 +19,23 @@ const authMiddleware = async (req, res, next) => {
       });
     }
 
-    const email = jwtProvider.getEmailFromjwt(token);
+    let email;
+    try {
+      email = jwtProvider.getEmailFromjwt(token);
+    } catch (err) {
+      return res.status(401).json({
+        message: "Invalid token, authorization failed",
+      });
+    }
 
-    const user = await userService.findUserByEmail(email);
+    let user;
+    try {
+      user = await userService.findUserByEmail(email);
+    } catch (err) {
+      return res.status(401).json({
+        message: "User does not exist, authorization failed",
+      });
+    }
     req.user = user;
     console.log(`Authenticated user : ${user.email}`);  
 

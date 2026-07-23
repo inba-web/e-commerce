@@ -57,11 +57,17 @@ class SellerProductController {
 
     async getProductById(req, res) {
         try {
-            const product = await ProductService.findProductById(req.params.productId);
+            const { productId } = req.params;
+            const mongoose = require("mongoose");
+            if (!mongoose.Types.ObjectId.isValid(productId)) {
+                return res.status(404).json({ error: "Product not found" });
+            }
+            const product = await ProductService.findProductById(productId);
             return res.status(200).json(product);
         } catch (error) {
             console.log(`Error in getProductById Controller : `, error.message);
-            return res.status(500).json({ error: error.message });
+            const status = error.message === "Product not found" ? 404 : 500;
+            return res.status(status).json({ error: error.message });
         }
     }
 

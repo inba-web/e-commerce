@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 42" width="170" height="42">
+  <style>
+    .brand-text-inba { font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 850; fill: #00927c; font-size: 23px; letter-spacing: -0.5px; }
+    .brand-text-mart { font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 500; fill: #374151; font-size: 23px; letter-spacing: -0.5px; }
+    .logo-bag { fill: url(#grad1); }
+    .logo-i { fill: #ffffff; }
+  </style>
+
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00b49d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00806c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(6, 4)">
+    <!-- Bag handles -->
+    <path d="M 11 10 C 11 4, 23 4, 23 10" fill="none" stroke="url(#grad1)" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Bag body -->
+    <rect class="logo-bag" x="4" y="9" width="26" height="25" rx="5" />
+    <!-- Stylized "I" / Sparkle inside the bag -->
+    <path d="M17 14 L17 29 M14 20 L20 20" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Brand Typography -->
+  <text x="42" y="29" class="brand-text-inba">Inba</text>
+  <text x="91" y="29" class="brand-text-mart">Mart</text>
+</svg>
