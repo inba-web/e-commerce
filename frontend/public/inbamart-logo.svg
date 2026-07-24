@@ -1,28 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 42" width="170" height="42">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 42" width="180" height="42">
   <style>
-    .brand-text-inba { font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 850; fill: #00927c; font-size: 23px; letter-spacing: -0.5px; }
-    .brand-text-mart { font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 500; fill: #374151; font-size: 23px; letter-spacing: -0.5px; }
-    .logo-bag { fill: url(#grad1); }
-    .logo-i { fill: #ffffff; }
+    .brand-text {
+      font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 24px;
+      letter-spacing: -0.8px;
+    }
+    .text-inba {
+      font-weight: 900;
+      fill: #00927c;
+    }
+    .text-mart {
+      font-weight: 400;
+      fill: #1f2937;
+    }
+    .swoosh {
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+    }
   </style>
 
   <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00b49d;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#00806c;stop-opacity:1" />
+    <!-- Teal Gradient for the emblem -->
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00c0a5" />
+      <stop offset="100%" style="stop-color:#007966" />
+    </linearGradient>
+    <!-- Orange/Yellow Gradient for the swoosh -->
+    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffaa00" />
+      <stop offset="100%" style="stop-color:#ff7700" />
     </linearGradient>
   </defs>
 
-  <g transform="translate(6, 4)">
-    <!-- Bag handles -->
-    <path d="M 11 10 C 11 4, 23 4, 23 10" fill="none" stroke="url(#grad1)" stroke-width="2.5" stroke-linecap="round"/>
-    <!-- Bag body -->
-    <rect class="logo-bag" x="4" y="9" width="26" height="25" rx="5" />
-    <!-- Stylized "I" / Sparkle inside the bag -->
-    <path d="M17 14 L17 29 M14 20 L20 20" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <g transform="translate(4, 2)">
+    <!-- Modern Emblem: Sleek shopping bag with satisfaction checkmark -->
+    <path d="M 12 12 C 12 5, 22 5, 22 12" fill="none" stroke="url(#tealGrad)" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 6 12 L 28 12 L 25 32 C 25 34.5, 23 36.5, 20.5 36.5 L 13.5 36.5 C 11 36.5, 9 34.5, 9 32 Z" fill="url(#tealGrad)" />
+    <!-- White satisfaction checkmark -->
+    <path d="M 13 24 L 17 28 L 22 20" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
-  <!-- Brand Typography -->
-  <text x="42" y="29" class="brand-text-inba">Inba</text>
-  <text x="91" y="29" class="brand-text-mart">Mart</text>
+  <!-- Typography -->
+  <g transform="translate(38, 29)">
+    <text class="brand-text">
+      <tspan class="text-inba">Inba</tspan>
+      <tspan class="text-mart">Mart</tspan>
+    </text>
+    <!-- Smooth curved smile swoosh under the logo text -->
+    <path class="swoosh" d="M 6 4 C 28 9, 68 9, 82 4" stroke="url(#orangeGrad)" />
+    <!-- Arrow tip -->
+    <path d="M 80 1 L 84 4 L 79 7" fill="none" stroke="url(#orangeGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
 </svg>

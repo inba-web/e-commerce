@@ -4,7 +4,8 @@ import ElectronicCategoryCard from "./ElectronicCategoryCard";
 interface CategoryItem {
   section: string;
   name: string;
-  image: string;
+  image?: string;
+  Image?: string;
   categoryId: string;
 }
 

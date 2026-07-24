@@ -181,7 +181,7 @@ const Home = () => {
                     <div className="pt-2">
                       <Button
                         variant="contained"
-                        onClick={() => navigate("/products")}
+                        onClick={() => navigate("/search")}
                         sx={{
                           bgcolor: "#00927c",
                           "&:hover": { bgcolor: "#007d6a", transform: "translateY(-2px)" },

@@ -22,12 +22,13 @@ const seedAdmin = async () => {
             console.log("[ADMIN SEED] Super admin created with email: admin@inbamart.com / password: adminpassword");
         }
 
-        const productCount = await Product.countDocuments();
-        if (productCount === 0) {
-            console.log("[AUTO SEED] No products found in database. Starting auto-seed...");
-            const seedDatabase = require("../scripts/seedDatabase");
-            await seedDatabase();
-        }
+        // Auto seed is disabled per requirements
+        // const productCount = await Product.countDocuments();
+        // if (productCount === 0) {
+        //     console.log("[AUTO SEED] No products found in database. Starting auto-seed...");
+        //     const seedDatabase = require("../scripts/seedDatabase");
+        //     await seedDatabase();
+        // }
     } catch (err) {
         console.error("Failed to seed default admin and database:", err.message);
     }

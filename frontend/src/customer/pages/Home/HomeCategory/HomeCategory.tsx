@@ -2,7 +2,8 @@ import React from "react";
 import HomeCategoryCard from "./HomeCategoryCard";
 
 interface HomeCategoryItem {
-  image: string;
+  image?: string;
+  Image?: string;
   name: string;
   categoryId: string;
 }
