@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-const defaultUrl = "mongodb+srv://inbafreakz_db_user:tb868bQdyiV4HDdO@cluster0.guxcmfs.mongodb.net/myDatabase?retryWrites=true&w=majority";
 
 const seedAdmin = async () => {
     try {
@@ -35,7 +34,7 @@ const seedAdmin = async () => {
 };
 
 const connectDB = async() => {
-    const url = process.env.MONGODB_URI || defaultUrl;
+    const url = process.env.MONGODB_URI;
     try {
         const connection = await mongoose.connect(url, {
             serverSelectionTimeoutMS: 5000 // 5 seconds selection timeout

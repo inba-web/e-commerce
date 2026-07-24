@@ -55,7 +55,7 @@ app.use("/home", HomeCategoryRoutes);  //  HomeCategory Routes
 // admin - Locked down to prevent Broken Access Control
 app.use("/admin", adminMiddleware, adminRoutes);  // admin routes
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.listen(port, async()=> {
     console.log(`Server is running on port : http://localhost:${port}`)
