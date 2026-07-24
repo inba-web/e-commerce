@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
 interface HomeCategoryItem {
-  image: string;
+  image?: string;
+  Image?: string;
   name: string;
   categoryId: string;
 }
@@ -18,7 +19,7 @@ const HomeCategoryCard = ({ item }: { item: HomeCategoryItem }) => {
       <div className="custom-border w-[120px] lg:w-[200px] h-[120px] lg:h-[200px] rounded-full overflow-hidden shadow-md bg-teal-50">
         <img
           className="group-hover:scale-110 transition-transform duration-500 object-cover w-full h-full"
-          src={item.image}
+          src={item.Image || item.image}
           alt={item.name}
         />
       </div>

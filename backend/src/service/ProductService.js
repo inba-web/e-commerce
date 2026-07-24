@@ -114,7 +114,7 @@ class ProductService {
 
   async findProductById(productId) {
     try {
-      const product = await Product.findById(productId);
+      const product = await Product.findById(productId).populate("category");
       if (!product) {
         throw new Error("Product not found");
       }
@@ -126,7 +126,17 @@ class ProductService {
 
   async searchProduct(query) {
     try {
-      const products = await Product.find({ title: new RegExp(query, "i") });
+      const Category = require("../model/Category.js");
+      const categories = await Category.find({ name: new RegExp(query, "i") });
+      const categoryIds = categories.map(c => c._id);
+
+      const products = await Product.find({
+        $or: [
+          { title: new RegExp(query, "i") },
+          { description: new RegExp(query, "i") },
+          { category: { $in: categoryIds } }
+        ]
+      });
       return products;
     } catch (error) {
       throw new Error(error.message);

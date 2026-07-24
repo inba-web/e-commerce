@@ -31,6 +31,38 @@ const ProductDetails = () => {
   const [success, setSuccess] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
 
+  // Advanced Image Zoom States
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1);
+  const [touchStartDist, setTouchStartDist] = useState<number | null>(null);
+  const [lastTap, setLastTap] = useState(0);
+
+  // Category variant sizing check
+  const requiresSizeSelection = (prod: any) => {
+    if (!prod) return false;
+    if (prod.category) {
+      const categoryId = String(prod.category.categoryId || "").toLowerCase();
+      const categoryName = String(prod.category.name || "").toLowerCase();
+      const keywords = ["wear", "clothing", "saree", "footwear", "shoes", "apparel", "ethnic", "fashion", "jeans", "shirt", "pant", "kurti"];
+      if (keywords.some(kw => categoryId.includes(kw) || categoryName.includes(kw))) {
+        return true;
+      }
+    }
+    if (prod.size && prod.size.includes(",")) {
+      return true;
+    }
+    return false;
+  };
+
+  const getProductSizes = (prod: any) => {
+    if (!prod || !prod.size) return ["S", "M", "L", "XL", "XXL"];
+    if (prod.size.includes(",")) {
+      return prod.size.split(",").map((s: string) => s.trim()).filter(Boolean);
+    }
+    return ["S", "M", "L", "XL", "XXL"];
+  };
+
   useEffect(() => {
     const loadProduct = async () => {
       if (id) {
@@ -38,11 +70,85 @@ const ProductDetails = () => {
         if (data) {
           setProduct(data);
           setSelectedImage(data.images?.[0] || "");
+          
+          // Auto select default size if sizes are not required
+          const sizeNeeded = requiresSizeSelection(data);
+          if (!sizeNeeded) {
+            const defaultSize = data.size ? data.size.split(",")[0].trim() : "FREE SIZE";
+            setSelectedSize(defaultSize);
+          } else {
+            setSelectedSize("");
+          }
         }
       }
     };
     loadProduct();
   }, [id]);
+
+  // Desktop Hover Zoom handlers
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setZoomPos({ x, y });
+  };
+
+  // Mobile Tap & Pinch Zoom handlers
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      setTouchStartDist(dist);
+      setIsZoomed(true);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length === 2 && touchStartDist !== null) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const factor = dist / touchStartDist;
+      setZoomScale(Math.max(1, Math.min(3.5, factor * 1.5)));
+      setIsZoomed(true);
+    } else if (e.touches.length === 1 && (zoomScale > 1 || isZoomed)) {
+      const touch = e.touches[0];
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = ((touch.clientX - rect.left) / rect.width) * 100;
+      const y = ((touch.clientY - rect.top) / rect.height) * 100;
+      setZoomPos({ x, y });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTouchStartDist(null);
+  };
+
+  const handleTap = (e: React.TouchEvent<HTMLDivElement>) => {
+    const now = Date.now();
+    const DOUBLE_PRESS_DELAY = 300;
+    if (now - lastTap < DOUBLE_PRESS_DELAY) {
+      if (zoomScale > 1 || isZoomed) {
+        setZoomScale(1);
+        setIsZoomed(false);
+      } else {
+        setZoomScale(2.2);
+        setIsZoomed(true);
+      }
+    } else {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = ((touch.clientX - rect.left) / rect.width) * 100;
+        const y = ((touch.clientY - rect.top) / rect.height) * 100;
+        setZoomPos({ x, y });
+      }
+    }
+    setLastTap(now);
+  };
 
   if (loading || !product) {
     return (
@@ -57,7 +163,12 @@ const ProductDetails = () => {
       setError("Please login to purchase items");
       return;
     }
-    if (!selectedSize) {
+    
+    const sizeNeeded = requiresSizeSelection(product);
+    let sizeToSend = selectedSize;
+    if (!sizeNeeded) {
+      sizeToSend = product.size ? product.size.split(",")[0].trim() : "FREE SIZE";
+    } else if (!selectedSize) {
       setError("Please select a size");
       return;
     }
@@ -66,7 +177,7 @@ const ProductDetails = () => {
     setError("");
     setSuccess("");
     try {
-      await addToCart(product._id, selectedSize, quantity);
+      await addToCart(product._id, sizeToSend, quantity);
       setSuccess("Product added to cart successfully!");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err: any) {
@@ -81,13 +192,19 @@ const ProductDetails = () => {
       setError("Please login to purchase items");
       return;
     }
-    if (!selectedSize) {
+    
+    const sizeNeeded = requiresSizeSelection(product);
+    let sizeToSend = selectedSize;
+    if (!sizeNeeded) {
+      sizeToSend = product.size ? product.size.split(",")[0].trim() : "FREE SIZE";
+    } else if (!selectedSize) {
       setError("Please select a size");
       return;
     }
+
     try {
       setActionLoading(true);
-      await addToCart(product._id, selectedSize, quantity);
+      await addToCart(product._id, sizeToSend, quantity);
       navigate("/cart");
     } catch (err: any) {
       setError(err.message || "Checkout failed");
@@ -119,9 +236,26 @@ const ProductDetails = () => {
             ))}
           </div>
 
-          {/* Main Showcase Image */}
-          <div className="w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden border border-gray-150 order-1 md:order-2 bg-gray-50 flex items-center justify-center">
-            <img src={selectedImage} alt={product.title} className="w-full h-full object-cover object-top" />
+          {/* Main Showcase Image with Hover Zoom on Desktop and Pinch/Tap Zoom on Mobile */}
+          <div 
+            onMouseEnter={() => { setIsZoomed(true); setZoomScale(2.2); }}
+            onMouseLeave={() => { setIsZoomed(false); setZoomScale(1); }}
+            onMouseMove={handleMouseMove}
+            onTouchStart={(e) => { handleTouchStart(e); handleTap(e); }}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className="w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden border border-gray-150 order-1 md:order-2 bg-gray-50 flex items-center justify-center relative cursor-zoom-in overflow-hidden touch-none"
+          >
+            <img 
+              src={selectedImage} 
+              alt={product.title} 
+              loading="lazy"
+              className="w-full h-full object-cover object-top transition-transform duration-200 ease-out select-none pointer-events-none" 
+              style={{
+                transform: (isZoomed || zoomScale > 1) ? `scale(${zoomScale > 1 ? zoomScale : 2.2})` : "scale(1)",
+                transformOrigin: (isZoomed || zoomScale > 1) ? `${zoomPos.x}% ${zoomPos.y}%` : "center top"
+              }}
+            />
           </div>
         </div>
 
@@ -164,25 +298,27 @@ const ProductDetails = () => {
 
           <Divider />
 
-          {/* Size Selector */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wide">Select Size</h3>
-            <div className="flex gap-3">
-              {["S", "M", "L", "XL", "XXL"].map((sz) => (
-                <button
-                  key={sz}
-                  onClick={() => setSelectedSize(sz)}
-                  className={`w-12 h-12 rounded-lg border font-bold flex items-center justify-center transition-all ${
-                    selectedSize === sz
-                      ? "bg-teal-600 text-white border-teal-600 shadow-sm"
-                      : "bg-white text-gray-700 border-gray-300 hover:border-teal-600"
-                  }`}
-                >
-                  {sz}
-                </button>
-              ))}
+          {/* Size Selector - Show only for size-requiring products */}
+          {requiresSizeSelection(product) && (
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wide">Select Size</h3>
+              <div className="flex gap-3 flex-wrap">
+                {getProductSizes(product).map((sz) => (
+                  <button
+                    key={sz}
+                    onClick={() => setSelectedSize(sz)}
+                    className={`w-12 h-12 rounded-lg border font-bold flex items-center justify-center transition-all ${
+                      selectedSize === sz
+                        ? "bg-teal-600 text-white border-teal-600 shadow-sm"
+                        : "bg-white text-gray-700 border-gray-300 hover:border-teal-600"
+                    }`}
+                  >
+                    {sz}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Quantity Selector */}
           <div className="space-y-3">

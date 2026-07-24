@@ -43,6 +43,7 @@ const ProductCard = ({ item }: { item: ProductItem }) => {
       >
         <img
           src={item.images[currentImage] || "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=600"}
+          loading="lazy"
           className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
           alt={item.title}
         />
