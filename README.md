@@ -1,6 +1,21 @@
 # Inba Mart - Enterprise Multi-Vendor E-Commerce Platform
 
-Inba Mart is a high-performance, responsive multi-vendor e-commerce marketplace built using the MERN stack (MongoDB, Express, React, Node.js) and TypeScript. It features role-based user portals, dynamic search recommendations, security rate limiting, secure password recovery flows, and integration with Razorpay.
+<p align="center">
+A scalable MERN-based marketplace platform enabling customers, sellers, and administrators 
+to interact through a secure role-based commerce ecosystem.
+</p>
+
+## 🚀 Overview
+
+Inba Mart is a production-oriented multi-vendor e-commerce platform inspired by modern marketplaces like Amazon, Flipkart, and Meesho.
+
+The platform provides:
+
+- Customer shopping experience with product discovery, cart, wishlist, and order tracking
+- Seller marketplace with inventory management and revenue tracking
+- Admin control center for vendor approvals, coupons, and platform governance
+- Secure authentication with JWT, OTP-based password recovery, and RBAC authorization
+- Cloud-based media storage and online payment processing
 
 ---
 
