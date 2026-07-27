@@ -41,6 +41,39 @@ class AuthController{
             .json({message: error.message})
         }
     }
+
+    async forgotPassword(req, res) {
+        try {
+            const { email } = req.body;
+            await AuthService.forgotPassword(email);
+            res.status(200).json({ message: "OTP sent successfully to registered email." });
+        } catch (error) {
+            res.status(error instanceof Error ? 400 : 500)
+            .json({ message: error.message });
+        }
+    }
+
+    async verifyResetOtp(req, res) {
+        try {
+            const { email, otp } = req.body;
+            const resetToken = await AuthService.verifyResetOtp(email, otp);
+            res.status(200).json({ resetToken, message: "OTP verified successfully. Proceed to reset password." });
+        } catch (error) {
+            res.status(error instanceof Error ? 400 : 500)
+            .json({ message: error.message });
+        }
+    }
+
+    async resetPassword(req, res) {
+        try {
+            const { token, password } = req.body;
+            await AuthService.resetPassword(token, password);
+            res.status(200).json({ message: "Password reset successful. You can now log in with your new password." });
+        } catch (error) {
+            res.status(error instanceof Error ? 400 : 500)
+            .json({ message: error.message });
+        }
+    }
 }
 
-module.exports = new AuthController();
+module.exports = new AuthController();

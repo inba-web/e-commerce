@@ -25,6 +25,9 @@ import MyOrders from "./customer/pages/MyOrders/MyOrders";
 import Profile from "./customer/pages/Profile/Profile";
 import Login from "./customer/pages/Auth/Login";
 import Signup from "./customer/pages/Auth/Signup";
+import ForgotPassword from "./customer/pages/Auth/ForgotPassword";
+import ResetPassword from "./customer/pages/Auth/ResetPassword";
+import MobileBottomNav from "./customer/components/MobileBottomNav";
 import Footer from "./customer/components/Footer";
 
 // Seller components & pages
@@ -46,11 +49,12 @@ import AdminCoupons from "./admin/AdminCoupons";
 
 // Customer Layout Wrapper
 const CustomerView = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
+  <div className="min-h-screen bg-gray-50 flex flex-col justify-between pb-14 md:pb-0">
     <div className="flex flex-col flex-grow">
       <Navbar />
       <div className="flex-grow">{children}</div>
     </div>
+    <MobileBottomNav />
     <Footer />
   </div>
 );
@@ -103,6 +107,8 @@ const App = () => {
                       <Route path="/profile" element={<CustomerView><Profile /></CustomerView>} />
                       <Route path="/login" element={<CustomerView><Login /></CustomerView>} />
                       <Route path="/signup" element={<CustomerView><Signup /></CustomerView>} />
+                      <Route path="/forgot-password" element={<CustomerView><ForgotPassword /></CustomerView>} />
+                      <Route path="/reset-password" element={<CustomerView><ResetPassword /></CustomerView>} />
 
                       {/* Seller Routes */}
                       <Route path="/seller/login" element={<CustomerView><SellerLogin /></CustomerView>} />

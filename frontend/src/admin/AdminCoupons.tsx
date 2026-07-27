@@ -219,7 +219,7 @@ const AdminCoupons = () => {
                         </TableCell>
                         <TableCell align="right">
                           <IconButton color="error" onClick={() => handleDeleteCoupon(coupon._id)}>
-                            <DeleteIcon size="small" />
+                            <DeleteIcon fontSize="small" />
                           </IconButton>
                         </TableCell>
                       </TableRow>

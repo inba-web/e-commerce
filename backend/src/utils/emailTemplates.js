@@ -209,8 +209,57 @@ const getInvoiceTemplate = (user, orders) => {
   `;
 };
 
+const getCustomerResetPasswordOtpTemplate = (otp) => {
+  return `
+    <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f8fafc; padding: 32px 16px; color: #1e293b; min-height: 100%;">
+      <div style="max-width: 500px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0;">
+        
+        <!-- Header -->
+        <div style="background-color: #00927c; padding: 32px 24px; text-align: center;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 800; letter-spacing: 1px;">INBA MART</h1>
+          <p style="color: #e6fffa; margin: 6px 0 0 0; font-size: 13px; font-weight: 500; letter-spacing: 0.5px;">Customer Security Center</p>
+        </div>
+
+        <!-- Body -->
+        <div style="padding: 32px 24px;">
+          <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 700; color: #0f172a;">Password Reset Request</h2>
+          <p style="margin: 0 0 24px 0; font-size: 14.5px; line-height: 1.6; color: #475569;">
+            We received a request to reset the password for your customer account. Please use the following code to authorize this change:
+          </p>
+
+          <!-- OTP Display box -->
+          <div style="background-color: #fffbeb; border-radius: 12px; padding: 20px; text-align: center; margin: 28px 0; border: 1px dashed #fcd34d;">
+            <span style="font-size: 11px; font-weight: 800; color: #b45309; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 8px;">Reset Authorization Code</span>
+            <span style="font-size: 36px; font-family: 'Courier New', Courier, monospace; font-weight: 800; color: #d97706; letter-spacing: 6px; display: inline-block;">${otp}</span>
+          </div>
+
+          <p style="margin: 0 0 28px 0; font-size: 13px; line-height: 1.5; color: #64748b;">
+            This security code is active for 10 minutes. If you did not request a password reset, your password will remain unchanged and you can safely ignore this email.
+          </p>
+          
+          <div style="border-top: 1px solid #edf2f7; padding-top: 20px; text-align: center;">
+            <p style="margin: 0; font-size: 12px; color: #94a3b8;">
+              Need help? Reach out to <a href="mailto:support@inbamart.com" style="color: #00927c; text-decoration: none; font-weight: 600;">support@inbamart.com</a>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color: #f8fafc; padding: 16px 24px; text-align: center; border-top: 1px solid #e2e8f0;">
+          <p style="margin: 0; font-size: 11px; color: #94a3b8;">
+            &copy; ${new Date().getFullYear()} Inba Mart Inc. All rights reserved.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  `;
+};
+
 module.exports = {
   getWelcomeOtpTemplate,
   getResetPasswordOtpTemplate,
+  getCustomerResetPasswordOtpTemplate,
   getInvoiceTemplate
 };
+

@@ -15,12 +15,30 @@ const ElectronicCategoryCard = ({ item }: { item: categoryItem }) => {
   return (
     <div
       onClick={() => navigate(`/search?category=${item.categoryId}`)}
-      className="flex w-20 flex-col items-center gap-3 cursor-pointer group"
+      className="flex w-24 flex-col items-center gap-3 cursor-pointer group relative"
     >
-      <div className="w-16 h-16 rounded-full overflow-hidden bg-white shadow-sm flex items-center justify-center p-2 group-hover:shadow-md transition-shadow">
-        <img className="object-contain h-12 w-12 group-hover:scale-110 transition-transform" src={item.Image || item.image} alt={item.name} />
+      {/* Outer circular wrapper with gradient background and smooth scale effect */}
+      <div className="relative w-18 h-18 rounded-full p-[3px] bg-gradient-to-tr from-teal-500 to-emerald-400 shadow-md group-hover:shadow-teal-500/20 group-hover:shadow-lg transition-all duration-500 group-hover:scale-105">
+        
+        {/* Inner solid gap ring */}
+        <div className="w-full h-full rounded-full bg-white p-[2px] overflow-hidden">
+          
+          {/* Image container */}
+          <div className="w-full h-full rounded-full overflow-hidden relative bg-white flex items-center justify-center p-2">
+            <img 
+              className="object-contain h-10 w-10 group-hover:scale-110 transition-transform duration-500" 
+              src={item.Image || item.image} 
+              alt={item.name} 
+            />
+          </div>
+        </div>
+
+        {/* Decorative absolute element: rotating border pattern */}
+        <div className="absolute inset-0 rounded-full border border-dashed border-teal-500/20 group-hover:border-teal-500/50 group-hover:rotate-45 transition-all duration-1000 pointer-events-none -m-1"></div>
       </div>
-      <h2 className="font-semibold text-xs text-gray-700 text-center group-hover:text-teal-600">
+
+      {/* Title */}
+      <h2 className="font-extrabold text-[11px] text-gray-700 text-center group-hover:text-teal-600 transition-colors duration-300">
         {item.name}
       </h2>
     </div>

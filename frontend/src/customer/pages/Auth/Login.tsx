@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -71,7 +71,12 @@ const Login: React.FC = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-gray-600 uppercase">Password</label>
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-bold text-gray-600 uppercase">Password</label>
+                <Link to="/forgot-password" className="text-xs font-bold text-teal-700 hover:underline hover:text-teal-800">
+                  Forgot Password?
+                </Link>
+              </div>
               <TextField
                 fullWidth
                 size="small"

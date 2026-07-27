@@ -19,10 +19,10 @@ const DealCard = ({ deal }: { deal: DealItem }) => {
   const navigate = useNavigate();
   if (!deal) return null;
 
-  const isCategoryObj = deal.category && typeof deal.category === "object";
-  const imageUrl = isCategoryObj ? (deal.category.Image || deal.category.image) : deal.image;
-  const discountText = isCategoryObj ? `Flat ${deal.discout}% OFF` : deal.discount;
-  const categoryId = isCategoryObj ? deal.category.categoryId : deal.category;
+  const catObj = (deal.category && typeof deal.category === "object") ? deal.category : null;
+  const imageUrl = catObj ? (catObj.Image || catObj.image) : deal.image;
+  const discountText = catObj ? `Flat ${deal.discout}% OFF` : deal.discount;
+  const categoryId = catObj ? catObj.categoryId : deal.category;
 
   return (
     <div

@@ -206,11 +206,11 @@ const SellerLogin = () => {
   };
 
   return (
-    <div className="flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-[90vh]">
-      <div className="max-w-5xl w-full bg-white rounded-3xl border border-gray-150 shadow-xl overflow-hidden flex flex-col lg:flex-row min-h-[650px]">
+    <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-[90vh]">
+      <div className="max-w-md lg:max-w-5xl w-full bg-white rounded-3xl border border-gray-200 shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[550px] transition-all duration-300">
         
         {/* Left Pane - Brand Pitch (visible on desktop) */}
-        <div className="lg:w-[42%] bg-gradient-to-br from-[#00927c] to-[#005f50] p-10 lg:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+        <div className="hidden lg:flex lg:w-[42%] bg-gradient-to-br from-[#00927c] to-[#005f50] p-10 lg:p-12 text-white flex-col justify-between relative overflow-hidden">
           {/* Background overlay graphic */}
           <div className="absolute top-[-20%] right-[-20%] w-80 h-80 bg-teal-400 rounded-full opacity-10 blur-2xl"></div>
           <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-teal-300 rounded-full opacity-10 blur-xl"></div>
@@ -254,7 +254,8 @@ const SellerLogin = () => {
         </div>
 
         {/* Right Pane - Form Interface */}
-        <div className="lg:w-[58%] p-8 sm:p-12 flex flex-col justify-center bg-white">
+        <div className="w-full lg:w-[58%] p-6 sm:p-10 flex flex-col justify-center bg-white">
+
           <div className="mb-6">
             <Tabs
               value={tab}

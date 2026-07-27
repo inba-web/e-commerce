@@ -49,7 +49,6 @@ const AdminDashboard = () => {
   const ordersCount = stats?.totalOrders || 0;
   const customersCount = stats?.totalCustomers || 0;
   const sellersCount = stats?.totalSellers || 0;
-  const productsCount = stats?.totalProducts || 0;
   const salesTrend = stats?.salesTrend || [];
   const categorySales = stats?.categorySales || [];
 

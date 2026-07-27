@@ -303,7 +303,7 @@ const ProductDetails = () => {
             <div className="space-y-3">
               <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wide">Select Size</h3>
               <div className="flex gap-3 flex-wrap">
-                {getProductSizes(product).map((sz) => (
+                {getProductSizes(product).map((sz: string) => (
                   <button
                     key={sz}
                     onClick={() => setSelectedSize(sz)}

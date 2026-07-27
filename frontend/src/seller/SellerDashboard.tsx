@@ -16,6 +16,7 @@ import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import InsightsIcon from "@mui/icons-material/Insights";
 import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
 
 const SellerDashboard = () => {
   const { report, sellerOrders, loading, fetchSellerReport, fetchSellerOrders } = useSeller();

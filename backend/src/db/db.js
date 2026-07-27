@@ -4,30 +4,40 @@ const mongoose = require("mongoose");
 const seedAdmin = async () => {
     try {
         const User = require("../model/User");
-        const Product = require("../model/Product");
         const bcrypt = require("bcrypt");
         const UserRoles = require("../domain/UserRole");
-        const defaultAdmin = await User.findOne({ role: UserRoles.ADMIN });
+        const HomeCategory = require("../model/HomeCategory");
+
+        // Dynamic Admin Seeding from Environment Variables
+        const adminEmail = process.env.ADMIN_EMAIL || "admin@inbamart.com";
+        const adminPassword = process.env.ADMIN_PASSWORD || "adminpassword";
+
+        const defaultAdmin = await User.findOne({ email: adminEmail });
         if (!defaultAdmin) {
-            const hashedPassword = await bcrypt.hash("adminpassword", 10);
+            const hashedPassword = await bcrypt.hash(adminPassword, 10);
             const admin = new User({
                 fullName: "Super Admin",
-                email: "admin@inbamart.com",
+                email: adminEmail,
                 mobile: "9999999999",
                 password: hashedPassword,
                 role: UserRoles.ADMIN
             });
             await admin.save();
-            console.log("[ADMIN SEED] Super admin created with email: admin@inbamart.com / password: adminpassword");
+            console.log(`[ADMIN SEED] Super admin created dynamically with email: ${adminEmail}`);
         }
 
-        // Auto seed is disabled per requirements
-        // const productCount = await Product.countDocuments();
-        // if (productCount === 0) {
-        //     console.log("[AUTO SEED] No products found in database. Starting auto-seed...");
-        //     const seedDatabase = require("../scripts/seedDatabase");
-        //     await seedDatabase();
-        // }
+        // Auto-heal category database images if they contain broken links or mismatched images
+        await HomeCategory.updateMany(
+            { Image: "https://m.media-amazon.com/images/I/71jG+e7roXL._AC_UY218_.jpg" },
+            { Image: "https://images.unsplash.com/photo-1496181130204-755241544e35?q=80&w=600&auto=format&fit=crop" }
+        );
+
+        await HomeCategory.updateMany(
+            { categoryId: "tv", Image: { $regex: "dslr-camera", $options: "i" } },
+            { Image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=600&auto=format&fit=crop" }
+        );
+
+        console.log("[DB INIT] Database verification and auto-heal completed.");
     } catch (err) {
         console.error("Failed to seed default admin and database:", err.message);
     }

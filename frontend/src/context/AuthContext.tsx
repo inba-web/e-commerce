@@ -17,6 +17,9 @@ interface AuthContextType {
   signinSeller: (email: string, password: string) => Promise<any>;
   forgetSellerPassword: (email: string) => Promise<void>;
   resetSellerPassword: (email: string, otp: string, newPass: string) => Promise<void>;
+  forgetCustomerPassword: (email: string) => Promise<void>;
+  verifyCustomerResetOtp: (email: string, otp: string) => Promise<any>;
+  resetCustomerPassword: (token: string, password: string) => Promise<void>;
   logout: () => void;
   fetchProfile: (jwtToken?: string) => Promise<void>;
   updateProfile: (profileData: { fullName?: string, mobile?: string }) => Promise<void>;
@@ -132,6 +135,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await axios.post(`${API_URL}/sellers/reset-password`, { email, otp, password: newPass });
   };
 
+  const forgetCustomerPassword = async (email: string) => {
+    await axios.post(`${API_URL}/auth/forgot-password`, { email });
+  };
+
+  const verifyCustomerResetOtp = async (email: string, otp: string) => {
+    const response = await axios.post(`${API_URL}/auth/verify-reset-otp`, { email, otp });
+    return response.data;
+  };
+
+  const resetCustomerPassword = async (token: string, password: string) => {
+    await axios.post(`${API_URL}/auth/reset-password`, { token, password });
+  };
+
   const logout = () => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("role");
@@ -190,6 +206,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signinSeller,
         forgetSellerPassword,
         resetSellerPassword,
+        forgetCustomerPassword,
+        verifyCustomerResetOtp,
+        resetCustomerPassword,
         logout,
         fetchProfile,
         updateProfile,

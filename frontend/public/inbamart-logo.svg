@@ -1,55 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 42" width="180" height="42">
-  <style>
-    .brand-text {
-      font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: 24px;
-      letter-spacing: -0.8px;
-    }
-    .text-inba {
-      font-weight: 900;
-      fill: #00927c;
-    }
-    .text-mart {
-      font-weight: 400;
-      fill: #1f2937;
-    }
-    .swoosh {
-      fill: none;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-    }
-  </style>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 185 45" width="185" height="45">
   <defs>
-    <!-- Teal Gradient for the emblem -->
-    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#00c0a5" />
-      <stop offset="100%" style="stop-color:#007966" />
+    <!-- Brand Teal Gradient -->
+    <linearGradient id="logoTealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#059669" />
+      <stop offset="100%" style="stop-color:#007d6a" />
     </linearGradient>
-    <!-- Orange/Yellow Gradient for the swoosh -->
-    <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#ffaa00" />
-      <stop offset="100%" style="stop-color:#ff7700" />
+    <!-- Brand Amber Accent Gradient -->
+    <linearGradient id="logoAmberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b" />
+      <stop offset="100%" style="stop-color:#d97706" />
     </linearGradient>
   </defs>
 
+  <style>
+    .font-inba { font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 900; fill: #00927c; font-size: 26px; letter-spacing: -0.8px; }
+    .font-mart { font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 500; fill: #d97706; font-size: 26px; letter-spacing: -0.8px; }
+    .font-sub { font-family: 'Inter', sans-serif; font-weight: 600; fill: #94a3b8; font-size: 9px; letter-spacing: 2px; }
+    .swoosh-path { fill: none; stroke: url(#logoAmberGrad); stroke-width: 2.5; stroke-linecap: round; }
+  </style>
+
   <g transform="translate(4, 2)">
-    <!-- Modern Emblem: Sleek shopping bag with satisfaction checkmark -->
-    <path d="M 12 12 C 12 5, 22 5, 22 12" fill="none" stroke="url(#tealGrad)" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M 6 12 L 28 12 L 25 32 C 25 34.5, 23 36.5, 20.5 36.5 L 13.5 36.5 C 11 36.5, 9 34.5, 9 32 Z" fill="url(#tealGrad)" />
-    <!-- White satisfaction checkmark -->
-    <path d="M 13 24 L 17 28 L 22 20" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Premium Emblem: Overlapping geometric shapes forming a shopping bag and an 'M' -->
+    <path d="M 12 11 C 12 5, 22 5, 22 11" fill="none" stroke="url(#logoTealGrad)" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 5 11 L 29 11 L 25 35 C 25 38, 23 40, 20 40 L 14 40 C 11 40, 9 38, 9 35 Z" fill="url(#logoTealGrad)" />
+    <!-- Stylized 'M' inside the bag -->
+    <path d="M 13 29 L 16 20 L 19 25 L 22 20 L 25 29" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Small star accent representing premium quality -->
+    <path d="M 29 6 L 30.5 9 L 33.5 9.5 L 31 11.5 L 32 14.5 L 29 13 L 26 14.5 L 27 11.5 L 24.5 9.5 L 27.5 9 Z" fill="#f59e0b" />
   </g>
 
   <!-- Typography -->
-  <g transform="translate(38, 29)">
-    <text class="brand-text">
-      <tspan class="text-inba">Inba</tspan>
-      <tspan class="text-mart">Mart</tspan>
-    </text>
-    <!-- Smooth curved smile swoosh under the logo text -->
-    <path class="swoosh" d="M 6 4 C 28 9, 68 9, 82 4" stroke="url(#orangeGrad)" />
-    <!-- Arrow tip -->
-    <path d="M 80 1 L 84 4 L 79 7" fill="none" stroke="url(#orangeGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-  </g>
+  <text x="44" y="27" class="font-inba">Inba</text>
+  <text x="96" y="27" class="font-mart">Mart</text>
+  <text x="45" y="38" class="font-sub">MARKETPLACE</text>
+
+  <!-- Smile Swoosh below the text -->
+  <path class="swoosh-path" d="M 45 30 C 70 36, 115 36, 148 30" />
+  <!-- Arrow tip for the swoosh -->
+  <path d="M 145 27 L 150 30 L 144 33" fill="none" stroke="url(#logoAmberGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
