@@ -1,6 +1,7 @@
 const PaymentService = require("../service/PaymentService.js");
 const OrderService = require("../service/OrderService.js");
 const Cart = require("../model/Cart.js");
+const CartItem = require("../model/CartItem.js");
 const TransactionService = require("../service/TransactionService.js");
 const SellerService = require("../service/sellerService.js");
 const SellerReportService = require("../service/SelllerReportService.js");
@@ -67,9 +68,19 @@ const paymentSuccessHandler = async (req, res) => {
         console.error("Error sending invoice email helper:", invoiceErr);
       }
 
+      await CartItem.deleteMany({ userId: user._id.toString() });
+
       await Cart.findOneAndUpdate(
         { user: user._id },
-        { cartItems: [] },
+        {
+          cartItems: [],
+          totalSellingPrice: 0,
+          totalItem: 0,
+          totalMrpPrice: 0,
+          discount: 0,
+          couponCode: null,
+          couponPrice: 0
+        },
         { new: true },
       );
 

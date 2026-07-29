@@ -548,14 +548,16 @@ const Navbar = () => {
 
             {/* Become Seller - Desktop Only */}
             {role !== "ROLE_SELLER" && role !== "ROLE_ADMIN" && (
-              <Button
-                color="inherit"
-                startIcon={<StorefrontIcon />}
-                onClick={() => navigate("/seller/login")}
-                className="hidden md:flex hover:bg-teal-700/80 capitalize font-bold text-sm px-3.5 h-[40px] rounded-lg transition-colors"
-              >
-                Become Seller
-              </Button>
+              <div className="hidden md:block">
+                <Button
+                  color="inherit"
+                  startIcon={<StorefrontIcon />}
+                  onClick={() => navigate("/seller/login")}
+                  className="hover:bg-teal-700/80 capitalize font-bold text-sm px-3.5 h-[40px] rounded-lg transition-colors"
+                >
+                  Become Seller
+                </Button>
+              </div>
             )}
 
             {token ? (
@@ -576,9 +578,11 @@ const Navbar = () => {
                 </span>
               </div>
             ) : (
-              <Button variant="outlined" color="inherit" onClick={() => navigate("/login")} className="hidden md:flex capitalize border-white hover:bg-teal-700/80 font-bold text-sm h-[40px] px-4 rounded-lg transition-all">
-                Login / Register
-              </Button>
+              <div className="hidden md:block">
+                <Button variant="outlined" color="inherit" onClick={() => navigate("/login")} className="capitalize border-white hover:bg-teal-700/80 font-bold text-sm h-[40px] px-4 rounded-lg transition-all">
+                  Login / Register
+                </Button>
+              </div>
             )}
 
             {role !== "ROLE_SELLER" && role !== "ROLE_ADMIN" && (

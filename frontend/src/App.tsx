@@ -49,7 +49,7 @@ import AdminCoupons from "./admin/AdminCoupons";
 
 // Customer Layout Wrapper
 const CustomerView = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen bg-gray-50 flex flex-col justify-between pb-14 md:pb-0">
+  <div className="min-h-screen bg-gray-50 flex flex-col justify-between pb-14 md:pb-0 overflow-x-hidden">
     <div className="flex flex-col flex-grow">
       <Navbar />
       <div className="flex-grow">{children}</div>

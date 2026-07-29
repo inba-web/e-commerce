@@ -21,7 +21,7 @@ class PaymentService {
   }
 
   async getPaymentOrderById(orderId) {
-    const paymentOrder = await PaymentOrder.findOne(orderId);
+    const paymentOrder = await PaymentOrder.findById(orderId);
 
     if (!paymentOrder) {
       throw new Error("Payment order not found");
@@ -78,6 +78,7 @@ class PaymentService {
 
   async createRazorpayPaymentLink(user, amount, orderId) {
     try {
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
       const paymentLinkRequest = {
         amount: amount * 100, 
         currency: "INR",
@@ -90,7 +91,7 @@ class PaymentService {
           email: true,
         },
 
-        callback_url: `http://localhost:5173/payment-success/${orderId}`,
+        callback_url: `${frontendUrl}/payment-success/${orderId}`,
         callback_method: "get"
       };
 
