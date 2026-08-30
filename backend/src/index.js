@@ -69,7 +69,14 @@ app.use("/admin", adminMiddleware, adminRoutes);  // admin routes
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, async()=> {
-    console.log(`Server is running on port : http://localhost:${port}`)
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "inba-mart-backend"
+  });
+});
+
+app.listen(port, "0.0.0.0", async () => {
+    console.log(`Server is running on port : ${port}`);
     await connectDB();
-})
+});

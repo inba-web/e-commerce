@@ -8,7 +8,7 @@ async function sendVerificataionEmail(to, subject, body){
         service: "gmail",
         auth:{
             user: emailUser,
-            pass: emailPass
+            pass: emailPass 
         }
     });
 
