@@ -18,7 +18,7 @@ import ElectronicCategory from "./ElectronicCategory/ElectronicCategory";
 import Grid from "./Grid/Grid";
 import Deal from "../Deal/Deal";
 import HomeCategory from "./HomeCategory/HomeCategory";
-import { API_URL } from "../../../context/AuthContext";
+import { API_URL } from "../../../config/api";
 
 const Slider = SliderImport.default || SliderImport;
 
@@ -93,16 +93,16 @@ const Home = () => {
       const now = new Date();
       const endOfDay = new Date();
       endOfDay.setHours(23, 59, 59, 999);
-      
+
       const diff = endOfDay.getTime() - now.getTime();
       if (diff <= 0) {
         return "00h : 00m : 00s";
       }
-      
+
       const hours = Math.floor(diff / (1000 * 60 * 60));
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
-      
+
       const pad = (n: number) => String(n).padStart(2, '0');
       return `${pad(hours)}h : ${pad(minutes)}m : ${pad(seconds)}s`;
     };

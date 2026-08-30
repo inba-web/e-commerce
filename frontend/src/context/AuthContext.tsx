@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../config/api";
+export { API_URL };
 
-export const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 
 type UserRole = "ROLE_CUSTOMER" | "ROLE_SELLER" | "ROLE_ADMIN" | null;
 

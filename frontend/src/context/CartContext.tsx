@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { API_URL, useAuth } from "./AuthContext";
+import { useAuth } from "./AuthContext";
+import { API_URL } from "../config/api";
 
 interface CartContextType {
   cart: any;

@@ -9,28 +9,33 @@ const adminMiddleware = require("./middlewares/adminMiddleware");
 const app = express();
 app.use(helmet());
 app.use(mongoSanitize());
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.FRONTEND_URL
-].filter(Boolean);
+const allowedOrigins = [];
+if (process.env.NODE_ENV !== "production") {
+  allowedOrigins.push("http://localhost:5173");
+}
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ""));
+}
 
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, postman, curl) under safe conditions or check allowedOrigins
+    const normalizedOrigin = origin ? origin.replace(/\/$/, "") : "";
+    if (!origin || allowedOrigins.includes(normalizedOrigin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 
 app.use(express.json())
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.send({message:"Welcome To Inba Mart Backend System!"}) 
-}) 
+  res.send({ message: "Welcome To Inba Mart Backend System!" })
+})
 
 const adminRoutes = require("./routes/adminRoutes.js"); // adming Routes
 const sellerRoutes = require("./routes/sellerRoutes.js"); // seller Routes
@@ -77,6 +82,6 @@ app.get("/health", (req, res) => {
 });
 
 app.listen(port, "0.0.0.0", async () => {
-    console.log(`Server is running on port : ${port}`);
-    await connectDB();
+  console.log(`Server is running on port : ${port}`);
+  await connectDB();
 });

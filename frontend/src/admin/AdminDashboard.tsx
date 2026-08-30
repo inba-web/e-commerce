@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_URL, useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config/api";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -60,10 +61,10 @@ const AdminDashboard = () => {
     const paddingRight = 20;
     const paddingTop = 30;
     const paddingBottom = 40;
-    
+
     const chartWidth = width - paddingLeft - paddingRight;
     const chartHeight = height - paddingTop - paddingBottom;
-    
+
     const maxRevenue = Math.max(...salesTrend.map((d: any) => d.revenue), 100);
     const maxVal = Math.ceil(maxRevenue * 1.15);
 
@@ -83,8 +84,8 @@ const AdminDashboard = () => {
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto select-none">
           <defs>
             <linearGradient id="adminGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#00927c" stopOpacity="0.25"/>
-              <stop offset="100%" stopColor="#00927c" stopOpacity="0.0"/>
+              <stop offset="0%" stopColor="#00927c" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#00927c" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
@@ -94,20 +95,20 @@ const AdminDashboard = () => {
             const labelVal = Math.round(ratio * maxVal);
             return (
               <g key={idx}>
-                <line 
-                  x1={paddingLeft} 
-                  y1={y} 
-                  x2={width - paddingRight} 
-                  y2={y} 
-                  stroke="#f1f5f9" 
-                  strokeWidth="1" 
+                <line
+                  x1={paddingLeft}
+                  y1={y}
+                  x2={width - paddingRight}
+                  y2={y}
+                  stroke="#f1f5f9"
+                  strokeWidth="1"
                 />
-                <text 
-                  x={paddingLeft - 10} 
-                  y={y + 4} 
-                  textAnchor="end" 
-                  fontSize="10" 
-                  fill="#94a3b8" 
+                <text
+                  x={paddingLeft - 10}
+                  y={y + 4}
+                  textAnchor="end"
+                  fontSize="10"
+                  fill="#94a3b8"
                   className="font-mono font-semibold"
                 >
                   ₹{labelVal}
@@ -118,13 +119,13 @@ const AdminDashboard = () => {
 
           {/* X Axis Labels */}
           {points.map((p: any, idx: number) => (
-            <text 
-              key={idx} 
-              x={p.x} 
-              y={paddingTop + chartHeight + 20} 
-              textAnchor="middle" 
-              fontSize="10" 
-              fill="#64748b" 
+            <text
+              key={idx}
+              x={p.x}
+              y={paddingTop + chartHeight + 20}
+              textAnchor="middle"
+              fontSize="10"
+              fill="#64748b"
               className="font-semibold"
             >
               {p.label}
@@ -141,50 +142,50 @@ const AdminDashboard = () => {
           {points.map((p: any, idx: number) => {
             const colWidth = chartWidth / salesTrend.length;
             return (
-              <g 
+              <g
                 key={idx}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 className="cursor-pointer"
               >
-                <rect 
-                  x={p.x - colWidth / 2} 
-                  y={paddingTop} 
-                  width={colWidth} 
-                  height={chartHeight} 
-                  fill="transparent" 
+                <rect
+                  x={p.x - colWidth / 2}
+                  y={paddingTop}
+                  width={colWidth}
+                  height={chartHeight}
+                  fill="transparent"
                 />
-                
+
                 {hoveredIdx === idx && (
-                  <line 
-                    x1={p.x} 
-                    y1={paddingTop} 
-                    x2={p.x} 
-                    y2={paddingTop + chartHeight} 
-                    stroke="#cbd5e1" 
-                    strokeWidth="1" 
+                  <line
+                    x1={p.x}
+                    y1={paddingTop}
+                    x2={p.x}
+                    y2={paddingTop + chartHeight}
+                    stroke="#cbd5e1"
+                    strokeWidth="1"
                     strokeDasharray="2 2"
                   />
                 )}
 
-                <circle 
-                  cx={p.x} 
-                  cy={p.y} 
-                  r={hoveredIdx === idx ? 6 : 4} 
-                  fill={hoveredIdx === idx ? "#ffffff" : "#00927c"} 
-                  stroke="#00927c" 
-                  strokeWidth="2.5" 
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={hoveredIdx === idx ? 6 : 4}
+                  fill={hoveredIdx === idx ? "#ffffff" : "#00927c"}
+                  stroke="#00927c"
+                  strokeWidth="2.5"
                 />
 
                 {/* Sub Bar for daily order count at the bottom */}
-                <rect 
-                  x={p.x - 7} 
-                  y={paddingTop + chartHeight - (p.count > 0 ? 6 + p.count * 8 : 0)} 
-                  width="14" 
-                  height={p.count > 0 ? 6 + p.count * 8 : 0} 
-                  rx="3" 
-                  fill="#3b82f6" 
-                  opacity={hoveredIdx === idx ? 0.95 : 0.65} 
+                <rect
+                  x={p.x - 7}
+                  y={paddingTop + chartHeight - (p.count > 0 ? 6 + p.count * 8 : 0)}
+                  width="14"
+                  height={p.count > 0 ? 6 + p.count * 8 : 0}
+                  rx="3"
+                  fill="#3b82f6"
+                  opacity={hoveredIdx === idx ? 0.95 : 0.65}
                 />
               </g>
             );
@@ -192,7 +193,7 @@ const AdminDashboard = () => {
         </svg>
 
         {hoveredIdx !== null && points[hoveredIdx] && (
-          <div 
+          <div
             className="absolute bg-white/95 border border-slate-200 shadow-xl rounded-xl p-3 text-xs pointer-events-none transition-all duration-200 z-20 space-y-1"
             style={{
               left: `${(points[hoveredIdx].x / width) * 100}%`,
@@ -224,8 +225,8 @@ const AdminDashboard = () => {
                 <span>₹{cat.value}</span>
               </div>
               <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                <div 
-                  className="bg-teal-600 h-full rounded-full transition-all duration-500" 
+                <div
+                  className="bg-teal-600 h-full rounded-full transition-all duration-500"
                   style={{ width: `${percentage}%` }}
                 />
               </div>

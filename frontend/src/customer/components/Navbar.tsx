@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth, API_URL } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
+import { API_URL } from "../../config/api";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import axios from "axios";

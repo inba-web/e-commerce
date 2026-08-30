@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { API_URL, useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
+import { API_URL } from "../config/api";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";

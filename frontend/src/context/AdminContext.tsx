@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
-import { API_URL, useAuth } from "./AuthContext";
+import { useAuth } from "./AuthContext";
+import { API_URL } from "../config/api";
 
 interface AdminContextType {
   sellers: any[];

@@ -40,47 +40,51 @@ class PaymentService {
     return paymentOrder;
   }
 
-  async proceedPaymentOrder(paymentOrder, paymentId, paymentLinkId){
+  async proceedPaymentOrder(paymentOrder, paymentId, paymentLinkId) {
 
-    if(paymentOrder.status === PaymentStatus.PENDING){
-        const payment = await razorpayClient.payments.fetch(paymentId);
+    if (paymentOrder.status === PaymentStatus.PENDING) {
+      const payment = await razorpayClient.payments.fetch(paymentId);
 
-        if(payment.status === "captured"){
-            await Promise.all(paymentOrder.orders.map(async (orderId) => {
-                const order = await Orders.findById(orderId);
-                order.paymentStatus = PaymentStatus.COMPLETED;
-                order.orderStatus = OrderStatus.PLACED;
-                await order.save();
-            }));
+      if (payment.status === "captured") {
+        await Promise.all(paymentOrder.orders.map(async (orderId) => {
+          const order = await Orders.findById(orderId);
+          order.paymentStatus = PaymentStatus.COMPLETED;
+          order.orderStatus = OrderStatus.PLACED;
+          await order.save();
+        }));
 
-            paymentOrder.status = PaymentStatus.COMPLETED;
-            await paymentOrder.save(); 
+        paymentOrder.status = PaymentStatus.COMPLETED;
+        await paymentOrder.save();
 
-            return true;
-        }else{
-            paymentOrder.status = PaymentStatus.FAILED;
-            await paymentOrder.save();
+        return true;
+      } else {
+        paymentOrder.status = PaymentStatus.FAILED;
+        await paymentOrder.save();
 
-            await Promise.all(paymentOrder.orders.map(async (orderId) => {
-                const order = await Orders.findById(orderId);
-                order.paymentStatus = PaymentStatus.FAILED;
-                order.orderStatus = OrderStatus.CANCELLED;
-                await order.save();
-            }));
+        await Promise.all(paymentOrder.orders.map(async (orderId) => {
+          const order = await Orders.findById(orderId);
+          order.paymentStatus = PaymentStatus.FAILED;
+          order.orderStatus = OrderStatus.CANCELLED;
+          await order.save();
+        }));
 
-            return false;
-        } 
+        return false;
+      }
 
     }
 
     return false;
-  } 
+  }
 
   async createRazorpayPaymentLink(user, amount, orderId) {
     try {
-      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+      const rawFrontendUrl = process.env.FRONTEND_URL;
+      if (!rawFrontendUrl && process.env.NODE_ENV === "production") {
+        throw new Error("FRONTEND_URL environment variable is required in production mode");
+      }
+      const frontendUrl = (rawFrontendUrl || "http://localhost:5173").replace(/\/$/, "");
       const paymentLinkRequest = {
-        amount: amount * 100, 
+        amount: amount * 100,
         currency: "INR",
         customer: {
           name: user.fullName,
